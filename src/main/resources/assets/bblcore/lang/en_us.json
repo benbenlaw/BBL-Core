@@ -1,0 +1,34 @@
+{
+  "color.bblcore.white": "White",
+  "color.bblcore.black": "Black",
+  "color.bblcore.red": "Red",
+  "color.bblcore.green": "Green",
+  "color.bblcore.blue": "Blue",
+  "color.bblcore.yellow": "Yellow",
+  "color.bblcore.purple": "Purple",
+  "color.bblcore.orange": "Orange",
+  "color.bblcore.cyan": "Cyan",
+  "color.bblcore.gray": "Gray",
+  "color.bblcore.brown": "Brown",
+  "color.bblcore.pink": "Pink",
+  "color.bblcore.lime": "Lime",
+  "color.bblcore.light_blue": "Light Blue",
+  "color.bblcore.magenta": "Magenta",
+  "color.bblcore.light_gray": "Light Gray",
+  "color.bblcore.lit": "Lit",
+
+  "item.bblcore.black": "Black",
+  "item.bblcore.light": "Light",
+  "item.bblcore.upgrade_base": "Upgrade Base",
+
+  "core.block.colored_crafting_table": "Colored Crafting Table",
+
+  "tooltips.item.shift.not_held": "Press SHIFT for more info",
+  "tooltips.item.alt.not_held": "Press ALT for more info",
+  "tooltips.item.control.not_held": "Press CTRL for more info",
+
+  "tooltips.coloring_item.shift.held": "Right click to color colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
+  "tooltips.lighting_item.shift.held": "Right click to light colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
+  "tooltips.coloring_item.mass_spraying": "Mass Spraying!"
+
+}

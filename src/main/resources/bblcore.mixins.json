@@ -1,0 +1,17 @@
+{
+    "required": true,
+    "package": "com.benbenlaw.core.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "PortalTagForNetherPortalsMixin",
+        "FireBlockNetherPortalMixin",
+        "ColoredCraftingTableValidForPlayer"
+    ],
+    "client": [
+        "HorizonHeightMixin"
+    ],
+    "injectors": {
+    "defaultRequire": 1
+    }
+
+}
