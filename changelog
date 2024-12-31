@@ -1,5 +1,9 @@
 Changelog BBL Core
 
+
+1.1.28
+Updated Changelog to point to the changelog file in the github repository
+
 1.1.27
 Added ColoredItemProperties instead of using Item.Properties in item constructor use ColoredItemProperties
     , this applied a default color and lit value to the item. "white" and "false" are the default values
