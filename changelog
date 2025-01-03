@@ -1,5 +1,23 @@
 Changelog BBL Core
 
+1.1.30
+Fully implemented new ICondition for recipes for world type
+Example
+
+  "neoforge:conditions": [
+    {
+      "type": "bblcore:world_type_condition",
+      "world_type": "minecraft:flat"
+    }
+  ]
+
+This above condition will only allow the recipe to be used in a flat world type
+Added /reload_world_recipes command to reload recipes for world type recipe as these cannot be loaded in game before world load
+Added WorldTypeConditionConfig enable this to enforce recipe reloading on world load
+    - (not needed to be enable unless you want to use world type specific recipes)
+This is a beta feature and may have bugs
+
+
 1.1.29
 Adding condition based recipes for world type
 

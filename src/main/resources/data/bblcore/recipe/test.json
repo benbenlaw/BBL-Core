@@ -1,7 +1,8 @@
 {
   "neoforge:conditions": [
     {
-      "type": "bblcore:world_type_condition"
+      "type": "bblcore:world_type_condition",
+      "world_type": "minecraft:flat"
     }
   ],
   "type": "minecraft:crafting_shaped",

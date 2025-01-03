@@ -2,6 +2,7 @@ package com.benbenlaw.core;
 
 import com.benbenlaw.core.block.TestBlock;
 import com.benbenlaw.core.config.ColorTintIndexConfig;
+import com.benbenlaw.core.config.WorldTypeConditionConfig;
 import com.benbenlaw.core.fluid.TestFluid;
 import com.benbenlaw.core.item.CoreCreativeTab;
 import com.benbenlaw.core.item.CoreDataComponents;
@@ -48,6 +49,7 @@ public class Core {
 
 
         modContainer.registerConfig(ModConfig.Type.STARTUP, ColorTintIndexConfig.SPEC, "bbl/core/color_index.toml");
+        modContainer.registerConfig(ModConfig.Type.STARTUP, WorldTypeConditionConfig.SPEC, "bbl/core/world_type_condition_recipes.toml");
 
         eventBus.addListener(this::addItemToCreativeTab);
 
