@@ -12,6 +12,5 @@ public class CoreCommands {
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event) {
         ConfigCommand.register(event.getDispatcher());
-
     }
 }

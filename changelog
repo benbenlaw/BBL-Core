@@ -1,5 +1,11 @@
 Changelog BBL Core
 
+1.1.32
+Recipe conditions for world type now work a lot better not requiring a world reload
+Removed the /reload_world_recipes command as it is no longer needed
+Removed the WorldTypeConditionConfig as it is no longer needed
+Huge thanks to @matyrobbrt for helping with this
+
 1.1.31
 Disabled the /reload_world_recipes command on world load
 Added worldopenflow mixin

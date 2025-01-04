@@ -1,7 +1,6 @@
 package com.benbenlaw.core;
 
 import com.benbenlaw.core.config.ColorTintIndexConfig;
-import com.benbenlaw.core.config.WorldTypeConditionConfig;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
 import com.benbenlaw.core.recipe.CoreConditions;
@@ -38,7 +37,6 @@ public class Core {
 
 
         modContainer.registerConfig(ModConfig.Type.STARTUP, ColorTintIndexConfig.SPEC, "bbl/core/color_index.toml");
-        modContainer.registerConfig(ModConfig.Type.STARTUP, WorldTypeConditionConfig.SPEC, "bbl/core/world_type_condition_recipes.toml");
 
         eventBus.addListener(this::addItemToCreativeTab);
 
