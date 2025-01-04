@@ -11,7 +11,9 @@
     ],
     "client": [
         "client.HorizonHeightMixin",
-        "client.WorldOpenFlowsMixin"
+        "client.WorldOpenFlowsMixin",
+        "client.IntegratedServerMixin",
+        "client.CreateWorldScreenMixin"
     ],
     "injectors": {
     "defaultRequire": 1
