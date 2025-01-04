@@ -6,11 +6,12 @@
         "PortalTagForNetherPortalsMixin",
         "FireBlockNetherPortalMixin",
         "ColoredCraftingTableValidForPlayer",
-        "WorldOpenFlowsMixin"
+        "WorldLoaderMixin",
+        "access.ChunkGeneratorAccess"
     ],
     "client": [
-        "HorizonHeightMixin",
-        "WorldOpenFlowsMixin"
+        "client.HorizonHeightMixin",
+        "client.WorldOpenFlowsMixin"
     ],
     "injectors": {
     "defaultRequire": 1
