@@ -151,6 +151,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     mainFile.changelog = changelog
     mainFile.releaseType = "release"
     mainFile.gameVersions.addAll("1.21", "1.21.1")
+    mainFile.addModLoader("neoforge")
 }
 
 
