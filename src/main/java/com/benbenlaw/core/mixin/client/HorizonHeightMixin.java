@@ -1,4 +1,4 @@
-package com.benbenlaw.core.mixin;
+package com.benbenlaw.core.mixin.client;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.LevelHeightAccessor;

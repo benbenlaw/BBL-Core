@@ -1,30 +1,19 @@
 package com.benbenlaw.core;
 
-import com.benbenlaw.core.block.TestBlock;
 import com.benbenlaw.core.config.ColorTintIndexConfig;
 import com.benbenlaw.core.config.WorldTypeConditionConfig;
-import com.benbenlaw.core.fluid.TestFluid;
-import com.benbenlaw.core.item.CoreCreativeTab;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
-import com.benbenlaw.core.item.TestItem;
 import com.benbenlaw.core.recipe.CoreConditions;
-import com.benbenlaw.core.recipe.WorldTypeCondition;
 import com.benbenlaw.core.util.ColorHandler;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.telemetry.events.WorldLoadEvent;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
 
