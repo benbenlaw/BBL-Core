@@ -36,6 +36,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.CalculateDetachedCameraDistanceEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.internal.BrandingControl;
 
 import java.util.Collection;
@@ -76,6 +77,8 @@ public class ReloadWorldSpecificRecipe {
         Executor backgroundExecutor = Executors.newCachedThreadPool();
         PreparableReloadListener.PreparationBarrier barrier = CompletableFuture::completedFuture;
         recipeManager.reload(barrier, resourceManager, preparationProfiler, reloadProfiler, backgroundExecutor, server);
+
+
         if (ModList.get().isLoaded("jei")) {
             reloadJEI();
         }

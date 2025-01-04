@@ -1,5 +1,9 @@
 Changelog BBL Core
 
+1.1.31
+Disabled the /reload_world_recipes command on world load
+Added worldopenflow mixin
+
 1.1.30
 Fully implemented new ICondition for recipes for world type
 Example

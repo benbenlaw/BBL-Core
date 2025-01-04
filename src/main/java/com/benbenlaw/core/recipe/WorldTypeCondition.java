@@ -1,5 +1,6 @@
 package com.benbenlaw.core.recipe;
 
+import com.benbenlaw.core.world.WorldInfoCache;
 import com.mojang.realmsclient.dto.RealmsServer;
 import com.mojang.realmsclient.util.WorldGenerationInfo;
 import com.mojang.serialization.Codec;
@@ -48,43 +49,29 @@ public record WorldTypeCondition(String worldType) implements ICondition {
         return CODEC;
     }
 
+
     @Override
     public boolean test(@NotNull IContext context) {
-        MinecraftServer server = minecraft.getSingleplayerServer();
 
-        if (server == null) {
-            System.out.println("Condition failed: No server available");
-            return false;
-        }
-
-        // Get the level/server level
-        ServerLevel overworld = server.overworld(); // Assumes the overworld is the main level
-        if (overworld == null) {
-            System.out.println("Condition failed: Overworld not found");
-            return false;
-        }
-
-        // Retrieve the ChunkGenerator from the level
-        String gameWorldType = overworld.getChunkSource().getGenerator().getTypeNameForDataFixer().toString()
-                .replace("Optional[ResourceKey[minecraft:worldgen/chunk_generator / ", "").replace("]]", "");
-
-        System.out.println("World Type: " + gameWorldType);
+        String gameWorldType = WorldInfoCache.getWorldType();
 
         if (gameWorldType == null) {
-            System.out.println("Condition failed: Chunk generator not available");
+            System.out.println("Condition Failed: World type is null");
             return false;
         }
 
-        if (gameWorldType.contains(worldType)) {
-            System.out.println("Condition Passed: Flat world settings match the recipe");
+        else if (gameWorldType.contains(worldType)) {
+            System.out.println("Condition Passed: World type matches the recipe");
             return true;
         }
 
         else {
-            System.out.println("Condition Failed: Not a flat world generator");
+            System.out.println("Condition Failed: World type does not match the recipe");
             return false;
         }
     }
+
+
 
 
 

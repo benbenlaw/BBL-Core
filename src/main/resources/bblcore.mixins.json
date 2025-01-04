@@ -5,10 +5,12 @@
     "mixins": [
         "PortalTagForNetherPortalsMixin",
         "FireBlockNetherPortalMixin",
-        "ColoredCraftingTableValidForPlayer"
+        "ColoredCraftingTableValidForPlayer",
+        "WorldOpenFlowsMixin"
     ],
     "client": [
-        "HorizonHeightMixin"
+        "HorizonHeightMixin",
+        "WorldOpenFlowsMixin"
     ],
     "injectors": {
     "defaultRequire": 1
