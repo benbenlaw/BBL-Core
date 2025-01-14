@@ -13,7 +13,6 @@ public record WorldTypeCondition(HolderSet<MapCodec<? extends ChunkGenerator>> w
 
     public static final MapCodec<WorldTypeCondition> CODEC = RegistryCodecs.homogeneousList(Registries.CHUNK_GENERATOR)
             .fieldOf("world_type").xmap(WorldTypeCondition::new, WorldTypeCondition::worldTypes);
-
     @Override
     public MapCodec<? extends ICondition> codec() {
         return CODEC;
@@ -23,7 +22,6 @@ public record WorldTypeCondition(HolderSet<MapCodec<? extends ChunkGenerator>> w
     public boolean test(@NotNull IContext context) {
         return WorldInfoCache.matches(worldTypes);
     }
-
     @Override
     public String toString() {
         return "Valid World Type (" + worldTypes + ")";
