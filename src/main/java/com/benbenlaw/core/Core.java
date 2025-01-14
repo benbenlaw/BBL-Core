@@ -3,6 +3,8 @@ package com.benbenlaw.core;
 import com.benbenlaw.core.config.ColorTintIndexConfig;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
+import com.benbenlaw.core.loot.condintion.CoreLootModifierCondition;
+import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.recipe.CoreConditions;
 import com.benbenlaw.core.util.ColorHandler;
 import com.mojang.logging.LogUtils;
@@ -33,7 +35,10 @@ public class Core {
 
         CoreDataComponents.COMPONENTS.register(eventBus);
         CoreItems.ITEMS.register(eventBus);
+
         CoreConditions.CONDITIONALS.register(eventBus);
+        CoreLootModifierCondition.LOOT_CONDITION_TYPES.register(eventBus);
+        CoreLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(eventBus);
 
 
         modContainer.registerConfig(ModConfig.Type.STARTUP, ColorTintIndexConfig.SPEC, "bbl/core/color_index.toml");

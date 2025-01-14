@@ -1,5 +1,27 @@
 Changelog BBL Core
 
+1.1.34
+Added loot modifier and loot condition
+Modifier is used to add items to a loot table
+loot condition is used to add the world type condition to a loot table
+example below showing adding 10 diamonds to grass block loot tables in super flat worlds
+```js
+{
+    "type": "bblcore:add_item",
+    "conditions": [
+      {
+        "condition": "bblcore:world_type_condition",
+        "world_type": "minecraft:flat"
+      },
+      {
+        "block": "minecraft:grass_block",
+        "condition": "minecraft:block_state_property"
+      }
+    ],
+    "item": "minecraft:diamond",
+    "count": 10
+}```
+
 1.1.33
 Fixed modloader being missing from auto updates
 
