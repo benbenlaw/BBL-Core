@@ -3,7 +3,7 @@ package com.benbenlaw.core;
 import com.benbenlaw.core.config.ColorTintIndexConfig;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
-import com.benbenlaw.core.loot.condintion.CoreLootModifierCondition;
+import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.recipe.CoreConditions;
 import com.benbenlaw.core.util.ColorHandler;

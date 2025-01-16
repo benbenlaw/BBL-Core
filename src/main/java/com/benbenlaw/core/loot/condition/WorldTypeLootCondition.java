@@ -1,4 +1,4 @@
-package com.benbenlaw.core.loot.condintion;
+package com.benbenlaw.core.loot.condition;
 
 import com.benbenlaw.core.world.WorldInfoCache;
 import com.mojang.serialization.MapCodec;

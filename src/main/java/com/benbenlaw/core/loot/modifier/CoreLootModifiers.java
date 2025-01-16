@@ -1,12 +1,7 @@
 package com.benbenlaw.core.loot.modifier;
 
 import com.benbenlaw.core.Core;
-import com.benbenlaw.core.loot.condintion.WorldTypeLootCondition;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.registries.DeferredHolder;

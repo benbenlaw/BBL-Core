@@ -16,6 +16,7 @@ public class CoreTags {
 
         //Nether Portal Valid Tags
         public static final TagKey<Block> NETHER_PORTAL_FRAME = tag(Core.MOD_ID, "nether_portal_frame");
+        public static final TagKey<Block> CLIMBABLE_BLOCKS = tag(Core.MOD_ID,"climbable_blocks");
 
         public static TagKey<Block> tag(String modName, String name) {
             return BlockTags.create(ResourceLocation.fromNamespaceAndPath(modName, name));
