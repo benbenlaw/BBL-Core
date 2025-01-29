@@ -1,6 +1,7 @@
 package com.benbenlaw.core.event;
 
 import com.benbenlaw.core.Core;
+import com.benbenlaw.core.config.CoreStartupConfig;
 import com.benbenlaw.core.util.CoreTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,26 +27,48 @@ import java.util.Optional;
 public class ClimbableBlockEvent {
 
 
-
     @SubscribeEvent
     public static void onPlayerTick(EntityTickEvent.Post event) {
-
         Entity entity = event.getEntity();
         Level level = entity.level();
 
-        if (entity.horizontalCollision) {
-            BlockPos entityPos = entity.blockPosition();
-            for (Direction direction : Direction.values()) {
-                BlockPos adjacentPos = entityPos.relative(direction);
-                BlockState blockState = level.getBlockState(adjacentPos);
+        boolean isTouchingClimbable = false;
+        BlockPos entityPos = entity.blockPosition();
 
-                if (blockState.isFaceSturdy(level, adjacentPos, direction.getOpposite())) {
-                    if (blockState.is(CoreTags.Blocks.CLIMBABLE_BLOCKS)) {
-                        Vec3 initialVec = entity.getDeltaMovement();
-                        Vec3 climbVec = new Vec3(initialVec.x, 0.2D, initialVec.z);
-                        entity.setDeltaMovement(climbVec.scale(0.96D));
-                        break;
-                    }
+        for (Direction direction : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+            BlockPos adjacentPos = entityPos.relative(direction);
+            BlockState blockState = level.getBlockState(adjacentPos);
+
+            if (blockState.is(CoreTags.Blocks.CLIMBABLE_BLOCKS) &&
+                    blockState.isFaceSturdy(level, adjacentPos, direction.getOpposite())) {
+                isTouchingClimbable = true;
+                break;
+            }
+        }
+
+        Vec3 movement = entity.getDeltaMovement();
+
+        //Up
+        if (entity instanceof Player player) {
+            if (entity.horizontalCollision && isTouchingClimbable) {
+                if (!player.isShiftKeyDown()) { // Only climb if not sneaking
+                    Vec3 climbVec = new Vec3(movement.x, CoreStartupConfig.climbableBlockSpeed.get(), movement.z);
+                    entity.setDeltaMovement(climbVec.scale(0.96));
+                } else {
+                    entity.setDeltaMovement(new Vec3(movement.x, 0, movement.z));
+                }
+            }
+            //Down
+            else if (isTouchingClimbable && movement.y < 0) {
+                if (!player.isShiftKeyDown()) { // Only slow fall if not sneaking
+                    Vec3 slowFallVec = new Vec3(movement.x, -CoreStartupConfig.climbableBlockSpeed.get(), movement.z);
+                    entity.setDeltaMovement(slowFallVec);
+                    entity.resetFallDistance();
+                }
+                //Shift Held, Stop
+                else {
+                    entity.setDeltaMovement(new Vec3(movement.x, 0, movement.z));
+                    entity.resetFallDistance();
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.benbenlaw.core;
 
 import com.benbenlaw.core.config.ColorTintIndexConfig;
+import com.benbenlaw.core.config.CoreStartupConfig;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
 import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
@@ -42,6 +43,7 @@ public class Core {
 
 
         modContainer.registerConfig(ModConfig.Type.STARTUP, ColorTintIndexConfig.SPEC, "bbl/core/color_index.toml");
+        modContainer.registerConfig(ModConfig.Type.STARTUP, CoreStartupConfig.SPEC, "bbl/core/startup.toml");
 
         eventBus.addListener(this::addItemToCreativeTab);
 

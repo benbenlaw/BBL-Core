@@ -1,5 +1,13 @@
 Changelog BBL Core
 
+
+1.1.36
+Climbable blocks now longer trigger climbing when the player is on top of that block
+Climbable blocks now work going down, also reset the player's fall distance when they start climbing in either direction (like ladders)
+Holding Shift on Climbable block will stop the player moving up or down
+Climbable blocks can now have there speed adjusted in the config requires a double, default is (0.15)
+Added Startup Config
+
 1.1.35
 Added "bblcore:climbable_blocks" block tag any block added to this tag will be able to be climbed like ladders,
     this is to allow full shaped blocks like dirt to be climbable
