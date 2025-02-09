@@ -26,6 +26,10 @@ public class TestBlock {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.createBlocks(Core.MOD_ID);
 
+    public static final DeferredBlock<Block> TANK = registerBlockWithoutBlockItem("tank",
+            () -> new TankBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE)
+                    .instabreak()
+    ));
 
 
     public static final DeferredBlock<Block> COLORED_BLOCK = registerBlockWithoutBlockItem("colored_block",

@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -25,6 +26,9 @@ public class CoreDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> MASS_SPRAYING =
             COMPONENTS.register("mass_spraying", () ->
                     DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<FluidStack>> TANK_CONTENT =
+            COMPONENTS.register("tank_content", () ->
+                    DataComponentType.<FluidStack>builder().persistent(FluidStack.CODEC).networkSynchronized(FluidStack.STREAM_CODEC).build());
 
 
 

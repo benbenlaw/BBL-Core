@@ -1,9 +1,12 @@
 package com.benbenlaw.core;
 
+import com.benbenlaw.core.block.TestBlock;
+import com.benbenlaw.core.block.TestBlockEntities;
 import com.benbenlaw.core.config.ColorTintIndexConfig;
 import com.benbenlaw.core.config.CoreStartupConfig;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
+import com.benbenlaw.core.item.TestItem;
 import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.recipe.CoreConditions;
@@ -27,8 +30,9 @@ public class Core {
 
 
     public Core(final IEventBus eventBus, final ModContainer modContainer) {
-        //TestItem.ITEMS.register(eventBus);
-        //TestBlock.BLOCKS.register(eventBus);
+        TestItem.ITEMS.register(eventBus);
+        TestBlock.BLOCKS.register(eventBus);
+        TestBlockEntities.BLOCK_ENTITIES.register(eventBus);
         //TestFluid.FLUIDS.register(modEventBus);
 
 
