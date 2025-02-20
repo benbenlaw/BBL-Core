@@ -29,6 +29,6 @@
 
   "tooltips.coloring_item.shift.held": "Right click to color colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
   "tooltips.lighting_item.shift.held": "Right click to light colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
-  "tooltips.coloring_item.mass_spraying": "Mass Spraying!"
+  "tooltips.coloring_item.mass_spraying": ", Mass Spraying!"
 
 }

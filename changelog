@@ -1,5 +1,32 @@
 Changelog BBL Core
 
+1.1.74
+added map for bonemeal grass blocks
+
+1.1.62
+Implemented custom bone meal logic
+Bone meal short grass makes tall grass
+
+1.1.52
+Added flower placement to grass builder
+
+1.1.51
+grass builder now different requires coloredblock dirt, (coloredtallgrassblock) short grass, ResourceKey<PlacedFeature> VEGETATION_PLACEMENT
+
+1.1.46
+Fixed to dirt and glass drops and placements
+
+1.1.45
+Fixed the training "," on spray can colors
+Updated drops method on dirt to drop correct item
+Double tall grass now extends the correct class
+
+1.1.44
+Added ColoredDoublePlantBlock and ColoredTallGrassBlock
+
+1.1.42
+Improvements to Colored Grass Blocks
+
 1.1.38
 Added Colored Grass Blocks, maybe
 

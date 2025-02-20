@@ -31,6 +31,11 @@ public class BlockTypeColorFinder {
         put(ColoredFlower.class, blockState -> blockState.getValue(ColoredFlower.COLOR));
         put(ColoredFlowerPot.class, blockState -> blockState.getValue(ColoredFlowerPot.COLOR));
         put(ColoredCraftingTable.class, blockState -> blockState.getValue(ColoredCraftingTable.COLOR));
+        put(ColoredSnowyDirtBlock.class, blockState -> blockState.getValue(ColoredSnowyDirtBlock.COLOR));
+        put(ColoredSpreadingSnowyDirtBlock.class, blockState -> blockState.getValue(ColoredSpreadingSnowyDirtBlock.COLOR));
+        put(ColoredGrassBlock.class, blockState -> blockState.getValue(ColoredGrassBlock.COLOR));
+        put(ColoredTallGrassBlock.class, blockState -> blockState.getValue(ColoredTallGrassBlock.COLOR));
+        put(ColoredDoublePlantBlock.class, blockState -> blockState.getValue(ColoredDoublePlantBlock.COLOR));
 
         put(FlammableColoredLog.class, blockState -> blockState.getValue(FlammableColoredLog.COLOR));
         put(FlammableColoredBlock.class, blockState -> blockState.getValue(FlammableColoredBlock.COLOR));
@@ -46,4 +51,4 @@ public class BlockTypeColorFinder {
     public static void updateBlockTypeFinder(Class<? extends Block> blockClass, Function<BlockState, DyeColor> colorFunction) {
         BLOCK_TYPE_COLOR_FINDER.put(blockClass, colorFunction);
     }
-    }
+}

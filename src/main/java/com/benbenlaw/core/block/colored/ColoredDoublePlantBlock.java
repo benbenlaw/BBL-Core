@@ -6,21 +6,20 @@ import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.colored.ColoredBlockItem;
 import com.benbenlaw.core.item.colored.ColoredItem;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.HitResult;
@@ -29,23 +28,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static net.minecraft.world.level.block.SnowyDirtBlock.SNOWY;
+import static net.minecraft.world.level.block.DoublePlantBlock.HALF;
 
-public class ColoredSnowyDirtBlock extends Block implements IColored {
-
+public class ColoredDoublePlantBlock extends DoublePlantBlock implements IColored {
 
     public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-    public static final BooleanProperty SNOWY = BlockStateProperties.SNOWY;
-
-    public ColoredSnowyDirtBlock(Properties properties) {
+    public ColoredDoublePlantBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(COLOR, DyeColor.WHITE).setValue(LIT, Boolean.FALSE).setValue(SNOWY, Boolean.FALSE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(COLOR, DyeColor.WHITE).setValue(LIT, Boolean.FALSE).setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(COLOR, LIT, SNOWY);
+        builder.add(COLOR, LIT, HALF);
     }
 
     @Override
@@ -83,7 +79,7 @@ public class ColoredSnowyDirtBlock extends Block implements IColored {
     @Override
     public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
 
-        if (state.getBlock() instanceof ColoredSnowyDirtBlock) {
+        if (state.getBlock() instanceof ColoredDoublePlantBlock) {
             DyeColor color = state.getValue(COLOR);
             ItemStack stack = new ItemStack(this);
             stack.set(CoreDataComponents.COLOR, color.toString());
@@ -106,17 +102,15 @@ public class ColoredSnowyDirtBlock extends Block implements IColored {
             Boolean lit = stack.get(CoreDataComponents.LIT);
             assert lit != null;
 
-            BlockState newState = state.setValue(COLOR, dyeColor).setValue(LIT, lit);
+            BlockState newStateUpper = state.setValue(COLOR, dyeColor).setValue(LIT, lit).setValue(HALF, DoubleBlockHalf.UPPER);
+            BlockState newStateLower = state.setValue(COLOR, dyeColor).setValue(LIT, lit).setValue(HALF, DoubleBlockHalf.LOWER);
 
-            level.setBlockAndUpdate(pos, newState);
+            level.setBlockAndUpdate(pos, newStateLower);
+            level.setBlockAndUpdate(pos.above(), newStateUpper);
         } else {
             level.setBlockAndUpdate(pos, state);
         }
     }
-
-
-
-
 
 
 

@@ -209,7 +209,7 @@ public class ColoringItem extends Item {
         if (massSpraying) {
             massSprayingComponent = Component.translatable("tooltips.coloring_item.mass_spraying");
         }
-        String massSprayingComponentTranslated = ", " + massSprayingComponent.getString();
+        String massSprayingComponentTranslated = massSprayingComponent.getString();
 
         TooltipUtil.addShiftTooltip(list, "tooltips.coloring_item.shift.held");
 

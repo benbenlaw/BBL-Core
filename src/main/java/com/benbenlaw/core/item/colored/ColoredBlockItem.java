@@ -65,6 +65,15 @@ public class ColoredBlockItem extends BlockItem {
     public ColoredBlockItem(ColoredFlower block, Properties properties) {
         super(block, properties);
     }
+    public ColoredBlockItem(ColoredGrassBlock block, Properties properties) {super(block, properties);}
+    public ColoredBlockItem(ColoredSnowyDirtBlock block, Properties properties) {
+        super(block, properties);
+    }
+    public ColoredBlockItem(ColoredSpreadingSnowyDirtBlock block, Properties properties) {
+        super(block, properties);
+    }
+    public ColoredBlockItem(ColoredTallGrassBlock block, Properties properties) {super(block, properties);}
+    public ColoredBlockItem(ColoredDoublePlantBlock block, Properties properties) {super(block, properties);}
 
 
 
