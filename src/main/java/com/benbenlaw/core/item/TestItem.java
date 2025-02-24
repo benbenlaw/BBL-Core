@@ -32,12 +32,12 @@ public class TestItem {
 
  */
 
-    public static final DeferredItem<Item> PLANKS = ITEMS.register("planks",
-            () -> new ColoredBlockItem((ColoredBlock) TestBlock.PLANKS.get(), new Item.Properties()));
-           // () -> new ColoredItem(new Item.Properties()));
-
-    public static final DeferredItem<Item> TEST = ITEMS.register("test",
-              () -> new ColoredItem(new Item.Properties()));
+    //public static final DeferredItem<Item> PLANKS = ITEMS.register("planks",
+    //        () -> new ColoredBlockItem((ColoredBlock) TestBlock.PLANKS.get(), new Item.Properties()));
+    //       // () -> new ColoredItem(new Item.Properties()));
+//
+    //public static final DeferredItem<Item> TEST = ITEMS.register("test",
+    //          () -> new ColoredItem(new Item.Properties()));
 
 
 

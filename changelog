@@ -1,5 +1,27 @@
 Changelog BBL Core
 
+1.1.76
+Added FakePlayerUtil, used to create a simple fake player
+Added UnbreakableResourceBlock class;
+    when broken without the correct tool will run a defined loot table
+    can be collected when broken with the defined tool
+    height of the spawn blocks can be defined as well
+Added Unbreakable Resource Blocks KubeJS;
+```js
+StartupEvents.registry('block', event => {
+    event.create("new_block", 'bblcore_resource_block')
+        .dropHeightModifier(1)
+        .toolToCollectTheBlock("minecraft:diamond")
+        .resourceBlockLootTable("minecraft:blocks/gravel")
+})
+```
+Blocks can also be added through a mod if using BBL Core as a dependency
+
+
+
+1.1.75
+Added rotation for direction method
+
 1.1.74
 added map for bonemeal grass blocks
 

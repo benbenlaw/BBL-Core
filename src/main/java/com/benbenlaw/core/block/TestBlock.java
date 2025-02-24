@@ -6,6 +6,7 @@ import com.benbenlaw.core.block.colored.ColoredStairs;
 import com.benbenlaw.core.block.colored.ColoredWall;
 import com.benbenlaw.core.block.colored.flammable.FlammableColoredLog;
 import com.benbenlaw.core.item.TestItem;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -25,6 +26,18 @@ public class TestBlock {
 
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.createBlocks(Core.MOD_ID);
+
+    public static final DeferredBlock<Block> RESOURCE_BLOCK = registerBlock("resource_block",
+            () -> new UnbreakableResourceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE),
+                    1, "minecraft:dirt", "minecraft:blocks/diamond_ore")
+    );
+
+    public static final DeferredBlock<Block> RESOURCE_BLOCK_2 = registerBlock("resource_block_2",
+            () -> new UnbreakableResourceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE),
+                    1,"#minecraft:planks", "minecraft:blocks/emerald_ore")
+    );
+
+    /*
 
     public static final DeferredBlock<Block> TANK = registerBlockWithoutBlockItem("tank",
             () -> new TankBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE)
@@ -71,6 +84,8 @@ public class TestBlock {
                     .lightLevel(litBlockEmission())
                     .instabreak()
                     .noOcclusion()));
+
+     */
 
 
 

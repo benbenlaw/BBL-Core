@@ -32,7 +32,8 @@ public class TankBlockEntity extends SyncableBlockEntity {
 
 
     public TankBlockEntity(BlockPos pos, BlockState state) {
-        super(TestBlockEntities.TANK_BLOCK_ENTITY.get(), pos, state);
+        //super(TestBlockEntities.TANK_BLOCK_ENTITY.get(), pos, state);
+        super(null, pos, state);
     }
 
 

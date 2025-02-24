@@ -31,9 +31,9 @@ public class TestBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
             DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Core.MOD_ID);
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TankBlockEntity>> TANK_BLOCK_ENTITY =
-            register("tank_block_entity", () ->
-                    BlockEntityType.Builder.of(TankBlockEntity::new, TestBlock.TANK.get()), 1000);
+    //public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TankBlockEntity>> TANK_BLOCK_ENTITY =
+    //        register("tank_block_entity", () ->
+    //                BlockEntityType.Builder.of(TankBlockEntity::new, TestBlock.TANK.get()), 1000);
 
 
     public static <T extends BlockEntity> DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> register(@Nonnull String name, @Nonnull Supplier<BlockEntityType.Builder<T>> initializer, int capacity) {

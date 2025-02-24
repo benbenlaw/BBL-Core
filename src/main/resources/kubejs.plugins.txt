@@ -1,0 +1,1 @@
+com.benbenlaw.core.integration.kubejs.CoreKubeJSPlugin
