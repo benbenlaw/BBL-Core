@@ -1,5 +1,6 @@
 package com.benbenlaw.core.block.colored.util;
 
+import com.benbenlaw.core.block.brightable.BrightBlock;
 import com.benbenlaw.core.block.colored.*;
 import com.benbenlaw.core.block.colored.flammable.*;
 import net.minecraft.world.item.DyeColor;

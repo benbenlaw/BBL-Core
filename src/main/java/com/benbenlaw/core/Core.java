@@ -11,6 +11,7 @@ import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.recipe.CoreConditions;
 import com.benbenlaw.core.util.ColorHandler;
+import com.benbenlaw.core.util.ColorList;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.api.distmarker.Dist;

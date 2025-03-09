@@ -1,6 +1,7 @@
 package com.benbenlaw.core.block.colored.util;
 
 import com.benbenlaw.core.item.CoreDataComponents;
+import com.benbenlaw.core.util.CoreTags;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
@@ -24,6 +25,38 @@ public interface IColored {
     class BlockColors implements BlockColor {
         @Override
         public int getColor(BlockState state, BlockAndTintGetter level, BlockPos pos, int tintIndex) {
+
+            for (String colorTag : CoreTags.Blocks.COLOR_TAGS.keySet()) {
+                // Check if the block matches any of the color tags
+                if (state.is(CoreTags.Blocks.COLOR_TAGS.get(colorTag))) {
+                    // Convert the colorTag string to upper case and try to match it with DyeColor enum
+                    try {
+                        DyeColor dyeColor = DyeColor.valueOf(colorTag.toUpperCase());
+                        // Return the color from ColorMap using the dye color
+                        Integer colorValue = ColorMap.getColorValue(dyeColor);
+
+                        if (colorValue != null) {
+                            return colorValue; // Return the color value if found in ColorMap
+                        } else {
+                            // Handle the case where no color value is found in ColorMap
+                        }
+                    } catch (IllegalArgumentException e) {
+                        // Log or handle the case where colorTag doesn't match any DyeColor enum value
+                        // This will handle cases like "yellow" or other unrecognized tags gracefully
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
             if (state.getBlock() instanceof IColored) {
                 DyeColor dyeColor = null;
                 Function<BlockState, DyeColor> colorRetriever = BlockTypeColorFinder.BLOCK_TYPE_COLOR_FINDER.get(state.getBlock().getClass());
@@ -56,6 +89,17 @@ public interface IColored {
     class ItemColors implements ItemColor {
         @Override
         public int getColor(ItemStack stack, int index) {
+
+            for (String colorTag : CoreTags.Blocks.COLOR_TAGS.keySet()) {
+                if (stack.is(CoreTags.Items.COLOR_TAGS.get(colorTag))) {
+                    DyeColor dyeColor = DyeColor.valueOf(colorTag.toUpperCase());
+                    int colorValue = ColorMap.getColorValue(dyeColor);
+                    int alpha = 0xFF;
+                    return (alpha << 24) | (colorValue & 0xFFFFFF);
+                }
+            }
+
+
             String colorString = stack.get(CoreDataComponents.COLOR);
             if (colorString != null) {
                 DyeColor dyeColor = ColorMap.getDyeColor(colorString);

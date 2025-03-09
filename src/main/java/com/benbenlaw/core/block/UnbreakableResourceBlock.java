@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -35,11 +36,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class UnbreakableResourceBlock extends Block {
 
     public int dropHeightModifier;
-    public ItemLike toolToCollectTheBlockAsItem;
+    public Supplier<Item> toolToCollectTheBlockAsItem;
     public TagKey<Item> toolToCollectTheBlockAsTag;
     public String lootTable;
     public FakePlayer fakePlayer;
@@ -51,12 +53,14 @@ public class UnbreakableResourceBlock extends Block {
         if (toolToCollectTheBlock.startsWith("#")) {
             this.toolToCollectTheBlockAsTag = TagKey.create(Registries.ITEM, ResourceLocation.parse(toolToCollectTheBlock.substring(1)));
         } else {
-            this.toolToCollectTheBlockAsItem = BuiltInRegistries.ITEM.get(ResourceLocation.parse(toolToCollectTheBlock));
+            this.toolToCollectTheBlockAsItem = () -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(toolToCollectTheBlock));
         }
     }
 
+
+
     @Override
-    public void playerDestroy(@NotNull Level level, @NotNull Player player, BlockPos pos, @NotNull BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
+    public void playerDestroy(@NotNull Level level, @NotNull Player player, BlockPos pos, @NotNull BlockState state, @Nullable BlockEntity blockEntity, @NotNull ItemStack tool) {
 
         BlockPos dropPos = new BlockPos(pos.getX(), pos.getY() + dropHeightModifier, pos.getZ());
         boolean isCorrectTool = false;
@@ -66,7 +70,7 @@ public class UnbreakableResourceBlock extends Block {
         }
 
         if (toolToCollectTheBlockAsItem != null) {
-            isCorrectTool = tool.getItem() == toolToCollectTheBlockAsItem.asItem();
+            isCorrectTool = tool.getItem() == toolToCollectTheBlockAsItem.get();
         }
 
         if (!isCorrectTool) {
@@ -97,5 +101,18 @@ public class UnbreakableResourceBlock extends Block {
         drops.addAll(loot);
 
         return drops;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+
+        if (toolToCollectTheBlockAsItem != null) {
+            tooltipComponents.add(Component.literal(toolToCollectTheBlockAsItem.get().toString()));
+        }
+
+        if (toolToCollectTheBlockAsTag != null) {
+            tooltipComponents.add(Component.literal(toolToCollectTheBlockAsTag.toString()));
+        }
+
     }
 }

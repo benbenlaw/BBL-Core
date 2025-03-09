@@ -27,6 +27,11 @@ public class TestBlock {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.createBlocks(Core.MOD_ID);
 
+    public static final DeferredBlock<Block> COLORED_BLOCK = registerBlock("colored_block",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE)
+                    .instabreak()
+                    .noOcclusion())
+    );
     public static final DeferredBlock<Block> RESOURCE_BLOCK = registerBlock("resource_block",
             () -> new UnbreakableResourceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE),
                     1, "minecraft:dirt", "minecraft:blocks/diamond_ore")

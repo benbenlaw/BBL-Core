@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "bblcore:block/colored_block"
+    }
+  }
+}

@@ -8,6 +8,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CoreTags {
 
     //Extending this class CoreTag allows for the creation of new tags tag is your mod id and name is the name of the tag
@@ -17,6 +20,16 @@ public class CoreTags {
         //Nether Portal Valid Tags
         public static final TagKey<Block> NETHER_PORTAL_FRAME = tag(Core.MOD_ID, "nether_portal_frame");
         public static final TagKey<Block> CLIMBABLE_BLOCKS = tag(Core.MOD_ID,"climbable_blocks");
+
+        //Color Tags
+        public static final Map<String, TagKey<Block>> COLOR_TAGS = new HashMap<>();
+        static {
+            for (String color : ColorList.COLORS) {
+                COLOR_TAGS.put(color, tag(Core.MOD_ID, "tintable/" + color));
+            }
+        }
+
+
 
         public static TagKey<Block> tag(String modName, String name) {
             return BlockTags.create(ResourceLocation.fromNamespaceAndPath(modName, name));
@@ -29,6 +42,14 @@ public class CoreTags {
     }
     public static class Items {
         public static final TagKey<Item> NETHER_PORTAL_FRAME = tag(Core.MOD_ID,"nether_portal_frame");
+
+        //Color Tags
+        public static final Map<String, TagKey<Item>> COLOR_TAGS = new HashMap<>();
+        static {
+            for (String color : ColorList.COLORS) {
+                COLOR_TAGS.put(color, tag(Core.MOD_ID, "tintable/" + color));
+            }
+        }
 
         public static TagKey<Item> tag(String modName, String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(modName, name));

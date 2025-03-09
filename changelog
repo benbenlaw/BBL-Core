@@ -1,5 +1,22 @@
 Changelog BBL Core
 
+1.2.3
+Made Bright Crafinh gTables work
+
+1.2.2
+Added Tag Based IColored, change color based on item and block tags, requires custom tinted models
+Added Various color tinted models for blocks
+
+1.2.1
+Added Bright versions of all colored blocks
+Added Color List util class for getting a list of all colors
+
+1.2.0
+Started work on brightable blocks
+
+1.1.77
+Fixed resource blocks getting the item for breaking to early causing modded item to not work
+
 1.1.76
 Added FakePlayerUtil, used to create a simple fake player
 Added UnbreakableResourceBlock class;

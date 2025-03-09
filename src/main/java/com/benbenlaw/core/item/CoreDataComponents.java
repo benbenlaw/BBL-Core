@@ -20,6 +20,7 @@ public class CoreDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> COLOR =
             COMPONENTS.register("color", () ->
                     DataComponentType.<String>builder().persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8).build());
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> LIT =
             COMPONENTS.register("lit", () ->
                     DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());

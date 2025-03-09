@@ -1,5 +1,6 @@
 package com.benbenlaw.core.mixin;
 
+import com.benbenlaw.core.block.brightable.BrightCraftingTable;
 import com.benbenlaw.core.block.colored.ColoredCraftingTable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -26,6 +27,9 @@ public class ColoredCraftingTableValidForPlayer {
     @Inject(method = "stillValid", at = @At("HEAD"), cancellable = true)
     private void stillValid(Player player, CallbackInfoReturnable<Boolean> cir) {
         if (access.evaluate((world, pos) -> world.getBlockState(pos).getBlock() instanceof ColoredCraftingTable, true)) {
+            cir.setReturnValue(true);
+        }
+        if (access.evaluate((world, pos) -> world.getBlockState(pos).getBlock() instanceof BrightCraftingTable, true)) {
             cir.setReturnValue(true);
         }
     }

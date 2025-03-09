@@ -1,0 +1,7 @@
+{
+  "parent": "bblcore:block/tintable_cube_all",
+  "textures": {
+    "all": "bblcore:block/colored_block",
+    "particle": "bblcore:block/colored_block"
+  }
+}
