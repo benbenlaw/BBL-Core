@@ -44,19 +44,4 @@ public class BrightFlowerPot extends FlowerPotBlock
         builder.add(LIT);
     }
 
-    @Override
-    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult hitResult) {
-
-        //TODO implement this
-        //ItemStack itemstack = new ItemStack(this.getPotted());
-        //DyeColor color = blockState.getValue(COLOR);
-        //itemstack.set(CoreDataComponents.COLOR, color.toString());
-        //itemstack.set(CoreDataComponents.LIT, blockState.getValue(LIT));
-        //player.addItem(itemstack);
-        //level.setBlock(blockPos, getEmptyPot().defaultBlockState(), 3);
-        //level.gameEvent(player, GameEvent.BLOCK_CHANGE, blockPos);
-        //return InteractionResult.sidedSuccess(level.isClientSide);
-
-        return InteractionResult.sidedSuccess(level.isClientSide);
-    }
 }

@@ -31,16 +31,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-//todo implement tree grower
 public class BrightSapling extends SaplingBlock {
 
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
+    private final TreeGrower TREE_GROWER;
+
 
     public BrightSapling(TreeGrower treeGrower, Properties properties) {
         super(treeGrower, properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(STAGE, 0));
+        this.TREE_GROWER = treeGrower;
+        this.registerDefaultState(this.stateDefinition.any().setValue(STAGE, 0).setValue(LIT, false));
     }
+
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_55484_) {
         p_55484_.add(LIT, STAGE);
+    }
+
+    @Override
+    public void advanceTree(ServerLevel level, BlockPos pos, BlockState state, RandomSource random) {
+        if (state.getValue(STAGE) == 0) {
+            level.setBlock(pos, state.cycle(STAGE), 4);
+        } else {
+            this.TREE_GROWER.growTree(level, level.getChunkSource().getGenerator(), pos, state, random);
+        }
     }
 }

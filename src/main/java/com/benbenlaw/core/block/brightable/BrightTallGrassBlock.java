@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,15 +31,22 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-//todo bone meal logic
 public class BrightTallGrassBlock extends TallGrassBlock {
 
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-    public static ColoredDoublePlantBlock COLORED_DOUBLE_PLANT_BLOCK;
-    public BrightTallGrassBlock(Properties properties, ColoredDoublePlantBlock coloredDoublePlantBlock) {
+    private final BrightDoublePlantBlock COLORED_DOUBLE_PLANT_BLOCK;
+    public BrightTallGrassBlock(Properties properties, BrightDoublePlantBlock coloredDoublePlantBlock) {
         super(properties);
         COLORED_DOUBLE_PLANT_BLOCK = coloredDoublePlantBlock;
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, Boolean.FALSE));
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+        if (COLORED_DOUBLE_PLANT_BLOCK.defaultBlockState().canSurvive(level, pos) && level.isEmptyBlock(pos.above())) {
+            DoublePlantBlock.placeAt(level, COLORED_DOUBLE_PLANT_BLOCK.defaultBlockState(), pos, 2);
+        }
+
     }
 
     @Override
