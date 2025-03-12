@@ -1,6 +1,7 @@
 package com.benbenlaw.core.block;
 
 import com.benbenlaw.core.Core;
+import com.benbenlaw.core.block.brightable.BrightBlock;
 import com.benbenlaw.core.block.colored.ColoredBlock;
 import com.benbenlaw.core.block.colored.ColoredStairs;
 import com.benbenlaw.core.block.colored.ColoredWall;
@@ -28,7 +29,7 @@ public class TestBlock {
             DeferredRegister.createBlocks(Core.MOD_ID);
 
     public static final DeferredBlock<Block> COLORED_BLOCK = registerBlock("colored_block",
-            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE)
+            () -> new BrightBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE)
                     .instabreak()
                     .noOcclusion())
     );

@@ -17,6 +17,10 @@ public class CoreConditions {
     public static final DeferredHolder<MapCodec<? extends ICondition>, MapCodec<WorldTypeCondition>> WORLD_TYPE_CONDITION =
             CONDITIONALS.register("world_type_condition", () -> WorldTypeCondition.CODEC);
 
+    public static final DeferredHolder<MapCodec<? extends ICondition>, MapCodec<CraftingTableApplyColor>> CRAFTING_TABLE_APPLY_COLOR =
+            CONDITIONALS.register("crafting_table_apply_color", () ->  CraftingTableApplyColor.CODEC);
+
+
     public static void register(IEventBus eventBus) {
         CONDITIONALS.register(eventBus);
     }

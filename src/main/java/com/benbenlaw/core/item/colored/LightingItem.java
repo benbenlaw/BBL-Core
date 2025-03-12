@@ -1,5 +1,6 @@
 package com.benbenlaw.core.item.colored;
 
+import com.benbenlaw.core.block.brightable.IBrightable;
 import com.benbenlaw.core.block.colored.util.IColored;
 import com.benbenlaw.core.block.colored.ColoredBlock;
 import com.benbenlaw.core.item.TooltipUtil;
@@ -57,6 +58,28 @@ public class LightingItem extends Item {
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
         BlockState state = level.getBlockState(pos);
+
+        if (state.getBlock() instanceof IBrightable) {
+            Property<Boolean> litProperty = (Property<Boolean>) state.getBlock().getStateDefinition().getProperty("lit");
+
+            if (litProperty != null) {
+                boolean isLit = state.getValue(litProperty);
+                if (isLit) {
+                    level.setBlock(pos, state.setValue(litProperty, false), 3);
+                } else {
+                    level.setBlock(pos, state.setValue(litProperty, true), 3);
+                }
+            }
+
+            if (stack.isDamageableItem()) {
+                assert player != null;
+                stack.hurtAndBreak(1, player, player.getEquipmentSlotForItem(stack));
+            } else {
+                stack.shrink(1);
+            }
+            return InteractionResult.SUCCESS;
+        }
+
 
         if (state.getBlock() instanceof IColored) {
 

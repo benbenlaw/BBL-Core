@@ -1,5 +1,18 @@
 Changelog BBL Core
 
+//CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
+
+1.2.18
+Fixed mass spraying for names blocks
+
+1.2.16
+Added correct bightgrass class
+Moved caveopolis colored crafting into core
+Added "banned_from_coloring" tag for blocks that should not be colored via crafting or in world
+Bright blocks now implement IBrightable
+LightingItems now support bright blocks and IBrightable
+Added Colored crafting condition to enable or disable colored crafting in the config
+
 1.2.15
 Pushed for colors
 

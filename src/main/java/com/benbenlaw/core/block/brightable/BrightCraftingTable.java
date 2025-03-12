@@ -1,7 +1,5 @@
 package com.benbenlaw.core.block.brightable;
 
-import com.benbenlaw.core.block.colored.ColoredBlock;
-import com.benbenlaw.core.block.colored.util.IColored;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
@@ -15,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class BrightCraftingTable extends ColoredBlock{
+public class BrightCraftingTable extends BrightBlock implements IBrightable {
 
     public BrightCraftingTable(Properties properties) {
         super(properties);

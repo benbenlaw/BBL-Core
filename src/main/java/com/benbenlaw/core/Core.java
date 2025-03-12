@@ -10,6 +10,7 @@ import com.benbenlaw.core.item.TestItem;
 import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.recipe.CoreConditions;
+import com.benbenlaw.core.recipe.CoreRecipes;
 import com.benbenlaw.core.util.ColorHandler;
 import com.benbenlaw.core.util.ColorList;
 import com.mojang.logging.LogUtils;
@@ -42,6 +43,8 @@ public class Core {
         CoreDataComponents.COMPONENTS.register(eventBus);
         CoreItems.ITEMS.register(eventBus);
 
+        CoreRecipes.SERIALIZER.register(eventBus);
+        CoreRecipes.TYPES.register(eventBus);
         CoreConditions.CONDITIONALS.register(eventBus);
         CoreLootModifierCondition.LOOT_CONDITION_TYPES.register(eventBus);
         CoreLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(eventBus);

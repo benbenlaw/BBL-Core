@@ -1,0 +1,9 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "bblcore:crafting_table_apply_color"
+    }
+  ],
+  "type": "bblcore:coloring",
+  "category": "misc"
+}

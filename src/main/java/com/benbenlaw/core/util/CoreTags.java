@@ -20,6 +20,7 @@ public class CoreTags {
         //Nether Portal Valid Tags
         public static final TagKey<Block> NETHER_PORTAL_FRAME = tag(Core.MOD_ID, "nether_portal_frame");
         public static final TagKey<Block> CLIMBABLE_BLOCKS = tag(Core.MOD_ID,"climbable_blocks");
+        public static final TagKey<Block> BANNED_FROM_COLORING = tag(Core.MOD_ID,"banned_from_coloring");
 
         //Color Tags
         public static final Map<String, TagKey<Block>> COLOR_TAGS = new HashMap<>();
@@ -42,6 +43,8 @@ public class CoreTags {
     }
     public static class Items {
         public static final TagKey<Item> NETHER_PORTAL_FRAME = tag(Core.MOD_ID,"nether_portal_frame");
+        public static final TagKey<Item> BANNED_FROM_COLORING = tag(Core.MOD_ID,"banned_from_coloring");
+
 
         //Color Tags
         public static final Map<String, TagKey<Item>> COLOR_TAGS = new HashMap<>();

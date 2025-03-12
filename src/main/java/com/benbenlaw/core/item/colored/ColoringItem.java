@@ -122,8 +122,8 @@ public class ColoringItem extends Item {
                 return InteractionResult.SUCCESS;
             }
 
+            // Handle blocks with names containing the color
             for (String colorCheck : colors) {
-
                 if (state.getBlock().getName().toString().contains(colorCheck) && !(state.getBlock() instanceof BaseEntityBlock)) {
 
                     String block = state.getBlock().toString();
@@ -141,7 +141,12 @@ public class ColoringItem extends Item {
                             }
                         }
 
-                        level.setBlock(pos, newState, 3);
+                        // Mass spraying check added here
+                        if (Boolean.TRUE.equals(stack.get(CoreDataComponents.MASS_SPRAYING))) {
+                            massConvertBlocks(level, pos, state, player, stack, newState);
+                        } else {
+                            level.setBlock(pos, newState, 3);
+                        }
 
                         if (stack.isDamageableItem()) {
                             assert player != null;
@@ -161,20 +166,27 @@ public class ColoringItem extends Item {
         return InteractionResult.FAIL;
     }
 
+
     private void massConvertBlocks(Level level, BlockPos startPos, BlockState targetState, Player player, ItemStack itemStack, BlockState newBlockState) {
         Queue<BlockPos> toVisit = new LinkedList<>();
         Set<BlockPos> visited = new HashSet<>();
         toVisit.add(startPos);
 
+        // Counter for blocks converted
+        int blocksConverted = 0;
+
+        // We will play the sound once after conversion is done
         while (!toVisit.isEmpty() && itemStack.getDamageValue() < itemStack.getMaxDamage()) {
             BlockPos currentPos = toVisit.poll();
             if (visited.contains(currentPos)) {
                 continue;
             }
+
             BlockState currentState = level.getBlockState(currentPos);
             if (currentState.getBlock() == targetState.getBlock()) {
                 visited.add(currentPos);
-                convertBlocks(level, currentPos, targetState, player, itemStack, newBlockState);
+                convertBlocks(level, currentPos, currentState, player, itemStack, newBlockState);
+                blocksConverted++;
                 for (Direction direction : Direction.values()) {
                     BlockPos adjacentPos = currentPos.relative(direction);
                     if (!visited.contains(adjacentPos)) {
@@ -183,12 +195,22 @@ public class ColoringItem extends Item {
                 }
             }
         }
+
+        if (blocksConverted > 0) {
+            level.playSound(null, startPos, SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.BLOCKS, 1.0f, 1.0f);
+        }
     }
 
-
     private void convertBlocks(Level level, BlockPos pos, BlockState blockState, Player player, ItemStack itemStack, BlockState newBlockState) {
-        level.setBlock(pos, newBlockState, 3);  // 3 means it will update neighbors
-        level.playSound(null, pos, SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.BLOCKS, 1.0f, 1.0f);
+        // Copy properties from the old state to the new one
+        for (Property<?> property : blockState.getProperties()) {
+            if (newBlockState.hasProperty(property)) {
+                newBlockState = copyProperty(blockState, newBlockState, property);
+            }
+        }
+
+        // Now set the block to the new state, which should include any copied properties
+        level.setBlock(pos, newBlockState, 3);
 
         if (itemStack.isDamageableItem()) {
             itemStack.hurtAndBreak(1, player, player.getEquipmentSlotForItem(itemStack));
@@ -196,6 +218,7 @@ public class ColoringItem extends Item {
             itemStack.shrink(1);
         }
     }
+
 
     private <T extends Comparable<T>> BlockState copyProperty(BlockState oldState, BlockState newState, Property<T> property) {
         return newState.setValue(property, oldState.getValue(property));
