@@ -2,6 +2,9 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.2.20
+Added default server config
+
 1.2.18
 Fixed mass spraying for names blocks
 

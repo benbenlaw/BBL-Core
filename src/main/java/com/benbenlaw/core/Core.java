@@ -3,6 +3,7 @@ package com.benbenlaw.core;
 import com.benbenlaw.core.block.TestBlock;
 import com.benbenlaw.core.block.TestBlockEntities;
 import com.benbenlaw.core.config.ColorTintIndexConfig;
+import com.benbenlaw.core.config.CoreDefaultServerConfig;
 import com.benbenlaw.core.config.CoreStartupConfig;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
@@ -52,6 +53,7 @@ public class Core {
 
         modContainer.registerConfig(ModConfig.Type.STARTUP, ColorTintIndexConfig.SPEC, "bbl/core/color_index.toml");
         modContainer.registerConfig(ModConfig.Type.STARTUP, CoreStartupConfig.SPEC, "bbl/core/startup.toml");
+        modContainer.registerConfig(ModConfig.Type.STARTUP, CoreDefaultServerConfig.SPEC, "bbl/core/default_server.toml");
 
         eventBus.addListener(this::addItemToCreativeTab);
 

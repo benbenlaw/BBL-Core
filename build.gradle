@@ -84,6 +84,10 @@ dependencies {
     compileOnly "curse.maven:rhino-416294:5650008"
     runtimeOnly "curse.maven:rhino-416294:5650008"
 
+    //BH Menu
+    compileOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
+    runtimeOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
+
     //Mekanism
     //compileOnly "curse.maven:mekanism-268560:5574951"
     //runtimeOnly "curse.maven:mekanism-268560:5574951"
