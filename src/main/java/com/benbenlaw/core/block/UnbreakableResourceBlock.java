@@ -58,6 +58,10 @@ public class UnbreakableResourceBlock extends Block {
     }
 
 
+    @Override
+    public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
+        super.destroy(level, pos, state);
+    }
 
     @Override
     public void playerDestroy(@NotNull Level level, @NotNull Player player, BlockPos pos, @NotNull BlockState state, @Nullable BlockEntity blockEntity, @NotNull ItemStack tool) {
@@ -80,9 +84,6 @@ public class UnbreakableResourceBlock extends Block {
             popResource(level, pos, new ItemStack(this.asItem(), 1));
         }
     }
-
-
-
 
     @Override
     protected @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {

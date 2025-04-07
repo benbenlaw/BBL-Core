@@ -88,6 +88,10 @@ dependencies {
     compileOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
     runtimeOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
 
+    //Just Dire Things
+    //compileOnly "curse.maven:just-dire-things-1002348:6369120"
+    //runtimeOnly "curse.maven:just-dire-things-1002348:6369120"
+
     //Mekanism
     //compileOnly "curse.maven:mekanism-268560:5574951"
     //runtimeOnly "curse.maven:mekanism-268560:5574951"

@@ -2,6 +2,12 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.2.22
+Added UnbreakableResourceBlock support to Just Dire Things block breaker, this is a mixin
+
+1.2.21
+Fixed stone blocks having missing particles when broken
+
 1.2.20
 Added default server config
 
@@ -23,7 +29,7 @@ Pushed for colors
 Updated Grass
 
 1.2.3
-Made Bright Crafinh gTables work
+Made Bright Crafting Tables work
 
 1.2.2
 Added Tag Based IColored, change color based on item and block tags, requires custom tinted models

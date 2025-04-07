@@ -1,6 +1,0 @@
-{
-  "parent": "bblcore:block/tintable_cube_all",
-  "textures": {
-    "all": "minecraft:block/stone"
-  }
-}
