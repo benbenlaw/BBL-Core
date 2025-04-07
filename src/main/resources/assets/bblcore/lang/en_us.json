@@ -23,12 +23,16 @@
 
   "core.block.colored_crafting_table": "Colored Crafting Table",
 
+  "tooltips.block.unbreakable_resource_block_tool": "Collection tool: %s",
+  "tooltips.block.unbreakable_resource_block_tool_tag": "Collection tool tag: %s",
+
   "tooltips.item.shift.not_held": "Press SHIFT for more info",
   "tooltips.item.alt.not_held": "Press ALT for more info",
   "tooltips.item.control.not_held": "Press CTRL for more info",
 
   "tooltips.coloring_item.shift.held": "Right click to color colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
   "tooltips.lighting_item.shift.held": "Right click to light colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
-  "tooltips.coloring_item.mass_spraying": ", Mass Spraying!"
+  "tooltips.coloring_item.mass_spraying": ", Mass Spraying!",
+  "jei.unbreakable_resource_block.name": "Resource Blocks"
 
 }

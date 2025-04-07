@@ -35,12 +35,12 @@ public class TestBlock {
     );
     public static final DeferredBlock<Block> RESOURCE_BLOCK = registerBlock("resource_block",
             () -> new UnbreakableResourceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE),
-                    1, "minecraft:dirt", "minecraft:blocks/diamond_ore")
+                    1, "minecraft:dirt", "minecraft:blocks/diamond_ore", "minecraft:air")
     );
 
     public static final DeferredBlock<Block> RESOURCE_BLOCK_2 = registerBlock("resource_block_2",
             () -> new UnbreakableResourceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE),
-                    1,"#minecraft:planks", "minecraft:blocks/emerald_ore")
+                    1,"#minecraft:planks", "minecraft:blocks/emerald_ore", "minecraft:flame")
     );
 
     /*

@@ -2,6 +2,11 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.2.23
+Tweaked tool tips for unbreakable blocks to show the correct harvest tool  / tag more friendly
+Added .particle to kubejs builder, allow a particle to be set for the block when in world
+In mods the builder now requires a particle to be set
+
 1.2.22
 Added UnbreakableResourceBlock support to Just Dire Things block breaker, this is a mixin
 

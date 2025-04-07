@@ -1,7 +1,11 @@
 package com.benbenlaw.core.block;
 
 import com.benbenlaw.core.util.FakePlayerUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -9,6 +13,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -44,11 +49,14 @@ public class UnbreakableResourceBlock extends Block {
     public Supplier<Item> toolToCollectTheBlockAsItem;
     public TagKey<Item> toolToCollectTheBlockAsTag;
     public String lootTable;
+    public String particle;
     public FakePlayer fakePlayer;
-    public UnbreakableResourceBlock(Properties properties, int dropHeightModifier, String toolToCollectTheBlock, String lootTable) {
+    private static boolean warnedAboutMissingParticle = false;
+    public UnbreakableResourceBlock(Properties properties, int dropHeightModifier, String toolToCollectTheBlock, String lootTable, String particle) {
         super(properties);
         this.dropHeightModifier = dropHeightModifier;
         this.lootTable = lootTable;
+        this.particle = particle;
 
         if (toolToCollectTheBlock.startsWith("#")) {
             this.toolToCollectTheBlockAsTag = TagKey.create(Registries.ITEM, ResourceLocation.parse(toolToCollectTheBlock.substring(1)));
@@ -65,6 +73,7 @@ public class UnbreakableResourceBlock extends Block {
 
     @Override
     public void playerDestroy(@NotNull Level level, @NotNull Player player, BlockPos pos, @NotNull BlockState state, @Nullable BlockEntity blockEntity, @NotNull ItemStack tool) {
+
 
         BlockPos dropPos = new BlockPos(pos.getX(), pos.getY() + dropHeightModifier, pos.getZ());
         boolean isCorrectTool = false;
@@ -107,13 +116,40 @@ public class UnbreakableResourceBlock extends Block {
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
 
+
         if (toolToCollectTheBlockAsItem != null) {
-            tooltipComponents.add(Component.literal(toolToCollectTheBlockAsItem.get().toString()));
+            Component name = toolToCollectTheBlockAsItem.get().getName(toolToCollectTheBlockAsItem.get().getDefaultInstance());
+            tooltipComponents.add(Component.translatable("tooltips.block.unbreakable_resource_block_tool", name).withStyle(ChatFormatting.GRAY));
         }
 
         if (toolToCollectTheBlockAsTag != null) {
-            tooltipComponents.add(Component.literal(toolToCollectTheBlockAsTag.toString()));
+            String tag = toolToCollectTheBlockAsTag.toString();
+            tooltipComponents.add(Component.translatable("tooltips.block.unbreakable_resource_block_tool_tag", tag).withStyle(ChatFormatting.GRAY));
         }
+    }
 
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (random.nextFloat() < 0.5F) {
+
+            ParticleOptions particleType = (ParticleOptions) BuiltInRegistries.PARTICLE_TYPE.get(ResourceLocation.parse(particle));
+            if (particleType == null) {
+                if (!warnedAboutMissingParticle) {
+                    System.out.println("Particle not found, defaulting to minecraft:flame!");
+                    warnedAboutMissingParticle = true;
+                }
+                particleType = ParticleTypes.FLAME;
+            }
+
+            level.addParticle(
+                    particleType,
+                    pos.getX() + 0.5,
+                    pos.getY() + 1.5,
+                    pos.getZ() + 0.5,
+                    0.0D,
+                    0.0D,
+                    0.0D
+            );
+        }
     }
 }
