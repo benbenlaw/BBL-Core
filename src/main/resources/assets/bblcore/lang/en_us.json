@@ -21,7 +21,12 @@
   "item.bblcore.light": "Light",
   "item.bblcore.upgrade_base": "Upgrade Base",
 
-  "core.block.colored_crafting_table": "Colored Crafting Table",
+  "command.bblcore.modpack": "You are playing %s version %s",
+  "command.bblcore.discord": "Click to join our Discord server!",
+  "command.bblcore.modpack_not_set": "Set modpack information in the config - config/bbl/core/modpack.toml",
+
+  "core.falling.recovery_home": "A Mysterious force has saved you, taking you home...",
+  "core.falling.recovery_default": "A Mysterious force has saved you, taking you to world spawn...",
 
   "tooltips.block.unbreakable_resource_block_tool": "Collection tool: %s",
   "tooltips.block.unbreakable_resource_block_tool_tag": "Collection tool tag: %s",

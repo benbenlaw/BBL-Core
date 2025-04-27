@@ -2,6 +2,14 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.2.25
+Renamed StartupServer config to CoreModpackConfig file is now in bbl/core/modpack
+Removed the enabledPublicServerConfig, when the server name and server ip are set the server will be added to the multiplayer screen
+Added /modpack and /version originally from Opolis Utilities, disabled till 1.22
+
+1.2.24
+Added Void Protection, enable in config, when player takes damage in the void player will be teleported to spawn/ players spawn
+
 1.2.23
 Tweaked tool tips for unbreakable blocks to show the correct harvest tool  / tag more friendly
 Added .particle to kubejs builder, allow a particle to be set for the block when in world

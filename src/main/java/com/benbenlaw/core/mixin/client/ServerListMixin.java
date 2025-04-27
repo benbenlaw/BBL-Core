@@ -1,6 +1,6 @@
 package com.benbenlaw.core.mixin.client;
 
-import com.benbenlaw.core.config.CoreDefaultServerConfig;
+import com.benbenlaw.core.config.CoreModpackConfig;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,17 +16,17 @@ public class ServerListMixin {
     @Inject(method = "load", at = @At("RETURN"))
     private void injectCustomServer(CallbackInfo ci) {
 
-        if (CoreDefaultServerConfig.enableDefaultServer.get()) {
+        if (!CoreModpackConfig.serverName.get().isEmpty() && !CoreModpackConfig.serverIP.get().isEmpty()) {
 
             ServerList serverList = (ServerList) (Object) this;
             List<ServerData> servers = ((ServerListAccessor) serverList).getServerList();
 
-            String serverName = CoreDefaultServerConfig.serverName.get();
-            String serverIP = CoreDefaultServerConfig.serverIP.get();
+            String serverName = CoreModpackConfig.serverName.get();
+            String serverIP = CoreModpackConfig.serverIP.get();
 
             servers.removeIf(server -> server.ip.equals(serverIP));
             ServerData customServer = new ServerData(serverName, serverIP, ServerData.Type.OTHER);
-            servers.add(0, customServer);
+            servers.addFirst(customServer);
             serverList.save();
         }
     }

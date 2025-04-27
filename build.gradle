@@ -30,6 +30,9 @@ base {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
+
+
+
 neoForge {
     version = project.neo_version
 
@@ -89,8 +92,8 @@ dependencies {
     runtimeOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
 
     //Just Dire Things
-    //compileOnly "curse.maven:just-dire-things-1002348:6369120"
-    //runtimeOnly "curse.maven:just-dire-things-1002348:6369120"
+    compileOnly "curse.maven:just-dire-things-1002348:6369120"
+    runtimeOnly "curse.maven:just-dire-things-1002348:6369120"
 
     //Mekanism
     //compileOnly "curse.maven:mekanism-268560:5574951"

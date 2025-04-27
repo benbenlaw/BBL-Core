@@ -1,9 +1,8 @@
 package com.benbenlaw.core;
 
 import com.benbenlaw.core.block.TestBlock;
-import com.benbenlaw.core.block.TestBlockEntities;
 import com.benbenlaw.core.config.ColorTintIndexConfig;
-import com.benbenlaw.core.config.CoreDefaultServerConfig;
+import com.benbenlaw.core.config.CoreModpackConfig;
 import com.benbenlaw.core.config.CoreStartupConfig;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
@@ -13,7 +12,6 @@ import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.recipe.CoreConditions;
 import com.benbenlaw.core.recipe.CoreRecipes;
 import com.benbenlaw.core.util.ColorHandler;
-import com.benbenlaw.core.util.ColorList;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.api.distmarker.Dist;
@@ -53,7 +51,7 @@ public class Core {
 
         modContainer.registerConfig(ModConfig.Type.STARTUP, ColorTintIndexConfig.SPEC, "bbl/core/color_index.toml");
         modContainer.registerConfig(ModConfig.Type.STARTUP, CoreStartupConfig.SPEC, "bbl/core/startup.toml");
-        modContainer.registerConfig(ModConfig.Type.STARTUP, CoreDefaultServerConfig.SPEC, "bbl/core/default_server.toml");
+        modContainer.registerConfig(ModConfig.Type.STARTUP, CoreModpackConfig.SPEC, "bbl/core/modpack.toml");
 
         eventBus.addListener(this::addItemToCreativeTab);
 
