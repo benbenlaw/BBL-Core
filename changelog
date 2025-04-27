@@ -2,6 +2,14 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.2.28
+Added ruby, sapphire and peridot to ResourceNames.class
+Disabled test event for tags
+Disabled testing tags in core
+Added more tag builders for block, item and fluid
+Disabled all core testing blocks
+Fixed seed_slot mcmeta file and added poppy to the images
+
 1.2.27
 Completely change the global tags system, new resources are added to the ResourceNames.class this contains a name of resource to add tags for
 Inside the new CommonTags contains the tags for the resources eg gears, ingots, plates ect

@@ -65,7 +65,7 @@ public class CommonTags {
     private static void registerResourceTags(String resource) {
         Map<ResourceType, TagKey<Item>> tags = new EnumMap<>(ResourceType.class);
         for (ResourceType type : ResourceType.values()) {
-            tags.put(type, ModdedTagBuilder.createTag(
+            tags.put(type, ModdedTagBuilder.createNeoFabricItemTag(
                     String.format("%s/%s", type.path, resource)));
         }
         TAGS.put(resource, tags);
@@ -79,7 +79,7 @@ public class CommonTags {
     private static void registerRawStorageBlockTags(String resource) {
         Map<ResourceType, TagKey<Item>> tags = TAGS.get(resource);
         if (tags != null) {
-            tags.put(ResourceType.RAW_STORAGE_BLOCKS, ModdedTagBuilder.createTag(
+            tags.put(ResourceType.RAW_STORAGE_BLOCKS, ModdedTagBuilder.createNeoFabricItemTag(
                     String.format("storage_blocks/raw_%s", resource)));
         }
     }

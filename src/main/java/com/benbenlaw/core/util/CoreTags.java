@@ -1,6 +1,7 @@
 package com.benbenlaw.core.util;
 
 import com.benbenlaw.core.Core;
+import com.benbenlaw.core.tag.ModdedTagBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -26,19 +27,15 @@ public class CoreTags {
         public static final Map<String, TagKey<Block>> COLOR_TAGS = new HashMap<>();
         static {
             for (String color : ColorList.COLORS) {
-                COLOR_TAGS.put(color, tag(Core.MOD_ID, "tintable/" + color));
+                COLOR_TAGS.put(color, ModdedTagBuilder.createBlockTag(Core.MOD_ID, "tintable/" + color));
             }
         }
-
 
 
         public static TagKey<Block> tag(String modName, String name) {
             return BlockTags.create(ResourceLocation.fromNamespaceAndPath(modName, name));
         }
 
-        public static TagKey<Block> commonTags(String name) {
-            return BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
-        }
 
     }
     public static class Items {
@@ -50,18 +47,13 @@ public class CoreTags {
         public static final Map<String, TagKey<Item>> COLOR_TAGS = new HashMap<>();
         static {
             for (String color : ColorList.COLORS) {
-                COLOR_TAGS.put(color, tag(Core.MOD_ID, "tintable/" + color));
+                COLOR_TAGS.put(color, ModdedTagBuilder.createItemTag(Core.MOD_ID, "tintable/" + color));
             }
         }
 
         public static TagKey<Item> tag(String modName, String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(modName, name));
         }
-
-        public static TagKey<Item> commonTags(String name) {
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
-        }
-
     }
 
 }

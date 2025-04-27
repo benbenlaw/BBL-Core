@@ -32,8 +32,8 @@ public class Core {
 
 
     public Core(final IEventBus eventBus, final ModContainer modContainer) {
-        TestItem.ITEMS.register(eventBus);
-        TestBlock.BLOCKS.register(eventBus);
+        //TestItem.ITEMS.register(eventBus);
+        //TestBlock.BLOCKS.register(eventBus);
         //TestBlockEntities.BLOCK_ENTITIES.register(eventBus);
         //TestFluid.FLUIDS.register(modEventBus);
 
@@ -52,7 +52,7 @@ public class Core {
         CoreLootModifierCondition.LOOT_CONDITION_TYPES.register(eventBus);
         CoreLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(eventBus);
 
-
+        //Configs
         modContainer.registerConfig(ModConfig.Type.STARTUP, ColorTintIndexConfig.SPEC, "bbl/core/color_index.toml");
         modContainer.registerConfig(ModConfig.Type.STARTUP, CoreStartupConfig.SPEC, "bbl/core/startup.toml");
         modContainer.registerConfig(ModConfig.Type.STARTUP, CoreModpackConfig.SPEC, "bbl/core/modpack.toml");

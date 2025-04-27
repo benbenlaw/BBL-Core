@@ -25,6 +25,9 @@ public class ResourceNames {
     public static final String OSMIUM = "osmium";
     public static final String URANIUM = "uranium";
     public static final String IRIDIUM = "iridium";
+    public static final String RUBY = "ruby";
+    public static final String SAPPHIRE = "sapphire";
+    public static final String PERIDOT = "peridot";
 
     // Alloys
     public static final String BRONZE = "bronze";

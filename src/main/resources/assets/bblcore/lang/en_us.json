@@ -26,8 +26,8 @@
   "chat.bblcore.falling.home": "A Mysterious force has saved you, taking you home...",
   "chat.bblcore.falling.default": "A Mysterious force has saved you, taking you to world spawn...",
 
-  "tooltips.block.unbreakable_resource_block_tool": "Collection tool: %s",
-  "tooltips.block.unbreakable_resource_block_tool_tag": "Collection tool tag: %s",
+  "tooltips.bblcore.block.unbreakable_resource_block_tool": "Collection tool: %s",
+  "tooltips.bblcore.block.unbreakable_resource_block_tool_tag": "Collection tool tag: %s",
 
   "tooltips.bblcore.shift": "Press SHIFT for more info",
   "tooltips.bblcore.alt": "Press ALT for more info",

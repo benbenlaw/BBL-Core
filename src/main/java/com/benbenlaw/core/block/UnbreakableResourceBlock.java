@@ -119,12 +119,12 @@ public class UnbreakableResourceBlock extends Block {
 
         if (toolToCollectTheBlockAsItem != null) {
             Component name = toolToCollectTheBlockAsItem.get().getName(toolToCollectTheBlockAsItem.get().getDefaultInstance());
-            tooltipComponents.add(Component.translatable("tooltips.block.unbreakable_resource_block_tool", name).withStyle(ChatFormatting.GRAY));
+            tooltipComponents.add(Component.translatable("tooltips.bblcore.block.unbreakable_resource_block_tool", name).withStyle(ChatFormatting.GRAY));
         }
 
         if (toolToCollectTheBlockAsTag != null) {
             String tag = toolToCollectTheBlockAsTag.toString();
-            tooltipComponents.add(Component.translatable("tooltips.block.unbreakable_resource_block_tool_tag", tag).withStyle(ChatFormatting.GRAY));
+            tooltipComponents.add(Component.translatable("tooltips.bblcore.block.unbreakable_resource_block_tool_tag", tag).withStyle(ChatFormatting.GRAY));
         }
     }
 
