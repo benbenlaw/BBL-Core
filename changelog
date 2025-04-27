@@ -2,6 +2,15 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.2.27
+Completely change the global tags system, new resources are added to the ResourceNames.class this contains a name of resource to add tags for
+Inside the new CommonTags contains the tags for the resources eg gears, ingots, plates ect
+Both of these can be added and expanded in the future by simply adding a resource name and/or type of resource
+CommonTags.getTag("resource_name", "resource_type") will return the tag for that resource
+The best way to ensure the tag is present is to use the name from ResourceNames.class and the types CommonTags.class so
+CommonTags.getTag(ResourceNames.IRON, CommonTags.GEARS) will return the TagKey<Item> for iron gears (#c:gears/iron)
+Removed the old tags classes and system for this
+
 1.2.26
 General tidy up of translation keys to follow a better standard translation key should be (component.mod_id.key)
     eg "item.bblcore.upgrade_base": "Upgrade Base", "chat.bblcore.modpack": "Modpack"

@@ -2,6 +2,7 @@ package com.benbenlaw.core.event;
 
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.config.CoreStartupConfig;
+import com.benbenlaw.core.tag.CommonTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -9,25 +10,32 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.portal.DimensionTransition;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import org.apache.logging.log4j.core.jmx.Server;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-import javax.management.Attribute;
 import java.util.Objects;
 
-import static net.minecraft.world.level.portal.DimensionTransition.DO_NOTHING;
+import static com.benbenlaw.core.tag.CommonTags.ResourceType.RAW_STORAGE_BLOCKS;
+import static com.benbenlaw.core.tag.ResourceNames.IRON;
 
 @EventBusSubscriber(modid = Core.MOD_ID)
 public class ReturnToPlayerSpawnEvent {
 
+    @SubscribeEvent
+    public static void onPlayerRightClick(PlayerInteractEvent.RightClickItem event) {
+
+        if (event.getItemStack().is(CommonTags.getTag(IRON, RAW_STORAGE_BLOCKS))) {
+
+            event.getEntity().sendSystemMessage(Component.literal("its working !!!!!!!!"));
+
+        }
+
+
+    }
 
     @SubscribeEvent
     public static void onVoidDamage(LivingDamageEvent.Post event) {
