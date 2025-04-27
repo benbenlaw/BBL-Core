@@ -227,18 +227,17 @@ public class ColoringItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> list, TooltipFlag flag) {
 
-        boolean massSpraying = stack.get(CoreDataComponents.MASS_SPRAYING);
+        boolean massSpraying = Boolean.TRUE.equals(stack.get(CoreDataComponents.MASS_SPRAYING));
         Component massSprayingComponent = Component.literal("");
         if (massSpraying) {
-            massSprayingComponent = Component.translatable("tooltips.coloring_item.mass_spraying");
+            massSprayingComponent = Component.translatable("tooltips.bblcore.coloring_item.mass_spraying");
         }
         String massSprayingComponentTranslated = massSprayingComponent.getString();
 
-        TooltipUtil.addShiftTooltip(list, "tooltips.coloring_item.shift.held");
+        TooltipUtil.addShiftTooltip(list, "tooltips.bblcore.coloring_item.shift_down");
 
         Component colorComponent = Component.translatable(ColorMap.getTranslationKey(color.toString()));
-        StringBuilder nameBuilder = new StringBuilder()
-                .append(colorComponent.getString());
+        String nameBuilder = colorComponent.getString();
 
         TextColor textColor = (color == DyeColor.BLACK)
                 ? TextColor.fromRgb(0x3C3C3C)
@@ -251,7 +250,7 @@ public class ColoringItem extends Item {
     @Override
     public @NotNull Component getName(ItemStack stack) {
 
-        StringBuilder nameBuilder = new StringBuilder(super.getName(stack).getString());
+        String nameBuilder = super.getName(stack).getString();
 
         TextColor textColor;
 
@@ -261,7 +260,7 @@ public class ColoringItem extends Item {
             textColor = TextColor.fromRgb(0x3C3C3C);
         }
 
-        return Component.literal(nameBuilder.toString())
+        return Component.literal(nameBuilder)
                 .withStyle(style -> style.withColor(textColor));
     }
 }

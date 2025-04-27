@@ -29,8 +29,8 @@ public class CoreModpackConfig {
         //Discord URL
         BUILDER.push("Discord URL use /discord command to get the link");
 
-        discordURL = BUILDER.comment("Add a URL to link your discord, default = https://discord.gg/benbenlaw")
-                .define("Discord URL", "https://discord.gg/benbenlaw");
+        discordURL = BUILDER.comment("Add a URL to link your discord, BBL Discord = https://discord.gg/benbenlaw")
+                .define("Discord URL", "");
 
         BUILDER.pop();
 

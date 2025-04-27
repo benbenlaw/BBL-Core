@@ -17,27 +17,25 @@
   "color.bblcore.light_gray": "Light Gray",
   "color.bblcore.lit": "Lit",
 
-  "item.bblcore.black": "Black",
-  "item.bblcore.light": "Light",
   "item.bblcore.upgrade_base": "Upgrade Base",
 
-  "command.bblcore.modpack": "You are playing %s version %s",
-  "command.bblcore.discord": "Click to join our Discord server!",
-  "command.bblcore.modpack_not_set": "Set modpack information in the config - config/bbl/core/modpack.toml",
-
-  "core.falling.recovery_home": "A Mysterious force has saved you, taking you home...",
-  "core.falling.recovery_default": "A Mysterious force has saved you, taking you to world spawn...",
+  "chat.bblcore.modpack": "You are playing %s version %s",
+  "chat.bblcore.modpack_not_set": "Set modpack information in the config - config/bbl/core/modpack.toml",
+  "chat.bblcore.discord": "Click to join our Discord server!",
+  "chat.bblcore.discord_not_set": "Set discord information in the config - config/bbl/core/modpack.toml",
+  "chat.bblcore.falling.home": "A Mysterious force has saved you, taking you home...",
+  "chat.bblcore.falling.default": "A Mysterious force has saved you, taking you to world spawn...",
 
   "tooltips.block.unbreakable_resource_block_tool": "Collection tool: %s",
   "tooltips.block.unbreakable_resource_block_tool_tag": "Collection tool tag: %s",
 
-  "tooltips.item.shift.not_held": "Press SHIFT for more info",
-  "tooltips.item.alt.not_held": "Press ALT for more info",
-  "tooltips.item.control.not_held": "Press CTRL for more info",
+  "tooltips.bblcore.shift": "Press SHIFT for more info",
+  "tooltips.bblcore.alt": "Press ALT for more info",
+  "tooltips.bblcore.ctrl": "Press CTRL for more info",
 
-  "tooltips.coloring_item.shift.held": "Right click to color colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
+  "tooltips.bblcore.coloring_item.shift_down": "Right click to color colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
   "tooltips.lighting_item.shift.held": "Right click to light colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
-  "tooltips.coloring_item.mass_spraying": ", Mass Spraying!",
+  "tooltips.bblcore.coloring_item.mass_spraying": ", Mass Spraying!",
   "jei.unbreakable_resource_block.name": "Resource Blocks"
 
 }

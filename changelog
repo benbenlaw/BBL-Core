@@ -2,6 +2,12 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.2.26
+General tidy up of translation keys to follow a better standard translation key should be (component.mod_id.key)
+    eg "item.bblcore.upgrade_base": "Upgrade Base", "chat.bblcore.modpack": "Modpack"
+Try to use vanilla component just for consistency
+Discord command now has a error message if empty, will now be empty by default
+
 1.2.25
 Renamed StartupServer config to CoreModpackConfig file is now in bbl/core/modpack
 Removed the enabledPublicServerConfig, when the server name and server ip are set the server will be added to the multiplayer screen

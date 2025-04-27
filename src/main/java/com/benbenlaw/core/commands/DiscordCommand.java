@@ -20,10 +20,15 @@ public class DiscordCommand {
     private static int execute(CommandContext<CommandSourceStack> command){
         if(command.getSource().getEntity() instanceof Player player){
 
-            player.sendSystemMessage(Component.literal(CoreModpackConfig.discordURL.get())
-                    .setStyle(Style.EMPTY.withUnderlined(true).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, CoreModpackConfig.discordURL.get()))
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("command.bblcore.discord"))))
-                    .withStyle(ChatFormatting.BLUE));
+            if (!CoreModpackConfig.discordURL.get().isEmpty()) {
+                player.sendSystemMessage(Component.literal(CoreModpackConfig.discordURL.get())
+                        .setStyle(Style.EMPTY.withUnderlined(true).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, CoreModpackConfig.discordURL.get()))
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.bblcore.discord"))))
+                        .withStyle(ChatFormatting.BLUE));
+            } else {
+                player.sendSystemMessage(Component.translatable("chat.bblcore.discord_not_set")
+                        .withStyle(ChatFormatting.RED));
+            }
         }
         return Command.SINGLE_SUCCESS;
     }

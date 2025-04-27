@@ -47,12 +47,12 @@ public class ReturnToPlayerSpawnEvent {
 
                 if (spawnPos == null) {
                     spawnPos = serverLevel.getSharedSpawnPos();
-                    player.sendSystemMessage(Component.translatable("core.falling.recovery_default"));
+                    player.sendSystemMessage(Component.translatable("chat.bblcore.falling.default"));
                 }
 
                 player.fallDistance = 0.0F;
                 player.teleportTo(serverLevel, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), 0.0F, 0.0F);
-                player.sendSystemMessage(Component.translatable("core.falling.recovery_home"));
+                player.sendSystemMessage(Component.translatable("chat.bblcore.falling.home"));
 
             }
         }
