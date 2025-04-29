@@ -3,6 +3,8 @@ Changelog BBL Core
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
 1.2.28
+Added modpack update tracking, add the modpack id into the modpack config and enable it to check for modpack updates,
+    currently supports curseforge launcher other launcher will not show at the moment
 Added ruby, sapphire and peridot to ResourceNames.class
 Disabled test event for tags
 Disabled testing tags in core

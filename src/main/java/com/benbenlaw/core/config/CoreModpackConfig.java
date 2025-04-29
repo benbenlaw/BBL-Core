@@ -12,6 +12,7 @@ public class CoreModpackConfig {
     public static final ModConfigSpec.ConfigValue<String> modpackName;
     public static final ModConfigSpec.ConfigValue<String> modpackVersion;
     public static final ModConfigSpec.ConfigValue<Boolean> updateChecker;
+    public static final ModConfigSpec.ConfigValue<Integer> projectID;
 
     static {
 
@@ -47,6 +48,9 @@ public class CoreModpackConfig {
 
         updateChecker = BUILDER.comment("Check if the modpack has any updates available, default = false")
                 .define("Update Checker", false);
+
+        projectID = BUILDER.comment("Project ID for the modpack, found on curse forge")
+                .define("Project ID", 0);
 
         BUILDER.pop();
 

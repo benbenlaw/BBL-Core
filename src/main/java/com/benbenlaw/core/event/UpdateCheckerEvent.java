@@ -1,53 +1,42 @@
 package com.benbenlaw.core.event;
 
 import com.benbenlaw.core.Core;
-import com.benbenlaw.core.config.CoreStartupConfig;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.mojang.authlib.minecraft.client.ObjectMapper;
-import net.minecraft.core.BlockPos;
+import com.benbenlaw.core.config.CoreModpackConfig;
+import com.benbenlaw.core.util.GitExcludedClass;
+import com.google.gson.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import org.checkerframework.checker.units.qual.C;
 
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import javax.net.ssl.HttpsURLConnection;
+import java.io.*;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @EventBusSubscriber(modid = Core.MOD_ID)
 public class UpdateCheckerEvent {
 
     private static final String PREFIX = "https://api.curseforge.com";
-    private static final String apiKey = "$2a$10$Y64bw4w0RYpXpu9d9bEu7ulQSgP3MzXPm6rfmhEbqhnHf3oa8WOEq";
+    private static final String apiKey = GitExcludedClass.a;
+    private static final Path curseforgeMinecraftInstanceFileLocation = Path.of("minecraftinstance.json");
+    private static final int projectID = CoreModpackConfig.projectID.get();
 
     @SubscribeEvent
     public static void onPlayerLoggingInEvent(ClientPlayerNetworkEvent.LoggingIn event) {
-
         Player player = event.getPlayer();
 
-        if (player.getPersistentData().get("bblcore.modpack_version_id") == null) {
+        if (CoreModpackConfig.updateChecker.get()) {
+
             try {
-                HttpURLConnection connection = (HttpURLConnection) new URL(PREFIX + "/v1/mods/1193409").openConnection();
+                // Fetch the latest file ID from the API
+                HttpsURLConnection connection = (HttpsURLConnection) new URL(PREFIX + "/v1/mods/" + projectID).openConnection();
                 connection.addRequestProperty("x-api-key", apiKey);
                 connection.setRequestMethod("GET");
 
@@ -59,87 +48,86 @@ public class UpdateCheckerEvent {
                     return;
                 }
 
-                event.getPlayer().sendSystemMessage(Component.literal("Successfully connected to API!"));
-
+                //Read the obtained data
                 StringBuilder response = new StringBuilder();
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String inputLine;
-
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
                 in.close();
 
-                String jsonResponse = response.toString();
-                JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+                JsonObject jsonObject = JsonParser.parseString(response.toString()).getAsJsonObject();
                 JsonObject dataObject = jsonObject.getAsJsonObject("data");
-                JsonArray latestFilesIndexesArray = dataObject.getAsJsonArray("latestFilesIndexes");
-                if (!latestFilesIndexesArray.isEmpty()) {
-                    JsonObject firstFileIndex = latestFilesIndexesArray.get(0).getAsJsonObject();
+                JsonArray latestFilesIndexes = dataObject.getAsJsonArray("latestFilesIndexes");
 
-                    int fileId = firstFileIndex.get("fileId").getAsInt();
-                    player.getPersistentData().putString("bblcore.modpack_version_id", String.valueOf(fileId));
+                //Modpack name and URL from the API
+                String modpackName = dataObject.get("name").getAsString();
+                String url = dataObject.getAsJsonObject("links").get("websiteUrl").getAsString();
 
-                } else {
-                    System.out.println("No files found in the 'latestFilesIndexes' array.");
-                }
+                //Current version from instance
+                int currentVersion = 0;
+                //Latest version from api
+                int latestFileId = 0;
 
-                System.out.println("Response: " + response);
-            } catch (IOException e) {
-                System.out.println("Error while testing connection! " + e.getMessage());
-            }
-
-        } else {
-
-
-            try {
-                HttpURLConnection connection = (HttpURLConnection) new URL(PREFIX + "/v1/mods/1193409").openConnection();
-                connection.addRequestProperty("x-api-key", apiKey);
-                connection.setRequestMethod("GET");
-
-                if (connection.getResponseCode() != 200) {
-                    System.out.println("Unable to establish connection to API! Code " + connection.getResponseCode());
-                    if (connection.getResponseCode() == 403) {
-                        System.out.println("(Are you sure the key is valid?)");
+                //Update latestFileId
+                if (latestFilesIndexes != null && !latestFilesIndexes.isEmpty()) {
+                    JsonObject firstEntry = latestFilesIndexes.get(0).getAsJsonObject();
+                    if (firstEntry.has("fileId")) {
+                        latestFileId = firstEntry.get("fileId").getAsInt();
+                        System.out.println("Latest file ID: " + latestFileId);
+                    } else {
+                        System.out.println("fileId not found in the first entry.");
                     }
-                    return;
-                }
-
-                event.getPlayer().sendSystemMessage(Component.literal("Successfully connected to API!"));
-
-                StringBuilder response = new StringBuilder();
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String inputLine;
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-
-                String jsonResponse = response.toString();
-                JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
-                JsonObject dataObject = jsonObject.getAsJsonObject("data");
-                JsonArray latestFilesIndexesArray = dataObject.getAsJsonArray("latestFilesIndexes");
-                if (!latestFilesIndexesArray.isEmpty()) {
-                    JsonObject firstFileIndex = latestFilesIndexesArray.get(0).getAsJsonObject();
-
-                    int fileId = firstFileIndex.get("fileId").getAsInt();
-
-                    System.out.println("File ID: " + fileId);
-                    event.getPlayer().sendSystemMessage(Component.literal("Update Available"));
-                    player.getPersistentData().putString("bblcore.modpack_version_id", String.valueOf(fileId));
-
                 } else {
-                    System.out.println("No files found in the 'latestFilesIndexes' array.");
+                    System.out.println("latestFilesIndexes is missing or empty.");
                 }
 
-                System.out.println("Response: " + response);
+                //Update currentVersion
+                if (Files.exists(curseforgeMinecraftInstanceFileLocation)) {
+                    System.out.println("Curse Forge Version file exists. Checking for updates...");
+                    try (Reader reader = Files.newBufferedReader(curseforgeMinecraftInstanceFileLocation)) {
+                        JsonObject dataObjectInstance = JsonParser.parseReader(reader).getAsJsonObject();
+
+                        if (dataObjectInstance.has("installedModpack")) {
+                            JsonObject installedModpack = dataObjectInstance.getAsJsonObject("installedModpack");
+
+                            if (installedModpack.has("installedFile")) {
+                                JsonObject installedFile = installedModpack.getAsJsonObject("installedFile");
+                                if (installedFile.has("id")) {
+                                    currentVersion = installedFile.get("id").getAsInt();
+                                    System.out.println("Installed File ID: " + currentVersion);
+                                } else {
+                                    System.out.println("ID not found in installedFile.");
+                                }
+                            } else {
+                                System.out.println("installedFile not found in installedModpack.");
+                            }
+                        } else {
+                            System.out.println("installedModpack not found in JSON.");
+                        }
+                    } catch (IOException e) {
+                        System.out.println("No curseforge instance file found!");
+                    }
+                }
+
+                //Inform the player about the update
+                if (currentVersion < latestFileId) {
+                    player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_update", modpackName)
+                            .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
+                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.bblcore.modpack_website"))))
+                            .withStyle(ChatFormatting.BLUE));
+                } else {
+                    player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_up_date").withStyle(ChatFormatting.GREEN));
+                }
+
+                System.out.println("");
+
             } catch (IOException e) {
                 System.out.println("Error while testing connection! " + e.getMessage());
             }
         }
     }
 }
-
 
 

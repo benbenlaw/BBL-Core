@@ -118,3 +118,5 @@ runs
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
 /runs/
+
+/src/main/java/com/benbenlaw/core/util/GitExcludedClass.java
