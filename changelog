@@ -2,6 +2,15 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.2.31
+Fixed server side crashing, please let that be it :(
+
+1.2.30
+Fixed auto update preventing world loads when the instance file is missing information
+
+1.2.29
+More slight tweaks to class names and more information about the fluid handler
+
 1.2.28
 Added modpack update tracking, add the modpack id into the modpack config and enable it to check for modpack updates,
     currently supports curseforge launcher other launcher will not show at the moment

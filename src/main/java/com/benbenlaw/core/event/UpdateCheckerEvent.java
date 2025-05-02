@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
@@ -20,7 +21,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@EventBusSubscriber(modid = Core.MOD_ID)
+@EventBusSubscriber(modid = Core.MOD_ID, value = Dist.CLIENT)
 public class UpdateCheckerEvent {
 
     private static final String PREFIX = "https://api.curseforge.com";
@@ -34,100 +35,118 @@ public class UpdateCheckerEvent {
 
         if (CoreModpackConfig.updateChecker.get()) {
 
-            try {
-                // Fetch the latest file ID from the API
-                HttpsURLConnection connection = (HttpsURLConnection) new URL(PREFIX + "/v1/mods/" + projectID).openConnection();
-                connection.addRequestProperty("x-api-key", apiKey);
-                connection.setRequestMethod("GET");
+            // Step 1: Read the local instance file to get the installed modpack info
+            if (Files.exists(curseforgeMinecraftInstanceFileLocation)) {
+                try (Reader reader = Files.newBufferedReader(curseforgeMinecraftInstanceFileLocation)) {
+                    JsonElement parsed = JsonParser.parseReader(reader);
 
-                if (connection.getResponseCode() != 200) {
-                    System.out.println("Unable to establish connection to API! Code " + connection.getResponseCode());
-                    if (connection.getResponseCode() == 403) {
-                        System.out.println("(Are you sure the key is valid?)");
+                    if (!parsed.isJsonObject()) {
+                        System.out.println("Instance file does not contain a valid JSON object.");
+                        player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_invalid_instance").withStyle(ChatFormatting.RED));
+                        return;
                     }
-                    return;
-                }
 
-                //Read the obtained data
-                StringBuilder response = new StringBuilder();
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
+                    JsonObject dataObjectInstance = parsed.getAsJsonObject();
 
-                JsonObject jsonObject = JsonParser.parseString(response.toString()).getAsJsonObject();
-                JsonObject dataObject = jsonObject.getAsJsonObject("data");
-                JsonArray latestFilesIndexes = dataObject.getAsJsonArray("latestFilesIndexes");
+                    // Step 2: Check if installedModpack is null (indicating a dev environment)
+                    JsonElement installedModpackElement = dataObjectInstance.get("installedModpack");
 
-                //Modpack name and URL from the API
-                String modpackName = dataObject.get("name").getAsString();
-                String url = dataObject.getAsJsonObject("links").get("websiteUrl").getAsString();
+                    if (installedModpackElement.isJsonNull()) {
+                        System.out.println("No modpack is installed (Dev Environment).");
+                        player.sendSystemMessage(Component.translatable("chat.bblcore.dev_environment").withStyle(ChatFormatting.YELLOW));
+                        return; // Do not proceed with the update check, allow player to join
+                    }
 
-                //Current version from instance
-                int currentVersion = 0;
-                //Latest version from api
-                int latestFileId = 0;
+                    // Step 3: Proceed with the update check if installedModpack exists
+                    JsonObject installedModpack = installedModpackElement.getAsJsonObject();
 
-                //Update latestFileId
-                if (latestFilesIndexes != null && !latestFilesIndexes.isEmpty()) {
-                    JsonObject firstEntry = latestFilesIndexes.get(0).getAsJsonObject();
-                    if (firstEntry.has("fileId")) {
-                        latestFileId = firstEntry.get("fileId").getAsInt();
-                        System.out.println("Latest file ID: " + latestFileId);
+                    // Fetch the installed file's version
+                    int currentVersion = 0;
+                    if (installedModpack.has("latestFile") && installedModpack.getAsJsonObject("latestFile").has("id")) {
+                        currentVersion = installedModpack.getAsJsonObject("latestFile").get("id").getAsInt();
+                        System.out.println("Installed File ID from instance: " + currentVersion);
                     } else {
-                        System.out.println("fileId not found in the first entry.");
+                        System.out.println("Could not find latestFile.id in instance file.");
+                        player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_no_version").withStyle(ChatFormatting.RED));
+                        return;
                     }
-                } else {
-                    System.out.println("latestFilesIndexes is missing or empty.");
-                }
 
-                //Update currentVersion
-                if (Files.exists(curseforgeMinecraftInstanceFileLocation)) {
-                    System.out.println("Curse Forge Version file exists. Checking for updates...");
-                    try (Reader reader = Files.newBufferedReader(curseforgeMinecraftInstanceFileLocation)) {
-                        JsonObject dataObjectInstance = JsonParser.parseReader(reader).getAsJsonObject();
+                    // Step 4: Fetch the latest version from the API
+                    try {
+                        HttpsURLConnection connection = (HttpsURLConnection) new URL(PREFIX + "/v1/mods/" + projectID).openConnection();
+                        connection.addRequestProperty("x-api-key", apiKey);
+                        connection.setRequestMethod("GET");
 
-                        if (dataObjectInstance.has("installedModpack")) {
-                            JsonObject installedModpack = dataObjectInstance.getAsJsonObject("installedModpack");
+                        if (connection.getResponseCode() != 200) {
+                            System.out.println("Unable to establish connection to API! Code " + connection.getResponseCode());
+                            if (connection.getResponseCode() == 403) {
+                                System.out.println("(Are you sure the key is valid?)");
+                            }
+                            return;
+                        }
 
-                            if (installedModpack.has("installedFile")) {
-                                JsonObject installedFile = installedModpack.getAsJsonObject("installedFile");
-                                if (installedFile.has("id")) {
-                                    currentVersion = installedFile.get("id").getAsInt();
-                                    System.out.println("Installed File ID: " + currentVersion);
-                                } else {
-                                    System.out.println("ID not found in installedFile.");
-                                }
+                        // Read API Response
+                        StringBuilder response = new StringBuilder();
+                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        String inputLine;
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+                        in.close();
+
+                        // Parse API response
+                        JsonObject jsonObject = JsonParser.parseString(response.toString()).getAsJsonObject();
+                        JsonObject dataObject = jsonObject.getAsJsonObject("data");
+                        JsonArray latestFilesIndexes = dataObject.getAsJsonArray("latestFilesIndexes");
+
+                        // Modpack name and website URL from API
+                        String modpackName = dataObject.get("name").getAsString();
+                        String url = dataObject.getAsJsonObject("links").get("websiteUrl").getAsString();
+
+                        // Get the latest file ID from the API
+                        int latestFileId = 0;
+                        if (latestFilesIndexes != null && !latestFilesIndexes.isEmpty()) {
+                            JsonObject firstEntry = latestFilesIndexes.get(0).getAsJsonObject();
+                            if (firstEntry.has("fileId")) {
+                                latestFileId = firstEntry.get("fileId").getAsInt();
+                                System.out.println("Latest file ID from API: " + latestFileId);
                             } else {
-                                System.out.println("installedFile not found in installedModpack.");
+                                System.out.println("fileId not found in the first entry.");
                             }
                         } else {
-                            System.out.println("installedModpack not found in JSON.");
+                            System.out.println("latestFilesIndexes is missing or empty.");
                         }
+
+                        // Step 5: Compare local version and API version
+                        if (currentVersion == 0) {
+                            player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_no_version").withStyle(ChatFormatting.RED));
+                        } else if (currentVersion < latestFileId) {
+                            player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_update", modpackName)
+                                    .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
+                                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.bblcore.modpack_website"))))
+                                    .withStyle(ChatFormatting.BLUE));
+                        } else {
+                            player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_up_to_date").withStyle(ChatFormatting.GREEN));
+                        }
+
                     } catch (IOException e) {
-                        System.out.println("No curseforge instance file found!");
+                        System.out.println("Error while connecting to the API: " + e.getMessage());
                     }
+
+                } catch (IOException e) {
+                    System.out.println("Error reading the instance file: " + e.getMessage());
+                    player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_instance_error").withStyle(ChatFormatting.RED));
                 }
-
-                //Inform the player about the update
-                if (currentVersion < latestFileId) {
-                    player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_update", modpackName)
-                            .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
-                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.bblcore.modpack_website"))))
-                            .withStyle(ChatFormatting.BLUE));
-                } else {
-                    player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_up_date").withStyle(ChatFormatting.GREEN));
-                }
-
-                System.out.println("");
-
-            } catch (IOException e) {
-                System.out.println("Error while testing connection! " + e.getMessage());
+            } else {
+                System.out.println("CurseForge instance file not found.");
+                player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_no_instance").withStyle(ChatFormatting.RED));
             }
         }
     }
+
+
+
+
 }
 
 

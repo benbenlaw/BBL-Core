@@ -39,7 +39,13 @@
   "tooltips.bblcore.coloring_item.shift_down": "Right click to color colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
   "tooltips.lighting_item.shift.held": "Right click to light colored blocks in world, SHIFT right click to enable and disable Mass Spraying, Use with colored blocks in crafting grid to spray!",
   "tooltips.bblcore.coloring_item.mass_spraying": ", Mass Spraying!",
-  "jei.unbreakable_resource_block.name": "Resource Blocks"
+  "jei.unbreakable_resource_block.name": "Resource Blocks",
+  "chat.bblcore.modpack_no_version": "Cannot find modpack current version maybe this is a dev instance?",
+  "chat.bblcore.modpack_instance_error": "Error in Modpack Instance FIle",
+  "chat.bblcore.modpack_no_instance": "File not found",
+  "chat.bblcore.modpack_up_to_date": "Modpack up to date",
+  "chat.bblcore.dev_environment": "No current version found, pack devs dont worry this is fine if you are working on a pack",
+  "chat.bblcore.modpack_invalid_instance": "Invalid instance file"
 
 
 }

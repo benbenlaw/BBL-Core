@@ -7,7 +7,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.BlockPos;
@@ -20,7 +19,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -32,7 +30,6 @@ import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -43,7 +40,6 @@ import org.joml.Vector3f;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
@@ -75,7 +71,7 @@ public class FluidDeferredRegister {
     private final DeferredRegister<Block> blockRegister;
     private final DeferredRegister<Item> itemRegister;
 
-    public static FluidType.Properties getMekBaseBuilder() {
+    public static FluidType.Properties getBaseBuilder() {
         return FluidType.Properties.create().sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL).sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY);
     }
 
@@ -95,7 +91,7 @@ public class FluidDeferredRegister {
     }
 
     public <BUCKET extends BucketItem> FluidRegistryObject<CoreFluidTypes, BaseFlowingFluid.Source, BaseFlowingFluid.Flowing, LiquidBlock, BUCKET> register(String name, BucketCreator<BUCKET> bucketCreator, UnaryOperator<FluidType.Properties> fluidProperties, UnaryOperator<FluidTypeRenderProperties> renderProperties) {
-        return this.register(name, (FluidType.Properties) fluidProperties.apply(getMekBaseBuilder()), (FluidTypeRenderProperties) renderProperties.apply(FluidTypeRenderProperties.builder()), bucketCreator, CoreFluidTypes::new);
+        return this.register(name, (FluidType.Properties) fluidProperties.apply(getBaseBuilder()), (FluidTypeRenderProperties) renderProperties.apply(FluidTypeRenderProperties.builder()), bucketCreator, CoreFluidTypes::new);
     }
 
     public <BUCKET extends BucketItem> FluidRegistryObject<CoreFluidTypes, BaseFlowingFluid.Source, BaseFlowingFluid.Flowing, LiquidBlock, BUCKET> register(String name, FluidType.Properties properties, FluidTypeRenderProperties renderProperties, BucketCreator<BUCKET> bucketCreator, BiFunction<FluidType.Properties, FluidTypeRenderProperties, CoreFluidTypes> fluidTypeCreator) {

@@ -14,6 +14,8 @@ public class TestFluid {
     public static final FluidDeferredRegister FLUIDS = new FluidDeferredRegister(Core.MOD_ID);
 
     //Actual color is 0xFEEF9C add FF to make buckets render correctly 0xFFFEEF9C
+    //Buckets require a colorHandler to render there contents correctly
+    //using a tint without the FF will cause the bucket to render incorrectly unless you tweak the value inside the color handler
     //Path is for still and flowing texture, if using own textures tint is not needed
     //BlockState and Block model are needed to prevent errors
     //Register fluid in client event inside main class
