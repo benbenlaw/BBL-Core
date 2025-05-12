@@ -17,6 +17,8 @@
   "color.bblcore.light_gray": "Light Gray",
   "color.bblcore.lit": "Lit",
 
+  "block.bblcore.colored_crafting_table": "Colored Crafting Table",
+
   "item.bblcore.upgrade_base": "Upgrade Base",
 
   "chat.bblcore.modpack": "You are playing %s version %s",

@@ -16,7 +16,8 @@
         "client.IntegratedServerMixin",
         "client.CreateWorldScreenMixin",
         "client.ServerListAccessor",
-        "client.ServerListMixin"
+        "client.ServerListMixin",
+        "client.NightVisionEffectMixin"
     ],
     "injectors": {
     "defaultRequire": 1

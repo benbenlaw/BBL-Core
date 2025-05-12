@@ -2,6 +2,22 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.2.36
+Added common tag builder for blocks, items
+Added fluid tag builder 100% not for casting i swear
+
+1.2.35
+Actually implemented log stripping
+
+1.2.34
+Fixed colored crafting table translation key
+
+1.2.33
+Added CoreWidget for fluid handlers
+
+1.2.32
+Added NightVisionEffectMixin, disables the flashing effect when a players night vision is ending
+
 1.2.31
 Fixed server side crashing, please let that be it :(
 
