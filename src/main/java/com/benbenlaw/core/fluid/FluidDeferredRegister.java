@@ -8,6 +8,7 @@ import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.FogParameters;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -17,13 +18,16 @@ import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.material.*;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.common.SoundActions;
@@ -123,9 +127,9 @@ public class FluidDeferredRegister {
         if (tint == -1) {
             return MapColor.NONE;
         } else {
-            int red = FastColor.ARGB32.red(tint);
-            int green = FastColor.ARGB32.green(tint);
-            int blue = FastColor.ARGB32.blue(tint);
+            int red = ARGB.red(tint);
+            int green = ARGB.green(tint);
+            int blue = ARGB.blue(tint);
             MapColor color = MapColor.NONE;
             double minDistance = Double.MAX_VALUE;
             MapColor[] var7 = NONE;
@@ -134,9 +138,9 @@ public class FluidDeferredRegister {
             for (int var9 = 0; var9 < var8; ++var9) {
                 MapColor toTest = var7[var9];
                 if (toTest != null && toTest != MapColor.NONE) {
-                    int testRed = FastColor.ARGB32.red(toTest.col);
-                    int testGreen = FastColor.ARGB32.green(toTest.col);
-                    int testBlue = FastColor.ARGB32.blue(toTest.col);
+                    int testRed = ARGB.red(toTest.col);
+                    int testGreen = ARGB.green(toTest.col);
+                    int testBlue = ARGB.blue(toTest.col);
                     double distanceSquare = perceptualColorDistanceSquared(red, green, blue, testRed, testGreen, testBlue);
                     if (distanceSquare < minDistance) {
                         minDistance = distanceSquare;
@@ -290,9 +294,13 @@ public class FluidDeferredRegister {
                         shape = FogShape.CYLINDER;
                     }
 
-                    RenderSystem.setShaderFogStart(-8.0F);
-                    RenderSystem.setShaderFogEnd(farDistance);
-                    RenderSystem.setShaderFogShape(shape);
+                    RenderSystem.setShaderFog(new FogParameters(
+                            -8.0F, // Fog start
+                            farDistance, // Fog end
+                            shape, // Fog shape
+                            1.0F, 1.0F, 1.0F, 1.0F)
+                    );
+
                 }
 
                 public int getTintColor() {

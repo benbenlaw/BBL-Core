@@ -1,12 +1,10 @@
 package com.benbenlaw.core;
 
-import com.benbenlaw.core.block.TestBlock;
 import com.benbenlaw.core.config.ColorTintIndexConfig;
 import com.benbenlaw.core.config.CoreModpackConfig;
 import com.benbenlaw.core.config.CoreStartupConfig;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
-import com.benbenlaw.core.item.TestItem;
 import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.recipe.CoreConditions;
@@ -66,7 +64,7 @@ public class Core {
 
     private void addItemToCreativeTab(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(CoreItems.UPGRADE_BASE.get());
+            //event.accept(CoreItems.UPGRADE_BASE.get());
         }
     }
 

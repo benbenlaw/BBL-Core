@@ -1,16 +1,15 @@
 package com.benbenlaw.core.block.brightable.flammable;
 
 import com.benbenlaw.core.block.brightable.BrightLeaves;
-import com.benbenlaw.core.block.colored.ColoredLeaves;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BrightFlammableLeaves extends BrightLeaves {
+public abstract class BrightFlammableLeaves extends BrightLeaves {
 
-    public BrightFlammableLeaves(Properties properties) {
-        super(properties);
+    public BrightFlammableLeaves(Properties properties, float leafParticleChance) {
+        super(properties, leafParticleChance);
     }
 
     @Override

@@ -1,16 +1,11 @@
 package com.benbenlaw.core.integration.kubejs;
 
+/*
 import com.benbenlaw.core.block.UnbreakableResourceBlock;
-import com.sun.jna.platform.unix.Resource;
 import dev.latvian.mods.kubejs.block.BlockBuilder;
-import dev.latvian.mods.kubejs.block.KubeJSBlockProperties;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import org.jetbrains.annotations.Blocking;
-import org.openjdk.nashorn.internal.objects.annotations.Setter;
 
 public class ResourceBlockBuilder extends BlockBuilder {
 
@@ -52,3 +47,5 @@ public class ResourceBlockBuilder extends BlockBuilder {
                 dropHeightModifier, toolToCollectTheBlock, lootTable, particle);
     }
 }
+
+ */

@@ -4,7 +4,6 @@ import com.benbenlaw.core.Core;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -17,9 +16,10 @@ public class CoreRecipes {
     public static final DeferredRegister<RecipeType<?>> TYPES =
             DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, Core.MOD_ID);
 
-    //Coloring
-    public static final Supplier<RecipeSerializer<ColoringRecipe>> COLORING_SERIALIZER =
-            SERIALIZER.register("coloring", () -> new SimpleCraftingRecipeSerializer<>(ColoringRecipe::new));
+    //TODO: Revisit this when NeoForge has a better way to handle custom recipes
+    //Coloring - No idea where SimpleCraftingRecipeSerializer has gone but its not in the NeoForge codebase anymore, no information on it either,
+    //public static final Supplier<RecipeSerializer<ColoringRecipe>> COLORING_SERIALIZER =
+    //        SERIALIZER.register("coloring", () -> new SimpleCraftingRecipeSerializer<>(ColoringRecipe::new));
 
     public static final Supplier<RecipeType<ColoringRecipe>> COLORING_TYPE =
             TYPES.register("coloring", () -> new RecipeType<ColoringRecipe>() {});

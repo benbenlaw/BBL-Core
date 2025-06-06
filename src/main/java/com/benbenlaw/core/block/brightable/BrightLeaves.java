@@ -7,11 +7,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-public class BrightLeaves extends LeavesBlock implements IBrightable {
+public abstract class BrightLeaves extends LeavesBlock implements IBrightable {
 
+    // Oak leaves particle chance is 0.01f
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-    public BrightLeaves(Properties properties) {
-        super(properties);
+    public BrightLeaves(Properties properties, float leafParticleChance) {
+        super(leafParticleChance, properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false).setValue(DISTANCE, 7).setValue(PERSISTENT, Boolean.FALSE).setValue(WATERLOGGED, Boolean.FALSE));
     }
 

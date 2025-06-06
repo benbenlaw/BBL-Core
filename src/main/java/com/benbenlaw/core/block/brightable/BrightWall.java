@@ -22,7 +22,7 @@ public class BrightWall extends WallBlock implements IBrightable {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(LIT, UP, NORTH_WALL, EAST_WALL, WEST_WALL, SOUTH_WALL, WATERLOGGED);
+        builder.add(LIT, UP, NORTH, EAST, WEST, SOUTH, WATERLOGGED);
     }
 
 

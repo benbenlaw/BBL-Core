@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.lighting.LightEngine;
 
 public class BrightGrassBlock extends GrassBlock implements BonemealableBlock, IBrightable {
@@ -21,10 +21,10 @@ public class BrightGrassBlock extends GrassBlock implements BonemealableBlock, I
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     private final Block DIRT_BLOCK;
     private final Block SHORT_GRASS_BLOCK;
-    private final ResourceKey<ConfiguredFeature<?, ?>> VEGETATION_PLACEMENT;
+    private final ResourceKey<PlacedFeature> VEGETATION_PLACEMENT;
 
 
-    public BrightGrassBlock(Properties properties, ResourceKey<ConfiguredFeature<?, ?>> vegetationPlacements, Block dirt, Block shortGrassBlock) {
+    public BrightGrassBlock(Properties properties, ResourceKey<PlacedFeature> vegetationPlacements, Block dirt, Block shortGrassBlock) {
         super(properties);
         VEGETATION_PLACEMENT = vegetationPlacements;
         DIRT_BLOCK = dirt;
@@ -45,10 +45,8 @@ public class BrightGrassBlock extends GrassBlock implements BonemealableBlock, I
         } else if (blockstate.getFluidState().getAmount() == 8) {
             return false;
         } else {
-            int i = LightEngine.getLightBlockInto(
-                    p_56825_, p_56824_, p_56826_, blockstate, blockpos, Direction.UP, blockstate.getLightBlock(p_56825_, blockpos)
-            );
-            return i < p_56825_.getMaxLightLevel();
+            int i = LightEngine.getLightBlockInto(p_56824_, blockstate, Direction.UP, blockstate.getLightBlock());
+            return i < 15;
         }
     }
 
@@ -81,29 +79,31 @@ public class BrightGrassBlock extends GrassBlock implements BonemealableBlock, I
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState state) {
-        level.registryAccess().registry(Registries.CONFIGURED_FEATURE).flatMap((registry) -> registry.getHolder(VEGETATION_PLACEMENT)).ifPresent((feature) -> {
 
-            // Place vegetation directly above the clicked block
-            if (level.getBlockState(blockPos).is(state.getBlock()) && level.getBlockState(blockPos.above()).isAir()) {
-                feature.value().place(level, level.getChunkSource().getGenerator(), random, blockPos.above());
-            }
 
-            // Controlled spreading logic (only spread on BrightGrassBlock)
-            for (int i = 0; i < 128; ++i) {  // Reduced spread attempts for better balance
-                BlockPos spreadPos = blockPos.offset(random.nextInt(5) - 2, random.nextInt(3) - 1, random.nextInt(5) - 2);
-                BlockState spreadState = level.getBlockState(spreadPos);
 
-                // Spread only on BrightGrassBlock, NOT on dirt
-                if (spreadState.is(state.getBlock())) {
-                    if (random.nextFloat() < 0.3F) { // Lower chance of spreading to control density
-                        BlockPos abovePos = spreadPos.above();
-                        if (level.getBlockState(abovePos).isAir()) {
-                            feature.value().place(level, level.getChunkSource().getGenerator(), random, abovePos);
-                        }
+        level.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).get(VEGETATION_PLACEMENT).ifPresent((feature) -> {
+
+        // Place vegetation directly above the clicked block
+        if (level.getBlockState(blockPos).is(state.getBlock()) && level.getBlockState(blockPos.above()).isAir()) {
+            feature.value().place(level, level.getChunkSource().getGenerator(), random, blockPos.above());
+        }
+
+        // Controlled spreading logic (only spread on BrightGrassBlock)
+        for (int i = 0; i < 128; ++i) {  // Reduced spread attempts for better balance
+            BlockPos spreadPos = blockPos.offset(random.nextInt(5) - 2, random.nextInt(3) - 1, random.nextInt(5) - 2);
+            BlockState spreadState = level.getBlockState(spreadPos);
+
+            // Spread only on BrightGrassBlock, NOT on dirt
+            if (spreadState.is(state.getBlock())) {
+                if (random.nextFloat() < 0.3F) { // Lower chance of spreading to control density
+                    BlockPos abovePos = spreadPos.above();
+                    if (level.getBlockState(abovePos).isAir()) {
+                        feature.value().place(level, level.getChunkSource().getGenerator(), random, abovePos);
                     }
                 }
             }
-        });
+        }});
     }
 
 

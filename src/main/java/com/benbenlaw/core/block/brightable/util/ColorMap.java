@@ -1,9 +1,8 @@
-package com.benbenlaw.core.block.colored.util;
+package com.benbenlaw.core.block.brightable.util;
 
 import com.benbenlaw.core.config.ColorTintIndexConfig;
 import net.minecraft.world.item.DyeColor;
 
-import java.awt.*;
 import java.util.HashMap;
 
 public class ColorMap {

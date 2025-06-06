@@ -6,9 +6,8 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.neoforged.neoforge.client.model.IQuadTransformer;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import static net.neoforged.neoforge.client.model.IQuadTransformer.COLOR;
@@ -130,18 +129,18 @@ public class RenderUtil {
     }
 
     public static float getRed(int color) {
-        return (float) FastColor.ARGB32.red(color) / 255.0F;
+        return (float) ARGB.red(color) / 255.0F;
     }
 
     public static float getGreen(int color) {
-        return (float) FastColor.ARGB32.green(color) / 255.0F;
+        return (float) ARGB.green(color) / 255.0F;
     }
 
     public static float getBlue(int color) {
-        return (float) FastColor.ARGB32.blue(color) / 255.0F;
+        return (float) ARGB.blue(color) / 255.0F;
     }
 
     public static float getAlpha(int color) {
-        return (float) FastColor.ARGB32.alpha(color) / 255.0F;
+        return (float) ARGB.alpha(color) / 255.0F;
     }
 }

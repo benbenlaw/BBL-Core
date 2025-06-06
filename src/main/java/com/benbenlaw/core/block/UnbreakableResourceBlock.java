@@ -3,7 +3,6 @@ package com.benbenlaw.core.block;
 import com.benbenlaw.core.util.FakePlayerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,33 +13,26 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class UnbreakableResourceBlock extends Block {
@@ -61,7 +53,7 @@ public class UnbreakableResourceBlock extends Block {
         if (toolToCollectTheBlock.startsWith("#")) {
             this.toolToCollectTheBlockAsTag = TagKey.create(Registries.ITEM, ResourceLocation.parse(toolToCollectTheBlock.substring(1)));
         } else {
-            this.toolToCollectTheBlockAsItem = () -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(toolToCollectTheBlock));
+            this.toolToCollectTheBlockAsItem = () -> BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(toolToCollectTheBlock));
         }
     }
 
@@ -113,26 +105,29 @@ public class UnbreakableResourceBlock extends Block {
         return drops;
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+    /* block now need there own item to all tooltips WHHYHYYY
 
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
 
         if (toolToCollectTheBlockAsItem != null) {
             Component name = toolToCollectTheBlockAsItem.get().getName(toolToCollectTheBlockAsItem.get().getDefaultInstance());
-            tooltipComponents.add(Component.translatable("tooltips.bblcore.block.unbreakable_resource_block_tool", name).withStyle(ChatFormatting.GRAY));
+            tooltipAdder.accept(Component.translatable("tooltips.bblcore.block.unbreakable_resource_block_tool", name).withStyle(ChatFormatting.GRAY));
         }
 
         if (toolToCollectTheBlockAsTag != null) {
             String tag = toolToCollectTheBlockAsTag.toString();
-            tooltipComponents.add(Component.translatable("tooltips.bblcore.block.unbreakable_resource_block_tool_tag", tag).withStyle(ChatFormatting.GRAY));
+            tooltipAdder.accept(Component.translatable("tooltips.bblcore.block.unbreakable_resource_block_tool_tag", tag).withStyle(ChatFormatting.GRAY));
         }
     }
+
+     */
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (random.nextFloat() < 0.5F) {
 
-            ParticleOptions particleType = (ParticleOptions) BuiltInRegistries.PARTICLE_TYPE.get(ResourceLocation.parse(particle));
+            ParticleOptions particleType = (ParticleOptions) BuiltInRegistries.PARTICLE_TYPE.getValue(ResourceLocation.parse(particle));
             if (particleType == null) {
                 if (!warnedAboutMissingParticle) {
                     System.out.println("Particle not found, defaulting to minecraft:flame!");

@@ -1,7 +1,6 @@
 package com.benbenlaw.core.item.colored;
 
-import com.benbenlaw.core.block.colored.util.ColorMap;
-import com.benbenlaw.core.block.colored.*;
+import com.benbenlaw.core.block.brightable.util.ColorMap;
 import com.benbenlaw.core.item.CoreDataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
@@ -16,66 +15,6 @@ public class ColoredBlockItem extends BlockItem {
     public ColoredBlockItem(Properties properties) {
         super(Blocks.AIR, properties);
     }
-
-    public ColoredBlockItem(ColoredBlock block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredStairs block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredSlab block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredWall block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredPressurePlate block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredButton block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredFence block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredFenceGate block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredDoor block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredTrapDoor block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredLog block, Properties properties) {
-        super(block, properties);
-    }
-
-    public ColoredBlockItem(ColoredLeaves block, Properties properties) {
-        super(block, properties);
-    }
-
-    public ColoredBlockItem(ColoredFlowerPot block, Properties properties) {
-        super(block, properties);
-    }
-
-    public ColoredBlockItem(ColoredSapling block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredFlower block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredGrassBlock block, Properties properties) {super(block, properties);}
-    public ColoredBlockItem(ColoredSnowyDirtBlock block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredSpreadingSnowyDirtBlock block, Properties properties) {
-        super(block, properties);
-    }
-    public ColoredBlockItem(ColoredTallGrassBlock block, Properties properties) {super(block, properties);}
-    public ColoredBlockItem(ColoredDoublePlantBlock block, Properties properties) {super(block, properties);}
-
-
 
     @Override
     public @NotNull Component getName(ItemStack stack) {

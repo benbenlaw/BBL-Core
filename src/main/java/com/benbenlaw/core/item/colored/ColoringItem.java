@@ -1,14 +1,13 @@
 package com.benbenlaw.core.item.colored;
 
-import com.benbenlaw.core.block.colored.util.ColorMap;
-import com.benbenlaw.core.block.colored.util.IColored;
-import com.benbenlaw.core.block.colored.util.BlockTypeColorFinder;
+import com.benbenlaw.core.block.brightable.util.ColorMap;
+import com.benbenlaw.core.block.brightable.util.IColored;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.TooltipUtil;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
@@ -17,10 +16,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -28,7 +31,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ColoringItem extends Item {
@@ -43,14 +50,15 @@ public class ColoringItem extends Item {
         return color;
     }
 
+
+    //Confirm this is correct
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        return super.supportsEnchantment(stack, enchantment);
     }
 
     @Override
-    public @NotNull ItemStack getCraftingRemainingItem(ItemStack itemStack) {
-
+    public ItemStack getCraftingRemainder(ItemStack itemStack) {
         if (itemStack.isDamageableItem()) {
             ItemStack stackInCraftingTable = itemStack.copy();
             stackInCraftingTable.setDamageValue(stackInCraftingTable.getDamageValue() + 1);
@@ -61,11 +69,11 @@ public class ColoringItem extends Item {
 
             return stackInCraftingTable;
         }
-        return super.getCraftingRemainingItem(itemStack);
+        return super.getCraftingRemainder(itemStack);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public @NotNull InteractionResult use(Level level, Player player, InteractionHand hand) {
 
         ItemStack stack = player.getItemInHand(hand);
         if (Screen.hasShiftDown()) {
@@ -73,7 +81,7 @@ public class ColoringItem extends Item {
             stack.set(CoreDataComponents.MASS_SPRAYING, !currentMassSpraying);
         }
 
-        return InteractionResultHolder.success(stack);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -92,35 +100,6 @@ public class ColoringItem extends Item {
         InteractionHand hand = context.getHand();
 
         if (!level.isClientSide()) {
-            if (state.getBlock() instanceof IColored) {
-                DyeColor dyeColor = null;
-                Function<BlockState, DyeColor> colorRetriever = BlockTypeColorFinder.BLOCK_TYPE_COLOR_FINDER.get(state.getBlock().getClass());
-
-                if (colorRetriever != null) {
-                    dyeColor = colorRetriever.apply(state);
-                }
-
-                Block block = state.getBlock();
-                Property<DyeColor> colorProperty = (Property<DyeColor>) block.getStateDefinition().getProperty("color");
-
-                if (colorProperty != null && dyeColor != null) {
-                    state = state.setValue(colorProperty, color);
-
-                    if (Boolean.TRUE.equals(stack.get(CoreDataComponents.MASS_SPRAYING))) {
-                        massConvertBlocks(level, pos, state, player, stack, state);
-                    } else {
-                        level.setBlock(pos, state, 3);
-                    }
-                }
-
-                if (stack.isDamageableItem()) {
-                    assert player != null;
-                    stack.hurtAndBreak(1, player, player.getEquipmentSlotForItem(stack));
-                } else {
-                    stack.shrink(1);
-                }
-                return InteractionResult.SUCCESS;
-            }
 
             // Handle blocks with names containing the color
             for (String colorCheck : colors) {
@@ -133,7 +112,8 @@ public class ColoringItem extends Item {
                     ResourceLocation newBlockResourceLocation = ResourceLocation.tryParse(newColoredBlock);
 
                     if (newBlockResourceLocation != null && BuiltInRegistries.BLOCK.containsKey(newBlockResourceLocation)) {
-                        Block newBlock = BuiltInRegistries.BLOCK.get(newBlockResourceLocation);
+                        Block newBlock = BuiltInRegistries.BLOCK.getValue(newBlockResourceLocation);
+
                         BlockState newState = newBlock.defaultBlockState();
                         for (Property<?> property : state.getProperties()) {
                             if (newState.hasProperty(property)) {
@@ -224,17 +204,16 @@ public class ColoringItem extends Item {
         return newState.setValue(property, oldState.getValue(property));
     }
 
+
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
 
         boolean massSpraying = Boolean.TRUE.equals(stack.get(CoreDataComponents.MASS_SPRAYING));
-        Component massSprayingComponent = Component.literal("");
-        if (massSpraying) {
-            massSprayingComponent = Component.translatable("tooltips.bblcore.coloring_item.mass_spraying");
-        }
-        String massSprayingComponentTranslated = massSprayingComponent.getString();
+        Component massSprayingComponent = massSpraying
+                ? Component.translatable("tooltips.bblcore.coloring_item.mass_spraying")
+                : Component.literal("");
 
-        TooltipUtil.addShiftTooltip(list, "tooltips.bblcore.coloring_item.shift_down");
+        TooltipUtil.addShiftTooltip(tooltipDisplay, tooltipAdder, "tooltips.bblcore.coloring_item.shift_down");
 
         Component colorComponent = Component.translatable(ColorMap.getTranslationKey(color.toString()));
         String nameBuilder = colorComponent.getString();
@@ -243,9 +222,13 @@ public class ColoringItem extends Item {
                 ? TextColor.fromRgb(0x3C3C3C)
                 : TextColor.fromRgb(color.getTextColor());
 
-        list.add(Component.literal("Color: " + nameBuilder + massSprayingComponentTranslated).withStyle(style -> style.withColor(textColor)));
-
+        // Combine your text with color and add it to the tooltip using tooltipAdder
+        tooltipAdder.accept(Component.literal("Color: " + nameBuilder + " " + massSprayingComponent.getString())
+                .withStyle(style -> style.withColor(textColor)));
     }
+
+
+
 
     @Override
     public @NotNull Component getName(ItemStack stack) {

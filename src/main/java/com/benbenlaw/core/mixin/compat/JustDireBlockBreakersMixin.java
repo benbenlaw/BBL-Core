@@ -14,11 +14,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.lang.reflect.Method;
-import java.util.Objects;
 
 @Mixin(targets = "com.direwolf20.justdirethings.common.blockentities.BlockBreakerT1BE")
 public class JustDireBlockBreakersMixin {

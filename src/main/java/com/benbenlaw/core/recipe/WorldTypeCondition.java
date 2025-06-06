@@ -20,6 +20,8 @@ public record WorldTypeCondition(HolderSet<MapCodec<? extends ChunkGenerator>> w
 
     @Override
     public boolean test(@NotNull IContext context) {
+        boolean matches = WorldInfoCache.matches(worldTypes);
+        System.out.println("Matches: " + matches);
         return WorldInfoCache.matches(worldTypes);
     }
     @Override

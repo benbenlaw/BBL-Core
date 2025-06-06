@@ -1,15 +1,14 @@
 package com.benbenlaw.core.integration.jei;
 
-import com.benbenlaw.core.recipe.CoreRecipes;
-import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeAccess;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
@@ -55,13 +54,16 @@ public abstract class CoreRecipeCategory<T extends Recipe<?>> implements IRecipe
     @Override
     public @Nullable ResourceLocation getRegistryName(@NotNull T recipe) {
         assert Minecraft.getInstance().level != null;
-        RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
+        RecipeAccess recipeAccess = Minecraft.getInstance().level.recipeAccess();
+
+        RecipeManager recipeManager = (RecipeManager) recipeAccess;
 
         Optional<RecipeHolder<?>> recipeHolder = recipeManager.getRecipes().stream()
                 .filter(holder -> holder.value().equals(recipe))
                 .findFirst();
 
-        return recipeHolder.map(RecipeHolder::id).orElse(null);
+        return recipeHolder.map(RecipeHolder::id)
+                .orElseThrow().registry();
 
     }
 }

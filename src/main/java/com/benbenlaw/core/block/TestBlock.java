@@ -2,12 +2,7 @@ package com.benbenlaw.core.block;
 
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.block.brightable.BrightBlock;
-import com.benbenlaw.core.block.colored.ColoredBlock;
-import com.benbenlaw.core.block.colored.ColoredStairs;
-import com.benbenlaw.core.block.colored.ColoredWall;
-import com.benbenlaw.core.block.colored.flammable.FlammableColoredLog;
 import com.benbenlaw.core.item.TestItem;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;

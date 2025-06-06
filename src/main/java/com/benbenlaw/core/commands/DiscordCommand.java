@@ -7,11 +7,12 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.*;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class DiscordCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher){
@@ -20,13 +21,20 @@ public class DiscordCommand {
     private static int execute(CommandContext<CommandSourceStack> command){
         if(command.getSource().getEntity() instanceof Player player){
 
-            if (!CoreModpackConfig.discordURL.get().isEmpty()) {
-                player.sendSystemMessage(Component.literal(CoreModpackConfig.discordURL.get())
-                        .setStyle(Style.EMPTY.withUnderlined(true).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, CoreModpackConfig.discordURL.get()))
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.bblcore.discord"))))
-                        .withStyle(ChatFormatting.BLUE));
-            } else {
-                player.sendSystemMessage(Component.translatable("chat.bblcore.discord_not_set")
+            ServerPlayer serverPlayer = (ServerPlayer) player;
+
+            try {
+                URI uri = new URI(CoreModpackConfig.discordURL.get());
+                serverPlayer.sendSystemMessage(Component.literal(CoreModpackConfig.discordURL.get())
+                        .setStyle(Style.EMPTY
+                                .withUnderlined(true)
+                                .withColor(ChatFormatting.BLUE)
+                                .withClickEvent(new ClickEvent.OpenUrl(uri))
+                                .withHoverEvent(new HoverEvent.ShowText(Component.translatable("chat.bblcore.discord")))
+                        )
+                );
+            } catch (URISyntaxException e) {
+                serverPlayer.sendSystemMessage(Component.translatable("chat.bblcore.discord_not_set")
                         .withStyle(ChatFormatting.RED));
             }
         }

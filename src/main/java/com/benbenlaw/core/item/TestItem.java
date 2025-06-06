@@ -1,10 +1,6 @@
 package com.benbenlaw.core.item;
 
 import com.benbenlaw.core.Core;
-import com.benbenlaw.core.block.colored.ColoredBlock;
-import com.benbenlaw.core.block.TestBlock;
-import com.benbenlaw.core.item.colored.ColoredBlockItem;
-import com.benbenlaw.core.item.colored.ColoredItem;
 import com.benbenlaw.core.item.colored.ColoringItem;
 import com.benbenlaw.core.item.colored.LightingItem;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -45,7 +41,7 @@ public class TestItem {
             () -> new ColoringItem(new Item.Properties(), DyeColor.BLACK));
     public static final DeferredItem<Item> BLUE = ITEMS.register("blue",
             () -> new ColoringItem(new Item.Properties().durability(456)
-                    .craftRemainder(BuiltInRegistries.ITEM.get(ResourceLocation.parse("core:blue"))), DyeColor.BLUE));
+                    .craftRemainder(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse("core:blue"))), DyeColor.BLUE));
     public static final DeferredItem<Item> LIGHT = ITEMS.register("light",
             () -> new LightingItem(new Item.Properties().durability(456)));
     public static final DeferredItem<Item> LIGHT_1 = ITEMS.register("light_1",

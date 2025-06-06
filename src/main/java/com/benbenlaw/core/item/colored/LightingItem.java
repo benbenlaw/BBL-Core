@@ -1,11 +1,9 @@
 package com.benbenlaw.core.item.colored;
 
 import com.benbenlaw.core.block.brightable.IBrightable;
-import com.benbenlaw.core.block.colored.util.IColored;
-import com.benbenlaw.core.block.colored.ColoredBlock;
+import com.benbenlaw.core.block.brightable.util.IColored;
 import com.benbenlaw.core.item.TooltipUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
@@ -14,6 +12,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class LightingItem extends Item {
 
@@ -29,14 +29,9 @@ public class LightingItem extends Item {
         super(properties);
     }
 
-    @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
-    }
 
     @Override
-    public @NotNull ItemStack getCraftingRemainingItem(ItemStack itemStack) {
-
+    public ItemStack getCraftingRemainder(ItemStack itemStack) {
         if (itemStack.isDamageableItem()) {
             ItemStack stackInCraftingTable = itemStack.copy();
             stackInCraftingTable.setDamageValue(stackInCraftingTable.getDamageValue() + 1);
@@ -47,7 +42,7 @@ public class LightingItem extends Item {
 
             return stackInCraftingTable;
         }
-        return super.getCraftingRemainingItem(itemStack);
+        return super.getCraftingRemainder(itemStack);
     }
 
     @Override
@@ -86,13 +81,6 @@ public class LightingItem extends Item {
             Block block = state.getBlock();
             Property<DyeColor> colorProperty = (Property<DyeColor>) block.getStateDefinition().getProperty("color");
 
-            if (colorProperty != null) {
-                if (state.getValue(ColoredBlock.LIT)) {
-                    level.setBlock(pos, state.setValue(ColoredBlock.LIT, false), 3);
-                } else {
-                    level.setBlock(pos, state.setValue(ColoredBlock.LIT, true), 3);
-                }
-            }
 
             if (stack.isDamageableItem()) {
                 assert player != null;
@@ -107,9 +95,9 @@ public class LightingItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> list, TooltipFlag flag) {
-        TooltipUtil.addShiftTooltip(list, "tooltips.lighting_item.shift.held");
-        list.add(Component.literal("Ability: Lights Blocks").withStyle(ChatFormatting.YELLOW));
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
+        TooltipUtil.addShiftTooltip(tooltipDisplay, tooltipAdder, "tooltips.lighting_item.shift.held");
+        tooltipAdder.accept(Component.literal("Ability: Lights Blocks").withStyle(ChatFormatting.YELLOW));
     }
 
     @Override

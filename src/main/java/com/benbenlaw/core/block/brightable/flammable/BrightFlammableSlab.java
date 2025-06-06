@@ -1,7 +1,6 @@
 package com.benbenlaw.core.block.brightable.flammable;
 
 import com.benbenlaw.core.block.brightable.BrightSlab;
-import com.benbenlaw.core.block.colored.ColoredSlab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;

@@ -1,5 +1,5 @@
 package com.benbenlaw.core.integration.kubejs;
-
+/*
 import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import dev.latvian.mods.kubejs.registry.BuilderTypeRegistry;
 import net.minecraft.core.registries.Registries;
@@ -16,3 +16,5 @@ public class CoreKubeJSPlugin implements KubeJSPlugin {
         KubeJSPlugin.super.registerBuilderTypes(registry);
     }
 }
+
+ */

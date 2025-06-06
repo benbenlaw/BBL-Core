@@ -3,7 +3,10 @@ package com.benbenlaw.core.event;
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.config.CoreModpackConfig;
 import com.benbenlaw.core.util.GitExcludedClass;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -16,7 +19,12 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,7 +50,7 @@ public class UpdateCheckerEvent {
 
                     if (!parsed.isJsonObject()) {
                         System.out.println("Instance file does not contain a valid JSON object.");
-                        player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_invalid_instance").withStyle(ChatFormatting.RED));
+                        player.displayClientMessage(Component.translatable("chat.bblcore.modpack_invalid_instance").withStyle(ChatFormatting.RED), false);
                         return;
                     }
 
@@ -53,7 +61,7 @@ public class UpdateCheckerEvent {
 
                     if (installedModpackElement.isJsonNull()) {
                         System.out.println("No modpack is installed (Dev Environment).");
-                        player.sendSystemMessage(Component.translatable("chat.bblcore.dev_environment").withStyle(ChatFormatting.YELLOW));
+                        player.displayClientMessage(Component.translatable("chat.bblcore.dev_environment").withStyle(ChatFormatting.YELLOW), false);
                         return; // Do not proceed with the update check, allow player to join
                     }
 
@@ -67,7 +75,7 @@ public class UpdateCheckerEvent {
                         System.out.println("Installed File ID from instance: " + currentVersion);
                     } else {
                         System.out.println("Could not find latestFile.id in instance file.");
-                        player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_no_version").withStyle(ChatFormatting.RED));
+                        player.displayClientMessage(Component.translatable("chat.bblcore.modpack_no_version").withStyle(ChatFormatting.RED), false);
                         return;
                     }
 
@@ -101,7 +109,7 @@ public class UpdateCheckerEvent {
 
                         // Modpack name and website URL from API
                         String modpackName = dataObject.get("name").getAsString();
-                        String url = dataObject.getAsJsonObject("links").get("websiteUrl").getAsString();
+                        URI uri = new URI (dataObject.getAsJsonObject("links").get("websiteUrl").getAsString());
 
                         // Get the latest file ID from the API
                         int latestFileId = 0;
@@ -119,27 +127,34 @@ public class UpdateCheckerEvent {
 
                         // Step 5: Compare local version and API version
                         if (currentVersion == 0) {
-                            player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_no_version").withStyle(ChatFormatting.RED));
+                            player.displayClientMessage(Component.translatable("chat.bblcore.modpack_no_version").withStyle(ChatFormatting.RED), false);
                         } else if (currentVersion < latestFileId) {
-                            player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_update", modpackName)
-                                    .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
-                                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.bblcore.modpack_website"))))
-                                    .withStyle(ChatFormatting.BLUE));
+                            player.displayClientMessage(
+                                    Component.translatable("chat.bblcore.modpack_update", modpackName)
+                                            .setStyle(Style.EMPTY
+                                                    .withClickEvent(new ClickEvent.OpenUrl(uri))
+                                                    .withHoverEvent(new HoverEvent.ShowText(Component.translatable("chat.bblcore.modpack_website")))
+                                                    .withColor(net.minecraft.ChatFormatting.BLUE)
+                                            ),
+                                    false
+                            );
                         } else {
-                            player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_up_to_date").withStyle(ChatFormatting.GREEN));
+                            player.displayClientMessage(Component.translatable("chat.bblcore.modpack_up_to_date").withStyle(ChatFormatting.GREEN), false);
                         }
 
                     } catch (IOException e) {
                         System.out.println("Error while connecting to the API: " + e.getMessage());
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
                     }
 
                 } catch (IOException e) {
                     System.out.println("Error reading the instance file: " + e.getMessage());
-                    player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_instance_error").withStyle(ChatFormatting.RED));
+                    player.displayClientMessage(Component.translatable("chat.bblcore.modpack_instance_error").withStyle(ChatFormatting.RED), false);
                 }
             } else {
                 System.out.println("CurseForge instance file not found.");
-                player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_no_instance").withStyle(ChatFormatting.RED));
+                player.displayClientMessage(Component.translatable("chat.bblcore.modpack_no_instance").withStyle(ChatFormatting.RED), false);
             }
         }
     }

@@ -1,7 +1,5 @@
 package com.benbenlaw.core.util;
 
-import net.minecraft.core.Direction;
-
 import java.util.List;
 
 public class ColorList {

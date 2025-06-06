@@ -4,6 +4,31 @@ Changelog BBL Core
 
 1.3.0
 
+OK this is gonna be quite the update, so here we go
+IColor no longer supports items, this is now JSON driven
+
+//Fluid API - Old - Fog in water
+RenderSystem.setShaderFogStart(-8.0F);
+RenderSystem.setShaderFogEnd(farDistance);
+RenderSystem.setShaderFogShape(shape);
+
+//Fluid API - New - Fog in water
+RenderSystem.setShaderFog(new FogParameters(
+        -8.0F, // Fog start
+        farDistance, // Fog end
+        shape, // Fog shape
+        1.0F, 1.0F, 1.0F, 1.0F)
+);
+
+Toolips have changed see UnbreakableResourceBlock and ColoringItem for examples
+Updated TooltipUtils to support the new tooltip system, uses this (TooltipDisplay display, Consumer<Component> tooltipAdder, String shiftHeldKey) now
+Updated RenderUtil
+Updated Bright Leaves Builder
+Removed ColoredBlockAPI, the BrightableBlockAPI is now the main API for colored blocks
+Updated Commands
+Updated Void Protection
+Updated Update Checker
+Disabled KUBEJS support for now, will be re-enabled in the future
 
 1.2.38
 added getAllResourceNames method to ResourceNames class, used to obtain all static resource names

@@ -1,26 +1,20 @@
 package com.benbenlaw.core.recipe;
 
-import com.benbenlaw.core.block.colored.util.ColorMap;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.colored.ColoredBlockItem;
 import com.benbenlaw.core.item.colored.ColoringItem;
 import com.benbenlaw.core.util.ColorList;
 import com.benbenlaw.core.util.CoreTags;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-
-import java.util.Objects;
 
 public class ColoringRecipe extends CustomRecipe {
     public ColoringRecipe(CraftingBookCategory category) {
@@ -101,11 +95,6 @@ public class ColoringRecipe extends CustomRecipe {
         return ItemStack.EMPTY;
     }
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
-
     private ItemStack applyColorToBlock(ItemStack stack, DyeColor color) {
         if (stack.getItem() instanceof ColoredBlockItem) {
             String colorString = color.getName();
@@ -121,7 +110,7 @@ public class ColoringRecipe extends CustomRecipe {
                 try {
                     resourceLocation = ResourceLocation.tryParse(resourceLocationString);
                     if (resourceLocation != null && BuiltInRegistries.ITEM.containsKey(resourceLocation)) {
-                        return BuiltInRegistries.ITEM.get(resourceLocation).getDefaultInstance();
+                        return BuiltInRegistries.ITEM.getValue(resourceLocation).getDefaultInstance();
                     }
                 } catch (IllegalArgumentException e) {
                     System.out.println("Failed to parse resource location: " + resourceLocationString);
@@ -141,8 +130,10 @@ public class ColoringRecipe extends CustomRecipe {
         return false;
     }
 
+    //TODO implement the serializer when recipe works
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return CoreRecipes.COLORING_SERIALIZER.get();
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
+        return null;
+    //    return CoreRecipes.COLORING_SERIALIZER.get();
     }
 }

@@ -1,8 +1,7 @@
 package com.benbenlaw.core.item.colored;
 
-import com.benbenlaw.core.block.colored.util.ColorMap;
+import com.benbenlaw.core.block.brightable.util.ColorMap;
 import com.benbenlaw.core.item.CoreDataComponents;
-import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.item.DyeColor;
