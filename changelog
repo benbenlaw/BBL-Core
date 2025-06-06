@@ -2,6 +2,15 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.3.0
+
+
+1.2.38
+added getAllResourceNames method to ResourceNames class, used to obtain all static resource names
+
+1.2.37
+Added wires to the common tags
+
 1.2.36
 Added common tag builder for blocks, items
 Added fluid tag builder 100% not for casting i swear

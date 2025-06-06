@@ -44,9 +44,9 @@ public class ModdedTagBuilder {
     }
 
     //Fluid Tag using the mod id
-    public static TagKey<Fluid> createFluidTag(String path) {
+    public static TagKey<Fluid> createFluidTag(String modName, String path) {
         return FluidTags.create(Objects.requireNonNull(ResourceLocation.tryParse(
-                String.valueOf(ResourceLocation.fromNamespaceAndPath("c", path)))));
+                String.valueOf(ResourceLocation.fromNamespaceAndPath(modName, path)))));
     }
 
 }
