@@ -1,12 +1,11 @@
 package com.benbenlaw.core;
 
-import com.benbenlaw.core.block.TestBlock;
 import com.benbenlaw.core.config.ColorTintIndexConfig;
 import com.benbenlaw.core.config.CoreModpackConfig;
 import com.benbenlaw.core.config.CoreStartupConfig;
+import com.benbenlaw.core.event.ModpackCrashInformation;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
-import com.benbenlaw.core.item.TestItem;
 import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.recipe.CoreConditions;
@@ -57,6 +56,10 @@ public class Core {
         modContainer.registerConfig(ModConfig.Type.STARTUP, CoreStartupConfig.SPEC, "bbl/core/startup.toml");
         modContainer.registerConfig(ModConfig.Type.STARTUP, CoreModpackConfig.SPEC, "bbl/core/modpack.toml");
 
+        //Modpack Crash Information
+        ModpackCrashInformation.register();
+
+
         eventBus.addListener(this::addItemToCreativeTab);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -69,19 +72,4 @@ public class Core {
             event.accept(CoreItems.UPGRADE_BASE.get());
         }
     }
-
-
-        /*
-
-        @SubscribeEvent
-        public static void onClientExtensions(RegisterClientExtensionsEvent event) {
-            event.registerFluidType(TestFluid.LIME_WATER.getFluidType().getClientExtensions(),
-                    TestFluid.LIME_WATER.getFluidType());
-
-            event.registerFluidType(TestFluid.PINK_WATER.getFluidType().getClientExtensions(),
-                    TestFluid.PINK_WATER.getFluidType());
-
-        }
-
-         */
 }

@@ -2,6 +2,10 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.2.37
+Added ModpackCrashInformation class, when both the modpack version and modpack name are set in the config any crash will generate a crash report
+    containing the modpack name and version this helps to identify specific issues and possible issues that are fixed in versions
+
 1.2.36
 Added common tag builder for blocks, items
 Added fluid tag builder 100% not for casting i swear
