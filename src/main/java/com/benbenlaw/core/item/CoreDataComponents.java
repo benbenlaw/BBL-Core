@@ -31,6 +31,10 @@ public class CoreDataComponents {
             COMPONENTS.register("tank_content", () ->
                     DataComponentType.<FluidStack>builder().persistent(FluidStack.CODEC).networkSynchronized(FluidStack.STREAM_CODEC).build());
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> LIGHT_LEVEL =
+            COMPONENTS.register("light_level", () ->
+                    DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
+
 
 
 

@@ -1,6 +1,24 @@
 Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
+//brightable everything
+
+ok so we need a custom item, scroll wheel to set a light level, right blick to place on the facing block
+use vanilla light blocks
+remove the light block on right click
+holding this item shows outline of the light block, maybe with the number of the light level
+
+1.3.2
+Added LightItem class, this is a custom item that can be used to place and remove light blocks in the world
+
+This can be used to place the vanilla light block in world as well as remove it
+The light level is displayed in world when holding the item
+If item is created with a durability, it will be reduced by 1 each time the light block is placed/removed
+If the item is not damageable, it will not be consumed
+Shift Scrolling will change the light level of the item
+This item will be in BBL Colors 1.21.5+ to replace the Glowstone Spray Can behavior to this
+LightBlockEmitLightEvent is the class for client side particle and text rendering when using this item
+Networking is handled by LightItemPayload and LightItemPacket to sync the changing of light level
 
 1.3.1
 Added ModpackCrashInformation class, when both the modpack version and modpack name are set in the config any crash will generate a crash reportAdd commentMore actions

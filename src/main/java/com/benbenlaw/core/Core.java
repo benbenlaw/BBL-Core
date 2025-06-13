@@ -6,8 +6,10 @@ import com.benbenlaw.core.config.CoreStartupConfig;
 import com.benbenlaw.core.event.ModpackCrashInformation;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
+import com.benbenlaw.core.item.TestItem;
 import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
+import com.benbenlaw.core.network.CoreNetworking;
 import com.benbenlaw.core.recipe.CoreConditions;
 import com.benbenlaw.core.recipe.CoreRecipes;
 import com.benbenlaw.core.tag.CommonTags;
@@ -21,6 +23,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -59,6 +62,7 @@ public class Core {
         //Modpack Crash InformationAdd commentMore actions
         ModpackCrashInformation.register();
 
+        eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::addItemToCreativeTab);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -70,6 +74,11 @@ public class Core {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             //event.accept(CoreItems.UPGRADE_BASE.get());
         }
+    }
+
+    public void commonSetup(RegisterPayloadHandlersEvent event) {
+        CoreNetworking.registerNetworking(event);
+
     }
 
 
