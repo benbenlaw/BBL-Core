@@ -2,14 +2,10 @@ package com.benbenlaw.core.fluid;
 
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.util.RenderUtil;
-import com.mojang.blaze3d.shaders.FogShape;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogParameters;
-import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.dispenser.BlockSource;
@@ -285,23 +281,23 @@ public class FluidDeferredRegister {
                     return new Vector3f(RenderUtil.getRed(CoreFluidTypes.this.color), RenderUtil.getGreen(CoreFluidTypes.this.color), RenderUtil.getBlue(CoreFluidTypes.this.color));
                 }
 
-                public void modifyFogRender(@NotNull Camera camera, @NotNull FogRenderer.@NotNull FogMode mode,
-                                            float renderDistance, float partialTick, float nearDistance, float farDistance,
-                                            @NotNull FogShape shape) {
-                    farDistance = 24.0F;
-                    if (farDistance > renderDistance) {
-                        farDistance = renderDistance;
-                        shape = FogShape.CYLINDER;
-                    }
-
-                    RenderSystem.setShaderFog(new FogParameters(
-                            -8.0F, // Fog start
-                            farDistance, // Fog end
-                            shape, // Fog shape
-                            1.0F, 1.0F, 1.0F, 1.0F)
-                    );
-
-                }
+                //public void modifyFogRender(@NotNull Camera camera, @NotNull FogRenderer.@NotNull FogMode mode,
+                //                            float renderDistance, float partialTick, float nearDistance, float farDistance,
+                //                            @NotNull FogShape shape) {
+                //    farDistance = 24.0F;
+                //    if (farDistance > renderDistance) {
+                //        farDistance = renderDistance;
+                //        shape = FogShape;
+                //    }
+//
+                //    RenderSystem.setShaderFog(new FogParameters(
+                //            -8.0F, // Fog start
+                //            farDistance, // Fog end
+                //            shape, // Fog shape
+                //            1.0F, 1.0F, 1.0F, 1.0F)
+                //    );
+//
+                //}
 
                 public int getTintColor() {
                     return color;

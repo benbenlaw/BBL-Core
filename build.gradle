@@ -30,9 +30,6 @@ base {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-
-
-
 neoForge {
     version = project.neo_version
 
@@ -74,39 +71,10 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
+
     //JEI
-
-    compileOnly "curse.maven:jei-238222:6617262"
-    runtimeOnly "curse.maven:jei-238222:6617262"
-
-    /*
-
-    //KubeJS
-    compileOnly "curse.maven:kubejs-238086:5631423"
-    runtimeOnly "curse.maven:kubejs-238086:5631423"
-
-    //Rhino
-    compileOnly "curse.maven:rhino-416294:5650008"
-    runtimeOnly "curse.maven:rhino-416294:5650008"
-
-    //BH Menu
-    compileOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
-    runtimeOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
-
-    //Just Dire Things
-    compileOnly "curse.maven:just-dire-things-1002348:6369120"
-    runtimeOnly "curse.maven:just-dire-things-1002348:6369120"
-
-    //Mekanism
-    //compileOnly "curse.maven:mekanism-268560:5574951"
-    //runtimeOnly "curse.maven:mekanism-268560:5574951"
-
-    //EMI
-
-    //compileOnly "curse.maven:emi-580555:5619579"
-    //runtimeOnly "curse.maven:emi-580555:5619579"
-
-     */
+    //compileOnly "curse.maven:jei-238222:6617262"
+    //runtimeOnly "curse.maven:jei-238222:6617262"
 
 }
 
@@ -173,7 +141,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
 
     mainFile.changelog = changelog
     mainFile.releaseType = "release"
-    mainFile.gameVersions.addAll("1.21", "1.21.1")
+    mainFile.gameVersions.addAll("1.21.6")
     mainFile.addModLoader("neoforge")
 }
 
@@ -187,7 +155,7 @@ modrinth {
     versionName = "bbl-core-" + "$minecraft_version" + "-" + "$mod_version"
     uploadFile = jar // With Loom, this MUST be set to `remapJar` instead of `jar`!
 
-    gameVersions.addAll("1.21", "1.21.1")
+    gameVersions.addAll("1.21.6")
 
     loaders = ["neoforge"]
     changelog = project.changelog

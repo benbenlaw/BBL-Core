@@ -1,3 +1,5 @@
+/*
+
 package com.benbenlaw.core.integration.jei;
 
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -67,3 +69,6 @@ public abstract class CoreRecipeCategory<T extends Recipe<?>> implements IRecipe
 
     }
 }
+
+
+ */

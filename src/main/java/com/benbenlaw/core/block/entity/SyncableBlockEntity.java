@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -42,21 +44,25 @@ public class SyncableBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
+
+
     @Override
     public @NotNull CompoundTag getUpdateTag(HolderLookup.@NotNull Provider provider) {
         CompoundTag updateTag = new CompoundTag();
-        saveAdditional(updateTag, provider);
+        saveCustomOnly(provider);
         return updateTag;
     }
+
+
     @Override
     public void onLoad() {
         super.onLoad();
         this.setChanged();
         this.sync();
     }
+
     @Override
-    public void onDataPacket(@NotNull Connection connection, @NotNull ClientboundBlockEntityDataPacket clientboundBlockEntityDataPacket,
-                             HolderLookup.@NotNull Provider provider) {
-        super.onDataPacket(connection, clientboundBlockEntityDataPacket, provider);
+    public void onDataPacket(Connection net, ValueInput valueInput) {
+        super.onDataPacket(net, valueInput);
     }
 }
