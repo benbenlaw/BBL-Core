@@ -44,25 +44,8 @@ public class SyncableBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-
-
     @Override
-    public @NotNull CompoundTag getUpdateTag(HolderLookup.@NotNull Provider provider) {
-        CompoundTag updateTag = new CompoundTag();
-        saveCustomOnly(provider);
-        return updateTag;
-    }
-
-
-    @Override
-    public void onLoad() {
-        super.onLoad();
-        this.setChanged();
-        this.sync();
-    }
-
-    @Override
-    public void onDataPacket(Connection net, ValueInput valueInput) {
-        super.onDataPacket(net, valueInput);
+    public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        return saveWithoutMetadata(provider);
     }
 }
