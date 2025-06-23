@@ -7,6 +7,7 @@ import com.benbenlaw.core.event.ModpackCrashInformation;
 import com.benbenlaw.core.fluid.FluidDeferredRegister;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
+import com.benbenlaw.core.item.TestItem;
 import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.network.CoreNetworking;
@@ -34,7 +35,7 @@ public class Core {
 
 
     public Core(final IEventBus eventBus, final ModContainer modContainer) {
-        //TestItem.ITEMS.register(eventBus);
+        TestItem.ITEMS.register(eventBus);
         //TestBlock.BLOCKS.register(eventBus);
         //TestBlockEntities.BLOCK_ENTITIES.register(eventBus);
         //TestFluid.FLUIDS.register(modEventBus);

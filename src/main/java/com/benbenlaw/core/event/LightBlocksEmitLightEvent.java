@@ -10,6 +10,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -123,9 +124,9 @@ public class LightBlocksEmitLightEvent {
 
             float width = font.width(String.valueOf(lightLevel)) / 2f;
             font.drawInBatch(
-                    String.valueOf(lightLevel), -width, 0, 0xFFFFFF,
+                    String.valueOf(lightLevel), -width, 0, 0xFFFFFFFF,
                     false, poseStack.last().pose(), mc.renderBuffers().bufferSource(),
-                    Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT
+                    Font.DisplayMode.SEE_THROUGH, 0, LightTexture.FULL_BRIGHT
             );
             poseStack.popPose();
         }
@@ -137,22 +138,33 @@ public class LightBlocksEmitLightEvent {
     @SubscribeEvent
     public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.level == null) {
-            return;
-        }
+        if (mc.player == null || mc.level == null) return;
 
         ItemStack stack = mc.player.getMainHandItem();
         if (stack.getItem() instanceof LightItem && mc.player.isShiftKeyDown()) {
             int lightLevel = stack.getOrDefault(LIGHT_LEVEL.get(), 15);
+            boolean changed = false;
+
             if (event.getScrollDeltaY() > 0 && lightLevel < 15) {
                 lightLevel++;
-                PacketDistributor.sendToServer(new LightItemPayload(lightLevel));
-                stack.set(LIGHT_LEVEL, lightLevel);
+                changed = true;
             } else if (event.getScrollDeltaY() < 0 && lightLevel > 0) {
                 lightLevel--;
-                PacketDistributor.sendToServer(new LightItemPayload(lightLevel));
+                changed = true;
             }
-            event.setCanceled(true);
+
+            if (changed) {
+                PacketDistributor.sendToServer(new LightItemPayload(lightLevel));
+                stack.set(LIGHT_LEVEL, lightLevel);
+
+                mc.gui.setOverlayMessage(
+                        Component.translatable("tooltip.core.light_level", lightLevel),
+                        false
+                );
+
+                event.setCanceled(true);
+            }
         }
     }
+
 }
