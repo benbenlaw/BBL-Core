@@ -96,7 +96,7 @@ public class LightingItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
-        TooltipUtil.addShiftTooltip(tooltipDisplay, tooltipAdder, "tooltips.lighting_item.shift.held");
+        TooltipUtil.addShiftTooltip(tooltipDisplay, tooltipAdder, Component.translatable("tooltips.lighting_item.shift.held"));
         tooltipAdder.accept(Component.literal("Ability: Lights Blocks").withStyle(ChatFormatting.YELLOW));
     }
 

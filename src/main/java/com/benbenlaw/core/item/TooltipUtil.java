@@ -10,25 +10,25 @@ import java.util.function.Consumer;
 
 public class TooltipUtil {
 
-    public static void addShiftTooltip(TooltipDisplay display, Consumer<Component> tooltipAdder, String shiftHeldKey) {
+    public static void addShiftTooltip(TooltipDisplay display, Consumer<Component> tooltipAdder, Component shiftHeldKey) {
         if (Screen.hasShiftDown()) {
-            tooltipAdder.accept(Component.translatable(shiftHeldKey).withStyle(ChatFormatting.YELLOW));
+            tooltipAdder.accept(shiftHeldKey.copy().withStyle(ChatFormatting.YELLOW));
         } else {
             tooltipAdder.accept(Component.translatable("tooltips.bblcore.shift").withStyle(ChatFormatting.YELLOW));
         }
     }
 
-    public static void addAltTooltip(ItemStack stack, TooltipDisplay display, Consumer<Component> tooltipAdder, String altHeldKey) {
+    public static void addAltTooltip(ItemStack stack, TooltipDisplay display, Consumer<Component> tooltipAdder, Component altHeldKey) {
         if (Screen.hasAltDown()) {
-            tooltipAdder.accept(Component.translatable(altHeldKey).withStyle(ChatFormatting.YELLOW));
+            tooltipAdder.accept(altHeldKey.copy().withStyle(ChatFormatting.YELLOW));
         } else {
             tooltipAdder.accept(Component.translatable("tooltips.bblcore.alt").withStyle(ChatFormatting.YELLOW));
         }
     }
 
-    public static void addControlTooltip(ItemStack stack, TooltipDisplay display, Consumer<Component> tooltipAdder, String ctrlHeldKey) {
+    public static void addControlTooltip(ItemStack stack, TooltipDisplay display, Consumer<Component> tooltipAdder, Component ctrlHeldKey) {
         if (Screen.hasControlDown()) {
-            tooltipAdder.accept(Component.translatable(ctrlHeldKey).withStyle(ChatFormatting.YELLOW));
+            tooltipAdder.accept(ctrlHeldKey.copy().withStyle(ChatFormatting.YELLOW));
         } else {
             tooltipAdder.accept(Component.translatable("tooltips.bblcore.ctrl").withStyle(ChatFormatting.YELLOW));
         }

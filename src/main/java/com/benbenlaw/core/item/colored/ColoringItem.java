@@ -213,7 +213,9 @@ public class ColoringItem extends Item {
                 ? Component.translatable("tooltips.bblcore.coloring_item.mass_spraying")
                 : Component.literal("");
 
-        TooltipUtil.addShiftTooltip(tooltipDisplay, tooltipAdder, "tooltips.bblcore.coloring_item.shift_down");
+        TooltipUtil.addShiftTooltip(tooltipDisplay, tooltipAdder,
+                Component.translatable("tooltips.bblcore.coloring_item.shift_down"));
+
 
         Component colorComponent = Component.translatable(ColorMap.getTranslationKey(color.toString()));
         String nameBuilder = colorComponent.getString();

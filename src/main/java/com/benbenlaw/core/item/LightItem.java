@@ -84,7 +84,8 @@ public class LightItem extends Item {
 
         int lightLevel = stack.getOrDefault(CoreDataComponents.LIGHT_LEVEL.get(), 15);
 
-        TooltipUtil.addShiftTooltip(tooltipDisplay, componentConsumer, "tooltip.core.light_level");
+
+        TooltipUtil.addShiftTooltip(tooltipDisplay, componentConsumer, Component.translatable("tooltip.core.light_level", lightLevel));
 
         //componentConsumer.accept(Component.translatable("tooltip.core.light_level", lightLevel));
     }

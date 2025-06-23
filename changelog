@@ -4,6 +4,12 @@ Changelog BBL Core
 //brightable everything
 //Add jei and kubeje support back in
 
+1.4.3
+TooltipUtils now takes a Component instead of a String for the shift, ctrl and alt keys
+
+1.4.2
+Moved slot textures into new package, for 1.21.6
+
 1.4.1
 Improved SyncableBlockEntity
 
