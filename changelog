@@ -4,6 +4,9 @@ Changelog BBL Core
 //brightable everything
 //Add jei and kubeje support back in
 
+1.4.5
+Fixed crashes with latest version of NeoForge
+
 1.4.4
 Fixed light item now showing light level in world
 Added overlay when scrolling light item to its current light level

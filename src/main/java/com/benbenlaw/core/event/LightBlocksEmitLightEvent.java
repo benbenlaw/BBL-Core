@@ -79,10 +79,7 @@ public class LightBlocksEmitLightEvent {
 
     // Render the light level above Light Blocks in the world
     @SubscribeEvent
-    public static void onClientWorldRender(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
-            return;
-        }
+    public static void onClientWorldRender(RenderLevelStageEvent.AfterTranslucentBlocks event) {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) {
