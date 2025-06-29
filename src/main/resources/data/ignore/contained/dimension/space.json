@@ -1,0 +1,10 @@
+{
+  "type": "contained:space",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "contained:space",
+      "layers": []
+    }
+  }
+}

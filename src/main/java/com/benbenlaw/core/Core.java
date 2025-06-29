@@ -1,6 +1,7 @@
 package com.benbenlaw.core;
 
 import com.benbenlaw.core.config.ColorTintIndexConfig;
+import com.benbenlaw.core.config.CoreDimensionConfig;
 import com.benbenlaw.core.config.CoreModpackConfig;
 import com.benbenlaw.core.config.CoreStartupConfig;
 import com.benbenlaw.core.event.ModpackCrashInformation;
@@ -55,6 +56,7 @@ public class Core {
         modContainer.registerConfig(ModConfig.Type.STARTUP, ColorTintIndexConfig.SPEC, "bbl/core/color_index.toml");
         modContainer.registerConfig(ModConfig.Type.STARTUP, CoreStartupConfig.SPEC, "bbl/core/startup.toml");
         modContainer.registerConfig(ModConfig.Type.STARTUP, CoreModpackConfig.SPEC, "bbl/core/modpack.toml");
+        modContainer.registerConfig(ModConfig.Type.STARTUP, CoreDimensionConfig.SPEC, "bbl/core/dimensions.toml");
 
         //Modpack Crash Information
         ModpackCrashInformation.register();

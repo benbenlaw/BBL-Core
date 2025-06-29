@@ -2,6 +2,11 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.3.0
+Added new config, dimensions. Adding a custom dimension in here will allow that dimension to follow sleeping rules by setting
+    the time to day when sleeping in a bed, because this is not a thing in vanilla Minecraft lol
+Added contained example world gen for testing
+
 1.2.37
 Added ModpackCrashInformation class, when both the modpack version and modpack name are set in the config any crash will generate a crash report
     containing the modpack name and version this helps to identify specific issues and possible issues that are fixed in versions
