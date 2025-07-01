@@ -35,7 +35,7 @@ public class Core {
 
 
     public Core(final IEventBus eventBus, final ModContainer modContainer) {
-        TestItem.ITEMS.register(eventBus);
+        //TestItem.ITEMS.register(eventBus);
         //TestBlock.BLOCKS.register(eventBus);
         //TestBlockEntities.BLOCK_ENTITIES.register(eventBus);
         //TestFluid.FLUIDS.register(modEventBus);
