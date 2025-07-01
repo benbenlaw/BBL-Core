@@ -7,6 +7,7 @@ import com.benbenlaw.core.network.LightItemPayload;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -22,6 +23,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
@@ -151,7 +153,7 @@ public class LightBlocksEmitLightEvent {
             }
 
             if (changed) {
-                PacketDistributor.sendToServer(new LightItemPayload(lightLevel));
+                ClientPacketDistributor.sendToServer(new LightItemPayload(lightLevel));
                 stack.set(LIGHT_LEVEL, lightLevel);
 
                 mc.gui.setOverlayMessage(
