@@ -3,7 +3,7 @@ Changelog BBL Core
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
 1.3.1
-Added new /recipeID command, when holding an item in the hadn it will return all recipes id that output that item
+Added new /recipeID command, when holding an item in the hand it will return all recipes id that output that item
     you can also do /recipeID modID to get the recipes for that item that that mod adds
 
 1.3.0
