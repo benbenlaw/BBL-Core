@@ -66,13 +66,16 @@ public class RecipeIDCommand {
             }
 
             if (ItemStack.isSameItem(recipe.value().getResultItem(player.level().registryAccess()), heldItem)) {
+                ResourceLocation typeId = net.minecraft.core.registries.BuiltInRegistries.RECIPE_TYPE.getKey(recipe.value().getType());
+                String hoverText = "Click to copy ID: " + id + "\nRecipe Type: " + (typeId != null ? typeId : "unknown");
+
                 Component clickableId = Component.literal(id.toString())
                         .withStyle(style -> style
                                 .withColor(ChatFormatting.GREEN)
                                 .withUnderlined(true)
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, id.toString()))
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                        Component.literal("Click to copy ID: " + id.toString())))
+                                        Component.literal(hoverText)))
                         );
 
                 player.sendSystemMessage(Component.literal("Recipe ID: ").append(clickableId));
