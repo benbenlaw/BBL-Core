@@ -12,6 +12,7 @@ public class CoreCommands {
     public static void registerCommands(RegisterCommandsEvent event) {
         DiscordCommand.register(event.getDispatcher());
         ModpackCommand.register(event.getDispatcher());
+        RecipeIDCommand.register(event.getDispatcher());
     }
 
 }
