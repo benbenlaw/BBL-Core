@@ -4,6 +4,9 @@ Changelog BBL Core
 //brightable everything
 //Add jei and kubeje support back in
 
+1.5.2
+Updated net.neoforged.moddev to 2.0.99
+
 1.5.1
 Updated SyncableBlockEntity to now take handUpdateTag
 Added getColor mehtod to ColoredItems class
