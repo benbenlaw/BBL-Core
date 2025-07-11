@@ -42,6 +42,11 @@ public class SyncableBlockEntity extends BlockEntity {
         }
     }
 
+    @Override
+    public void handleUpdateTag(@NotNull CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
+        loadAdditional(compoundTag, provider);
+    }
+
     public void syncContents(ServerPlayer player) {
         player.connection.send(Objects.requireNonNull(getUpdatePacket()));
     }
@@ -66,6 +71,6 @@ public class SyncableBlockEntity extends BlockEntity {
     @Override
     public void onDataPacket(@NotNull Connection connection, @NotNull ClientboundBlockEntityDataPacket clientboundBlockEntityDataPacket,
                              HolderLookup.@NotNull Provider provider) {
-        super.onDataPacket(connection, clientboundBlockEntityDataPacket, provider);
+        onDataPacket(connection, clientboundBlockEntityDataPacket, provider);
     }
 }
