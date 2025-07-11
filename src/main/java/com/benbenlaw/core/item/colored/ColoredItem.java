@@ -50,4 +50,8 @@ public class ColoredItem extends Item{
         return Component.literal(super.getName(stack).getString());
     }
 
+    public String getColor(ItemStack stack) {
+        return stack.getOrDefault(CoreDataComponents.COLOR, "white");
+    }
+
 }

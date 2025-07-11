@@ -40,6 +40,11 @@ public class SyncableBlockEntity extends BlockEntity {
     }
 
     @Override
+    public void handleUpdateTag(ValueInput input) {
+        loadAdditional(input);
+    }
+
+    @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
