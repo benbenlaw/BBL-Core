@@ -11,7 +11,7 @@ public class CoreNetworking {
 
 
         //To Server From Client
-        registrar.playToServer(LightItemPayload.TYPE, LightItemPayload.STREAM_CODEC, LightItemPacket.get()::handle);
+        registrar.playToServer(LightItemPacket.TYPE, LightItemPacket.STREAM_CODEC, LightItemPacket::handle);
 
 
 

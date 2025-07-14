@@ -4,6 +4,9 @@ Changelog BBL Core
 //brightable everything
 //Add jei and kubeje support back in
 
+1.5.3
+Combined packets and payloads into a single class for LightItem
+
 1.5.2
 Updated net.neoforged.moddev to 2.0.99
 

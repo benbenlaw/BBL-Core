@@ -1,13 +1,11 @@
 package com.benbenlaw.core.event;
 
 import com.benbenlaw.core.Core;
-import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.LightItem;
-import com.benbenlaw.core.network.LightItemPayload;
+import com.benbenlaw.core.network.LightItemPacket;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -153,7 +151,7 @@ public class LightBlocksEmitLightEvent {
             }
 
             if (changed) {
-                ClientPacketDistributor.sendToServer(new LightItemPayload(lightLevel));
+                ClientPacketDistributor.sendToServer(new LightItemPacket(lightLevel));
                 stack.set(LIGHT_LEVEL, lightLevel);
 
                 mc.gui.setOverlayMessage(
