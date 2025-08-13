@@ -4,6 +4,7 @@ import com.benbenlaw.core.Core;
 import com.benbenlaw.core.util.RenderUtil;
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -187,7 +188,6 @@ public class FluidDeferredRegister {
             Holder<Item> bucket = (Holder) var1.next();
             DispenserBlock.registerBehavior(bucket.value(), BUCKET_DISPENSE_BEHAVIOR);
         }
-
     }
 
     @FunctionalInterface
@@ -293,6 +293,11 @@ public class FluidDeferredRegister {
                     RenderSystem.setShaderFogStart(-8.0F);
                     RenderSystem.setShaderFogEnd(farDistance);
                     RenderSystem.setShaderFogShape(shape);
+                }
+
+                @Override
+                public void renderOverlay(Minecraft mc, PoseStack poseStack) {
+                    IClientFluidTypeExtensions.super.renderOverlay(mc, poseStack);
                 }
 
                 public int getTintColor() {

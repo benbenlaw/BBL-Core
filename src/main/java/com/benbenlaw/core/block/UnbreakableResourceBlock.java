@@ -32,8 +32,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -41,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class UnbreakableResourceBlock extends Block {
@@ -48,7 +51,7 @@ public class UnbreakableResourceBlock extends Block {
     public int dropHeightModifier;
     public Supplier<Item> toolToCollectTheBlockAsItem;
     public TagKey<Item> toolToCollectTheBlockAsTag;
-    public String lootTable;
+    public static String lootTable;
     public String particle;
     public FakePlayer fakePlayer;
     private static boolean warnedAboutMissingParticle = false;
@@ -86,31 +89,38 @@ public class UnbreakableResourceBlock extends Block {
             isCorrectTool = tool.getItem() == toolToCollectTheBlockAsItem.get();
         }
 
+        List<ItemStack> drops = getLootDrops(state, blockEntity, pos, player, tool, level);
+
         if (!isCorrectTool) {
-            dropResources(state, level, (dropPos), blockEntity, player, tool);
+
+            for (ItemStack drop : drops) {
+                if (drop.isEmpty()) continue;
+                popOutTheItem(level, dropPos, drop);
+            }
             level.setBlockAndUpdate(pos, this.defaultBlockState());
         } else {
             popResource(level, pos, new ItemStack(this.asItem(), 1));
         }
     }
 
-    @Override
-    protected @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
-        ServerLevel level = params.getLevel();
 
-        if (fakePlayer == null) {
-            fakePlayer = FakePlayerUtil.createFakePlayer(level, "resource_block_fake_player");
-        }
+    public static List<ItemStack> getLootDrops(BlockState state, BlockEntity entity, BlockPos pos, Player player, ItemStack tool, Level level) {
+        LootParams.Builder lootParams = new LootParams.Builder((ServerLevel) level)
+                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+                .withParameter(LootContextParams.TOOL, tool)
+                .withParameter(LootContextParams.BLOCK_ENTITY, entity)
+                .withParameter(LootContextParams.THIS_ENTITY, player)
+                .withParameter(LootContextParams.BLOCK_STATE, state);
 
-        LootParams lootparams =  (new LootParams.Builder((ServerLevel) fakePlayer.level())).withParameter(LootContextParams.THIS_ENTITY, fakePlayer).withParameter(LootContextParams.ORIGIN, fakePlayer.position()).create(LootContextParamSets.GIFT);
-        LootTable table = level.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE,
-                ResourceLocation.parse(lootTable)));
+        LootTable lootTableName = level.getServer().reloadableRegistries()
+                .getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(lootTable)));
 
-        List <ItemStack> drops = new java.util.ArrayList<>(List.of(ItemStack.EMPTY));
-        List <ItemStack> loot = table.getRandomItems(lootparams);
-        drops.addAll(loot);
+        List<ItemStack> finalDrops = new java.util.ArrayList<>(List.of(ItemStack.EMPTY));
+        List<ItemStack> loot = lootTableName.getRandomItems(lootParams.create(LootContextParamSet.builder().build()));
+        finalDrops.addAll(loot);
 
-        return drops;
+        return finalDrops;
+
     }
 
     @Override
@@ -151,5 +161,15 @@ public class UnbreakableResourceBlock extends Block {
                     0.0D
             );
         }
+    }
+
+
+    public static void popOutTheItem(Level level, BlockPos blockPos, ItemStack itemStack) {
+
+        Vec3 vec3 = Vec3.atLowerCornerWithOffset(blockPos, 0.5, 0.5, 0.5).offsetRandom(level.random, 0.7F);
+        ItemStack itemstack1 = itemStack.copy();
+        ItemEntity itementity = new ItemEntity(level, vec3.x(), vec3.y(), vec3.z(), itemstack1);
+        itementity.setDefaultPickUpDelay();
+        level.addFreshEntity(itementity);
     }
 }

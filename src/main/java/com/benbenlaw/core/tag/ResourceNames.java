@@ -1,5 +1,10 @@
 package com.benbenlaw.core.tag;
 
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 public class ResourceNames {
 
     // Vanilla
@@ -48,4 +53,19 @@ public class ResourceNames {
     public static final String END_STEEL = "end_steel";
     public static final String REDSTONE_ALLOY = "redstone_alloy";
     public static final String COPPER_ALLOY = "copper_alloy";
+
+    public static List<String> getAllResourceNames() {
+        return Arrays.stream(ResourceNames.class.getDeclaredFields())
+                .filter(field -> Modifier.isStatic(field.getModifiers()) && field.getType().equals(String.class))
+                .map(field -> {
+                    try {
+                        return (String) field.get(null);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toList();
+    }
 }
