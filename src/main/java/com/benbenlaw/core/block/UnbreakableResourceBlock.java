@@ -29,6 +29,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -66,8 +69,22 @@ public class UnbreakableResourceBlock extends Block {
         } else {
             this.toolToCollectTheBlockAsItem = () -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(toolToCollectTheBlock));
         }
+
+        this.registerDefaultState(this.defaultBlockState().setValue(DROPS_ENABLED, true));
     }
 
+    public static final BooleanProperty DROPS_ENABLED = BooleanProperty.create("drops_enabled");
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(DROPS_ENABLED);
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        super.onRemove(state, level, pos, newState, movedByPiston);
+    }
 
     @Override
     public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
@@ -75,33 +92,46 @@ public class UnbreakableResourceBlock extends Block {
     }
 
     @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        //level.setBlock(pos, state.setValue(OVERRIDE_DROPS, false), 3);
+    }
+
+    @Override
     public void playerDestroy(@NotNull Level level, @NotNull Player player, BlockPos pos, @NotNull BlockState state, @Nullable BlockEntity blockEntity, @NotNull ItemStack tool) {
 
+        if (level.getBlockState(pos).getValue(DROPS_ENABLED)) {
+            // Simply remove the block without dropping anything
+            level.setBlockAndUpdate(pos, this.defaultBlockState());
+            return;
+        }
 
-        BlockPos dropPos = new BlockPos(pos.getX(), pos.getY() + dropHeightModifier, pos.getZ());
+        BlockPos dropPos = pos.above(dropHeightModifier);
         boolean isCorrectTool = false;
 
         if (toolToCollectTheBlockAsTag != null) {
-            isCorrectTool = tool.is(this.toolToCollectTheBlockAsTag);
+            isCorrectTool = tool.is(toolToCollectTheBlockAsTag);
         }
 
         if (toolToCollectTheBlockAsItem != null) {
-            isCorrectTool = tool.getItem() == toolToCollectTheBlockAsItem.get();
+            isCorrectTool = isCorrectTool || ItemStack.isSameItemSameComponents(tool, new ItemStack(toolToCollectTheBlockAsItem.get()));
         }
 
         List<ItemStack> drops = getLootDrops(state, blockEntity, pos, player, tool, level);
 
         if (!isCorrectTool) {
-
             for (ItemStack drop : drops) {
-                if (drop.isEmpty()) continue;
-                popOutTheItem(level, dropPos, drop);
+                if (!drop.isEmpty()) {
+                    popOutTheItem(level, dropPos, drop);
+                }
             }
             level.setBlockAndUpdate(pos, this.defaultBlockState());
         } else {
-            popResource(level, pos, new ItemStack(this.asItem(), 1));
+            // Correct tool, drop the block itself
+            popOutTheItem(level, dropPos, new ItemStack(this.asItem(), 1));
+            level.setBlockAndUpdate(pos, this.defaultBlockState());
         }
     }
+
 
 
     public static List<ItemStack> getLootDrops(BlockState state, BlockEntity entity, BlockPos pos, Player player, ItemStack tool, Level level) {
@@ -112,15 +142,11 @@ public class UnbreakableResourceBlock extends Block {
                 .withParameter(LootContextParams.THIS_ENTITY, player)
                 .withParameter(LootContextParams.BLOCK_STATE, state);
 
-        LootTable lootTableName = level.getServer().reloadableRegistries()
+        LootTable lootTableName = level.getServer()
+                .reloadableRegistries()
                 .getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(lootTable)));
 
-        List<ItemStack> finalDrops = new java.util.ArrayList<>(List.of(ItemStack.EMPTY));
-        List<ItemStack> loot = lootTableName.getRandomItems(lootParams.create(LootContextParamSet.builder().build()));
-        finalDrops.addAll(loot);
-
-        return finalDrops;
-
+        return lootTableName.getRandomItems(lootParams.create(LootContextParamSets.BLOCK));
     }
 
     @Override

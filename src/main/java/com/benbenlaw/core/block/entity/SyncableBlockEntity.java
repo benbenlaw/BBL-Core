@@ -71,6 +71,6 @@ public class SyncableBlockEntity extends BlockEntity {
     @Override
     public void onDataPacket(@NotNull Connection connection, @NotNull ClientboundBlockEntityDataPacket clientboundBlockEntityDataPacket,
                              HolderLookup.@NotNull Provider provider) {
-        onDataPacket(connection, clientboundBlockEntityDataPacket, provider);
+        super.onDataPacket(connection, clientboundBlockEntityDataPacket, provider);
     }
 }

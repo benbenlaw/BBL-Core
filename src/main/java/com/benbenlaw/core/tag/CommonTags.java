@@ -21,7 +21,8 @@ public class CommonTags {
         DUSTS("dusts"),
         GEARS("gears"),
         RODS("rods"),
-        GEMS("gems");
+        GEMS("gems"),
+        WIRES("wires");
         private final String path;
 
         ResourceType(String path) {

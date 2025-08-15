@@ -1,5 +1,6 @@
 package com.benbenlaw.core;
 
+import com.benbenlaw.core.block.TestBlock;
 import com.benbenlaw.core.config.ColorTintIndexConfig;
 import com.benbenlaw.core.config.CoreDimensionConfig;
 import com.benbenlaw.core.config.CoreModpackConfig;
@@ -7,6 +8,7 @@ import com.benbenlaw.core.config.CoreStartupConfig;
 import com.benbenlaw.core.event.ModpackCrashInformation;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
+import com.benbenlaw.core.item.TestItem;
 import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.recipe.CoreConditions;
