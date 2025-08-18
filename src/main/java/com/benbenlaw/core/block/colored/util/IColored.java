@@ -53,10 +53,6 @@ public interface IColored {
 
 
 
-
-
-
-
             if (state.getBlock() instanceof IColored) {
                 DyeColor dyeColor = null;
                 Function<BlockState, DyeColor> colorRetriever = BlockTypeColorFinder.BLOCK_TYPE_COLOR_FINDER.get(state.getBlock().getClass());
