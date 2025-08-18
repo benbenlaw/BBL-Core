@@ -28,6 +28,7 @@ public class TestBlock {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.createBlocks(Core.MOD_ID);
 
+    /*
     public static final DeferredBlock<Block> COLORED_BLOCK = registerBlock("colored_block",
             () -> new BrightBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE)
                     .instabreak()
@@ -35,12 +36,12 @@ public class TestBlock {
     );
     public static final DeferredBlock<Block> RESOURCE_BLOCK = registerBlock("resource_block",
             () -> new UnbreakableResourceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE),
-                    1, "minecraft:dirt", "minecraft:blocks/diamond_ore", "minecraft:air")
+                    1, "minecraft:dirt", "minecraft:air")
     );
 
     public static final DeferredBlock<Block> RESOURCE_BLOCK_2 = registerBlock("resource_block_2",
             () -> new UnbreakableResourceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.STONE),
-                    1,"#minecraft:planks", "minecraft:blocks/emerald_ore", "minecraft:flame")
+                    1,"#minecraft:planks", "minecraft:flame")
     );
 
     /*

@@ -16,7 +16,6 @@ public class ResourceBlockBuilder extends BlockBuilder {
 
     private int dropHeightModifier = 0;
     private String toolToCollectTheBlock = "";
-    private String lootTable = "";
     private String particle = "";
     public ResourceBlockBuilder(ResourceLocation i) {
         super(i);
@@ -34,12 +33,6 @@ public class ResourceBlockBuilder extends BlockBuilder {
         return this;
     }
 
-    @Info("The loot table to use when the block is broken without the tool eg, minecraft:blocks/stone ")
-    public ResourceBlockBuilder resourceBlockLootTable(String lootTable) {
-        this.lootTable = lootTable;
-        return this;
-    }
-
     @Info("The particle the block gives off, optional defaults to minecraft:flames")
     public ResourceBlockBuilder particle(String particle) {
         this.particle = particle;
@@ -49,6 +42,6 @@ public class ResourceBlockBuilder extends BlockBuilder {
     @Override
     public Block createObject() {
         return new UnbreakableResourceBlock(createProperties(),
-                dropHeightModifier, toolToCollectTheBlock, lootTable, particle);
+                dropHeightModifier, toolToCollectTheBlock, particle);
     }
 }

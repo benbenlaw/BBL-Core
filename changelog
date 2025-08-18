@@ -2,6 +2,13 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.3.14
+Breaking unbreakable blocks no longer places in the same tick, there is now a 10 tick delay before the block is replaced
+
+1.3.13
+Removed loot table for unbreakable resource blocks, we now use the loot table that is created when the block is registered,
+    this is usually "namespace:blocks/block_name" this is the loot table that runs when the block is broken
+
 1.3.12
 Fixed loot table on unbreakable resource blocks being static
 

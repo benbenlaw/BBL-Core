@@ -1,5 +1,6 @@
 package com.benbenlaw.core.block;
 
+import com.benbenlaw.core.util.BlockInformation;
 import com.benbenlaw.core.util.FakePlayerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -49,19 +50,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import static com.benbenlaw.core.event.UnbreakableBlockReplaceEvent.blockInformationMap;
+
 public class UnbreakableResourceBlock extends Block {
 
     public int dropHeightModifier;
     public Supplier<Item> toolToCollectTheBlockAsItem;
     public TagKey<Item> toolToCollectTheBlockAsTag;
-    public String lootTable;
     public String particle;
-    public FakePlayer fakePlayer;
     private static boolean warnedAboutMissingParticle = false;
-    public UnbreakableResourceBlock(Properties properties, int dropHeightModifier, String toolToCollectTheBlock, String lootTable, String particle) {
+    public UnbreakableResourceBlock(Properties properties, int dropHeightModifier, String toolToCollectTheBlock, String particle) {
         super(properties);
         this.dropHeightModifier = dropHeightModifier;
-        this.lootTable = lootTable;
         this.particle = particle;
 
         if (toolToCollectTheBlock.startsWith("#")) {
@@ -69,16 +69,11 @@ public class UnbreakableResourceBlock extends Block {
         } else {
             this.toolToCollectTheBlockAsItem = () -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(toolToCollectTheBlock));
         }
-
-        this.registerDefaultState(this.defaultBlockState().setValue(DROPS_ENABLED, true));
     }
-
-    public static final BooleanProperty DROPS_ENABLED = BooleanProperty.create("drops_enabled");
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(DROPS_ENABLED);
     }
 
     @Override
@@ -99,13 +94,6 @@ public class UnbreakableResourceBlock extends Block {
     @Override
     public void playerDestroy(@NotNull Level level, @NotNull Player player, BlockPos pos, @NotNull BlockState state, @Nullable BlockEntity blockEntity, @NotNull ItemStack tool) {
 
-        if (level.getBlockState(pos).getValue(DROPS_ENABLED)) {
-            // Simply remove the block without dropping anything
-            level.setBlockAndUpdate(pos, this.defaultBlockState());
-            return;
-        }
-
-        BlockPos dropPos = pos.above(dropHeightModifier);
         boolean isCorrectTool = false;
 
         if (toolToCollectTheBlockAsTag != null) {
@@ -116,42 +104,17 @@ public class UnbreakableResourceBlock extends Block {
             isCorrectTool = isCorrectTool || ItemStack.isSameItemSameComponents(tool, new ItemStack(toolToCollectTheBlockAsItem.get()));
         }
 
-        List<ItemStack> drops = getLootDrops(state, blockEntity, pos, player, tool, level);
-
         if (!isCorrectTool) {
-            for (ItemStack drop : drops) {
-                if (!drop.isEmpty()) {
-                    popOutTheItem(level, dropPos, drop);
-                }
-            }
-            level.setBlockAndUpdate(pos, this.defaultBlockState());
-        } else {
-            // Correct tool, drop the block itself
-            popOutTheItem(level, dropPos, new ItemStack(this.asItem(), 1));
-            level.setBlockAndUpdate(pos, this.defaultBlockState());
+            long delay = 10 + Objects.requireNonNull(level.getServer()).getTickCount();
+            blockInformationMap.put(pos, new BlockInformation(state, level, delay));
+            level.setBlock(pos, Blocks.BARRIER.defaultBlockState(), Block.UPDATE_ALL);
         }
-    }
+        super.playerDestroy(level, player, pos, state, blockEntity, tool);
 
-    public List<ItemStack> getLootDrops(BlockState state, BlockEntity entity, BlockPos pos,
-                                        Player player, ItemStack tool, Level level) {
-        LootParams.Builder lootParams = new LootParams.Builder((ServerLevel) level)
-                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
-                .withParameter(LootContextParams.TOOL, tool)
-                .withParameter(LootContextParams.BLOCK_ENTITY, entity)
-                .withParameter(LootContextParams.THIS_ENTITY, player)
-                .withParameter(LootContextParams.BLOCK_STATE, state);
-
-        LootTable lootTableName = level.getServer()
-                .reloadableRegistries()
-                .getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(this.lootTable)));
-
-        return lootTableName.getRandomItems(lootParams.create(LootContextParamSets.BLOCK));
     }
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-
-
         if (toolToCollectTheBlockAsItem != null) {
             Component name = toolToCollectTheBlockAsItem.get().getName(toolToCollectTheBlockAsItem.get().getDefaultInstance());
             tooltipComponents.add(Component.translatable("tooltips.bblcore.block.unbreakable_resource_block_tool", name).withStyle(ChatFormatting.GRAY));
@@ -179,22 +142,12 @@ public class UnbreakableResourceBlock extends Block {
             level.addParticle(
                     particleType,
                     pos.getX() + 0.5,
-                    pos.getY() + 1.5,
+                    pos.getY() + 0.5,
                     pos.getZ() + 0.5,
                     0.0D,
                     0.0D,
                     0.0D
             );
         }
-    }
-
-
-    public static void popOutTheItem(Level level, BlockPos blockPos, ItemStack itemStack) {
-
-        Vec3 vec3 = Vec3.atLowerCornerWithOffset(blockPos, 0.5, 0.5, 0.5).offsetRandom(level.random, 0.7F);
-        ItemStack itemstack1 = itemStack.copy();
-        ItemEntity itementity = new ItemEntity(level, vec3.x(), vec3.y(), vec3.z(), itemstack1);
-        itementity.setDefaultPickUpDelay();
-        level.addFreshEntity(itementity);
     }
 }
