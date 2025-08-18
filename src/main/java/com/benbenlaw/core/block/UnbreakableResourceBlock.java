@@ -54,7 +54,7 @@ public class UnbreakableResourceBlock extends Block {
     public int dropHeightModifier;
     public Supplier<Item> toolToCollectTheBlockAsItem;
     public TagKey<Item> toolToCollectTheBlockAsTag;
-    public static String lootTable;
+    public String lootTable;
     public String particle;
     public FakePlayer fakePlayer;
     private static boolean warnedAboutMissingParticle = false;
@@ -132,9 +132,8 @@ public class UnbreakableResourceBlock extends Block {
         }
     }
 
-
-
-    public static List<ItemStack> getLootDrops(BlockState state, BlockEntity entity, BlockPos pos, Player player, ItemStack tool, Level level) {
+    public List<ItemStack> getLootDrops(BlockState state, BlockEntity entity, BlockPos pos,
+                                        Player player, ItemStack tool, Level level) {
         LootParams.Builder lootParams = new LootParams.Builder((ServerLevel) level)
                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
                 .withParameter(LootContextParams.TOOL, tool)
@@ -144,7 +143,7 @@ public class UnbreakableResourceBlock extends Block {
 
         LootTable lootTableName = level.getServer()
                 .reloadableRegistries()
-                .getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(lootTable)));
+                .getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(this.lootTable)));
 
         return lootTableName.getRandomItems(lootParams.create(LootContextParamSets.BLOCK));
     }

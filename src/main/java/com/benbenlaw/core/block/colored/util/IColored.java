@@ -31,7 +31,7 @@ public interface IColored {
                 if (state.is(CoreTags.Blocks.COLOR_TAGS.get(colorTag))) {
                     // Convert the colorTag string to upper case and try to match it with DyeColor enum
                     try {
-                        DyeColor dyeColor = DyeColor.valueOf(colorTag.toUpperCase());
+                        DyeColor dyeColor = ColorMap.getDyeColor(colorTag);
                         // Return the color from ColorMap using the dye color
                         Integer colorValue = ColorMap.getColorValue(dyeColor);
 
@@ -92,7 +92,7 @@ public interface IColored {
 
             for (String colorTag : CoreTags.Blocks.COLOR_TAGS.keySet()) {
                 if (stack.is(CoreTags.Items.COLOR_TAGS.get(colorTag))) {
-                    DyeColor dyeColor = DyeColor.valueOf(colorTag.toUpperCase());
+                    DyeColor dyeColor = ColorMap.getDyeColor(colorTag);
                     int colorValue = ColorMap.getColorValue(dyeColor);
                     int alpha = 0xFF;
                     return (alpha << 24) | (colorValue & 0xFFFFFF);
