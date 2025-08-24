@@ -2,6 +2,9 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.3.15
+Added Resource Block Delay with Just Dirt Things Block Breakers, maybe fixes crashes but unsure
+
 1.3.14
 Breaking unbreakable blocks no longer places in the same tick, there is now a 10 tick delay before the block is replaced
 
