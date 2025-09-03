@@ -1,56 +1,33 @@
 package com.benbenlaw.core.block;
 
-import com.benbenlaw.core.util.BlockInformation;
-import com.benbenlaw.core.util.FakePlayerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.CommonHooks;
-import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
-
-import static com.benbenlaw.core.event.UnbreakableBlockReplaceEvent.blockInformationMap;
 
 public class UnbreakableResourceBlock extends Block {
 
@@ -58,7 +35,10 @@ public class UnbreakableResourceBlock extends Block {
     public Supplier<Item> toolToCollectTheBlockAsItem;
     public TagKey<Item> toolToCollectTheBlockAsTag;
     public String particle;
+    public int progress;
     private static boolean warnedAboutMissingParticle = false;
+    public static final BooleanProperty RESTING = BooleanProperty.create("resting");
+
     public UnbreakableResourceBlock(Properties properties, int dropHeightModifier, String toolToCollectTheBlock, String particle) {
         super(properties);
         this.dropHeightModifier = dropHeightModifier;
@@ -69,11 +49,13 @@ public class UnbreakableResourceBlock extends Block {
         } else {
             this.toolToCollectTheBlockAsItem = () -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(toolToCollectTheBlock));
         }
+        this.registerDefaultState(this.stateDefinition.any().setValue(RESTING, Boolean.FALSE));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
+        builder.add(RESTING);
+
     }
 
     @Override
@@ -92,7 +74,52 @@ public class UnbreakableResourceBlock extends Block {
     }
 
     @Override
+    protected boolean isRandomlyTicking(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        level.setBlock(pos, state.setValue(RESTING, false), Block.UPDATE_ALL);
+        super.tick(state, level, pos, random);
+    }
+
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (state.getValue(RESTING)) {
+            return state;
+        }
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
+
+
+    @Override
+    public boolean canEntityDestroy(BlockState state, BlockGetter level, BlockPos pos, Entity entity) {
+        return super.canEntityDestroy(state, level, pos, entity);
+    }
+
+    @Override public float defaultDestroyTime() {
+        if (this.defaultBlockState().getValue(RESTING)) {
+            return 0.0f;
+        }
+        return super.defaultDestroyTime();
+    }
+
+    @Override
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        if (state.getValue(RESTING)) {
+            return false;
+        }
+        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+    }
+
+    @Override
     public void playerDestroy(@NotNull Level level, @NotNull Player player, BlockPos pos, @NotNull BlockState state, @Nullable BlockEntity blockEntity, @NotNull ItemStack tool) {
+
+        if (state.getValue(RESTING)) {
+            return;
+        }
 
         boolean isCorrectTool = false;
 
@@ -105,12 +132,10 @@ public class UnbreakableResourceBlock extends Block {
         }
 
         if (!isCorrectTool) {
-            long delay = 10 + Objects.requireNonNull(level.getServer()).getTickCount();
-            blockInformationMap.put(pos, new BlockInformation(state, level, delay));
-            level.setBlock(pos, Blocks.BARRIER.defaultBlockState(), Block.UPDATE_ALL);
+            level.setBlock(pos, this.defaultBlockState().setValue(RESTING, true), Block.UPDATE_ALL);
+            level.scheduleTick(pos, this, 20);
         }
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
-
     }
 
     @Override
@@ -124,6 +149,30 @@ public class UnbreakableResourceBlock extends Block {
             String tag = toolToCollectTheBlockAsTag.toString();
             tooltipComponents.add(Component.translatable("tooltips.bblcore.block.unbreakable_resource_block_tool_tag", tag).withStyle(ChatFormatting.GRAY));
         }
+    }
+
+    @Override
+    protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        if (state.getValue(RESTING)) {
+            return 0.0f;
+        }
+        return super.getDestroyProgress(state, player, level, pos);
+    }
+
+    @Override
+    public boolean canHarvestBlock(BlockState state, BlockGetter level, BlockPos pos, Player player) {
+        if (state.getValue(RESTING)) {
+            return false;
+        }
+        return super.canHarvestBlock(state, level, pos, player);
+    }
+
+    @Override
+    public float getSpeedFactor() {
+        if (this.defaultBlockState().getValue(RESTING)) {
+            return 0.0f;
+        }
+        return super.getSpeedFactor();
     }
 
     @Override

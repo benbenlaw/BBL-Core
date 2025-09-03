@@ -2,6 +2,16 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.3.18
+Added more safety checks to resource blocks
+Update Just Dire Things mixin to prevent the block being destroyed whilst the block is resting
+
+1.3.17
+Changed resource blocks to use a different block state property after it is broken, no longer sets to barrier block when broken. After 20 ticks it will
+    reset back to its normal state allowing for the block to be broken again. This should also fix issues with resource blocks becoming barriers permaently
+    after world reloads
+Updated Block Breaker mixin to apply the sate
+
 1.3.16
 Fixed Issues why resource blocks crashing sometimes when being placed
 

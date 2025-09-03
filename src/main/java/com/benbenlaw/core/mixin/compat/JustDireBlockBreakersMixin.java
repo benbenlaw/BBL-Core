@@ -1,14 +1,12 @@
 package com.benbenlaw.core.mixin.compat;
 
 import com.benbenlaw.core.block.UnbreakableResourceBlock;
-import com.benbenlaw.core.util.BlockInformation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.util.FakePlayer;
@@ -16,13 +14,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.lang.reflect.Method;
-import java.util.Objects;
-
-import static com.benbenlaw.core.event.UnbreakableBlockReplaceEvent.blockInformationMap;
+import static com.benbenlaw.core.block.UnbreakableResourceBlock.RESTING;
 
 @Mixin(targets = "com.direwolf20.justdirethings.common.blockentities.BlockBreakerT1BE")
 public class JustDireBlockBreakersMixin {
@@ -61,9 +56,8 @@ public class JustDireBlockBreakersMixin {
 
                         Block.dropResources(state, level, modifiedBlockPos, blockEntity, player, itemStack);
 
-                        long delay = 10 + Objects.requireNonNull(level.getServer()).getTickCount();
-                        blockInformationMap.put(breakPos, new BlockInformation(state, level, delay));
-                        level.setBlock(breakPos, Blocks.BARRIER.defaultBlockState(), Block.UPDATE_ALL);
+                        level.setBlock(breakPos, state.setValue(RESTING, true), Block.UPDATE_ALL);
+                        level.scheduleTick(breakPos, state.getBlock(), 20);
 
                         if (state.getDestroySpeed(player.level(), breakPos) != 0.0F) {
                             itemStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND));
@@ -75,6 +69,19 @@ public class JustDireBlockBreakersMixin {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    //This is used to prevent the level writer from destroying the block in instances of the just dirt things block breaker
+    @Inject(
+            method = "tryBreakBlock(Lnet/minecraft/world/item/ItemStack;Lnet/neoforged/neoforge/common/util/FakePlayer;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+
+    private void onTryBreakBlock(ItemStack tool, FakePlayer fakePlayer, BlockPos breakPos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
+        if (state.getBlock() instanceof UnbreakableResourceBlock && state.getValue(UnbreakableResourceBlock.RESTING)) {
+            cir.setReturnValue(false);
         }
     }
 }
