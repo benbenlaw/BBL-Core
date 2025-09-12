@@ -76,8 +76,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     //JEI
 
-    compileOnly "curse.maven:jei-238222:5606861"
-    runtimeOnly "curse.maven:jei-238222:5606861"
+    compileOnly "curse.maven:jei-238222:6614392"
+    runtimeOnly "curse.maven:jei-238222:6614392"
 
     //KubeJS
     compileOnly "curse.maven:kubejs-238086:5631423"
@@ -91,9 +91,33 @@ dependencies {
     compileOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
     runtimeOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
 
-    //Just Dire Things
-    compileOnly "curse.maven:just-dire-things-1002348:6369120"
-    runtimeOnly "curse.maven:just-dire-things-1002348:6369120"
+    //Framed Blocks
+    //compileOnly "curse.maven:framedblocks-441647:6872949"
+    //runtimeOnly "curse.maven:framedblocks-441647:6872949"
+
+    //Oritech
+    compileOnly "curse.maven:oritech-1030830:6807350"
+    runtimeOnly "curse.maven:oritech-1030830:6807350"
+
+    //Architectury
+    compileOnly "curse.maven:architectury-api-419699:5786327"
+    runtimeOnly "curse.maven:architectury-api-419699:5786327"
+
+    //Athena
+    compileOnly "curse.maven:athena-841890:6669522"
+    runtimeOnly "curse.maven:athena-841890:6669522"
+
+    //owo-lib
+    compileOnly "curse.maven:owo-lib-532610:6785734"
+    runtimeOnly "curse.maven:owo-lib-532610:6785734"
+
+    //geckolib
+    compileOnly "curse.maven:geckolib-388172:6920810"
+    runtimeOnly "curse.maven:geckolib-388172:6920810"
+
+    //
+
+    //Framed Block
 
     //Mekanism
     //compileOnly "curse.maven:mekanism-268560:5574951"
