@@ -22,7 +22,6 @@ public class WorldInfoCache {
         if (overworld == null) return;
 
         type = BuiltInRegistries.CHUNK_GENERATOR.wrapAsHolder(((ChunkGeneratorAccess) overworld.generator()).bblcore$getCodec());
-
         Core.LOGGER.info("Captured world type as using generator " + type.getRegisteredName());
     }
 

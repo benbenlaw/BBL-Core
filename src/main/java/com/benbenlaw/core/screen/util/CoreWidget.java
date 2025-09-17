@@ -1,5 +1,6 @@
 package com.benbenlaw.core.screen.util;
 
+import com.benbenlaw.core.tag.ResourceMaterial;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
 

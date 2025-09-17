@@ -4,11 +4,9 @@ import com.benbenlaw.core.Core;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 public class CoreButtons {
 
-    @OnlyIn(Dist.CLIENT)
     public static final WidgetSprites ON_BUTTONS = new WidgetSprites(
             ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/on"),
             ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/on_hover")

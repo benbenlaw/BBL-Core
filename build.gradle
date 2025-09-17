@@ -5,7 +5,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.73'
+    id 'net.neoforged.moddev' version '2.0.103'
     id 'net.darkhax.curseforgegradle' version '1.1.24'
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -22,6 +22,14 @@ repositories {
         content {
             includeGroup("curse.maven")
         }
+    }
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        name = "ModMaven"
+        url = "https://modmaven.dev"
     }
 }
 base {
@@ -58,14 +66,14 @@ neoForge {
             programArgument '--nogui'
         }
 
-        data {
-            data()
+        clientData {
+            clientData()
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
     }
 
     mods {
-        bblcore {
+        "${mod_id}" {
             sourceSet sourceSets.main
         }
     }
@@ -74,59 +82,9 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
+
     //JEI
-
-    compileOnly "curse.maven:jei-238222:6614392"
-    runtimeOnly "curse.maven:jei-238222:6614392"
-
-    //KubeJS
-    compileOnly "curse.maven:kubejs-238086:5631423"
-    runtimeOnly "curse.maven:kubejs-238086:5631423"
-
-    //Rhino
-    compileOnly "curse.maven:rhino-416294:5650008"
-    runtimeOnly "curse.maven:rhino-416294:5650008"
-
-    //BH Menu
-    compileOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
-    runtimeOnly "curse.maven:bisecthosting-server-integration-menu-neoforge-1084468:5762091"
-
-    //Framed Blocks
-    //compileOnly "curse.maven:framedblocks-441647:6872949"
-    //runtimeOnly "curse.maven:framedblocks-441647:6872949"
-
-    //Oritech
-    compileOnly "curse.maven:oritech-1030830:6807350"
-    runtimeOnly "curse.maven:oritech-1030830:6807350"
-
-    //Architectury
-    compileOnly "curse.maven:architectury-api-419699:5786327"
-    runtimeOnly "curse.maven:architectury-api-419699:5786327"
-
-    //Athena
-    compileOnly "curse.maven:athena-841890:6669522"
-    runtimeOnly "curse.maven:athena-841890:6669522"
-
-    //owo-lib
-    compileOnly "curse.maven:owo-lib-532610:6785734"
-    runtimeOnly "curse.maven:owo-lib-532610:6785734"
-
-    //geckolib
-    compileOnly "curse.maven:geckolib-388172:6920810"
-    runtimeOnly "curse.maven:geckolib-388172:6920810"
-
-    //
-
-    //Framed Block
-
-    //Mekanism
-    //compileOnly "curse.maven:mekanism-268560:5574951"
-    //runtimeOnly "curse.maven:mekanism-268560:5574951"
-
-    //EMI
-
-    //compileOnly "curse.maven:emi-580555:5619579"
-    //runtimeOnly "curse.maven:emi-580555:5619579"
+    implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
 
 }
 
@@ -188,12 +146,16 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
 
     apiToken = System.getenv("curseforge_token").toString()
 
-    def projectId = 1135181
+    def projectId = "${curseforge_id}"
     def mainFile = upload(projectId, jar)
 
     mainFile.changelog = changelog
-    mainFile.releaseType = "release"
-    mainFile.gameVersions.addAll("1.21", "1.21.1")
+    mainFile.releaseType = "${release_type}"
+
+    "${release_versions}".split(',').each {
+        mainFile.addGameVersion("${it}")
+    }
+
     mainFile.addModLoader("neoforge")
     mainFile.addEnvironment("server", "client")
 
@@ -204,13 +166,12 @@ tasks.getByName("modrinth").setGroup("modpublishing")
 
 modrinth {
     token = System.getenv("modrinth_token").toString()
-    projectId = "tfpHINm8"
+    projectId = "${modrinth_id}"
     versionType = "release"
-    versionName = "bbl-core-" + "$minecraft_version" + "-" + "$mod_version"
+    versionName = "${mod_id}" + "$minecraft_version" + "-" + "$mod_version"
     uploadFile = jar // With Loom, this MUST be set to `remapJar` instead of `jar`!
 
-    gameVersions.addAll("1.21", "1.21.1")
-
+    gameVersions = "${release_versions}".split(',').collect {e -> e}
     loaders = ["neoforge"]
     changelog = project.changelog
     dependencies {

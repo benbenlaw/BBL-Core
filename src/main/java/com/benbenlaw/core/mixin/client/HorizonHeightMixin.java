@@ -1,5 +1,6 @@
 package com.benbenlaw.core.mixin.client;
 
+import com.benbenlaw.core.config.ModpackConfig;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.LevelHeightAccessor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class HorizonHeightMixin {
 
     @Inject(method = "getHorizonHeight", at = @At("HEAD"), cancellable = true)
-    public void getHorizonHeight(LevelHeightAccessor p_171688_, CallbackInfoReturnable<Double> cir) {
-        cir.setReturnValue(-100.0D);
+    public void getHorizonHeight(LevelHeightAccessor levelHeightAccessor, CallbackInfoReturnable<Double> cir) {
+        cir.setReturnValue(ModpackConfig.horizonHeight.get());
     }
 }

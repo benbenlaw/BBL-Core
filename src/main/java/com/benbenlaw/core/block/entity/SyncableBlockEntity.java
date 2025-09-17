@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,8 +44,8 @@ public class SyncableBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void handleUpdateTag(@NotNull CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
-        loadAdditional(compoundTag, provider);
+    public void handleUpdateTag(ValueInput input) {
+        loadAdditional(input);
     }
 
     public void syncContents(ServerPlayer player) {
@@ -57,20 +58,22 @@ public class SyncableBlockEntity extends BlockEntity {
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag(HolderLookup.@NotNull Provider provider) {
-        CompoundTag updateTag = new CompoundTag();
-        saveAdditional(updateTag, provider);
-        return updateTag;
+    public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        return saveWithoutMetadata(provider);
     }
+
     @Override
     public void onLoad() {
         super.onLoad();
         this.setChanged();
         this.sync();
     }
+
     @Override
-    public void onDataPacket(@NotNull Connection connection, @NotNull ClientboundBlockEntityDataPacket clientboundBlockEntityDataPacket,
-                             HolderLookup.@NotNull Provider provider) {
-        super.onDataPacket(connection, clientboundBlockEntityDataPacket, provider);
+    public void onDataPacket(Connection net, ValueInput valueInput) {
+        super.onDataPacket(net, valueInput);
+        loadAdditional(valueInput);
     }
+
+
 }

@@ -2,14 +2,12 @@ package com.benbenlaw.core.fluid;
 
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.util.RenderUtil;
-import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.dispenser.BlockSource;
@@ -18,13 +16,16 @@ import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.material.*;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.common.SoundActions;
@@ -124,9 +125,9 @@ public class FluidDeferredRegister {
         if (tint == -1) {
             return MapColor.NONE;
         } else {
-            int red = FastColor.ARGB32.red(tint);
-            int green = FastColor.ARGB32.green(tint);
-            int blue = FastColor.ARGB32.blue(tint);
+            int red = ARGB.red(tint);
+            int green = ARGB.green(tint);
+            int blue = ARGB.blue(tint);
             MapColor color = MapColor.NONE;
             double minDistance = Double.MAX_VALUE;
             MapColor[] var7 = NONE;
@@ -135,9 +136,9 @@ public class FluidDeferredRegister {
             for (int var9 = 0; var9 < var8; ++var9) {
                 MapColor toTest = var7[var9];
                 if (toTest != null && toTest != MapColor.NONE) {
-                    int testRed = FastColor.ARGB32.red(toTest.col);
-                    int testGreen = FastColor.ARGB32.green(toTest.col);
-                    int testBlue = FastColor.ARGB32.blue(toTest.col);
+                    int testRed = ARGB.red(toTest.col);
+                    int testGreen = ARGB.green(toTest.col);
+                    int testBlue = ARGB.blue(toTest.col);
                     double distanceSquare = perceptualColorDistanceSquared(red, green, blue, testRed, testGreen, testBlue);
                     if (distanceSquare < minDistance) {
                         minDistance = distanceSquare;
@@ -188,6 +189,7 @@ public class FluidDeferredRegister {
             Holder<Item> bucket = (Holder) var1.next();
             DispenserBlock.registerBehavior(bucket.value(), BUCKET_DISPENSE_BEHAVIOR);
         }
+
     }
 
     @FunctionalInterface
@@ -252,58 +254,6 @@ public class FluidDeferredRegister {
 
         public boolean isVaporizedOnPlacement(Level level, BlockPos pos, FluidStack stack) {
             return false;
-        }
-
-        @SuppressWarnings({"initializeClient"})
-        public IClientFluidTypeExtensions getClientExtensions() {
-            return new IClientFluidTypeExtensions() {
-
-
-                public @NotNull ResourceLocation getStillTexture() {
-                    return CoreFluidTypes.this.stillTexture;
-                }
-
-                public @NotNull ResourceLocation getFlowingTexture() {
-                    return CoreFluidTypes.this.flowingTexture;
-                }
-
-                public ResourceLocation getOverlayTexture() {
-                    return CoreFluidTypes.this.overlayTexture;
-                }
-
-                public @Nullable ResourceLocation getRenderOverlayTexture(Minecraft mc) {
-                    return CoreFluidTypes.this.renderOverlayTexture;
-                }
-
-                public @NotNull Vector3f modifyFogColor(@NotNull Camera camera, float partialTick,
-                                                        @NotNull ClientLevel level, int renderDistance, float darkenWorldAmount,
-                                                        @NotNull Vector3f fluidFogColor) {
-                    return new Vector3f(RenderUtil.getRed(CoreFluidTypes.this.color), RenderUtil.getGreen(CoreFluidTypes.this.color), RenderUtil.getBlue(CoreFluidTypes.this.color));
-                }
-
-                public void modifyFogRender(@NotNull Camera camera, @NotNull FogRenderer.@NotNull FogMode mode,
-                                            float renderDistance, float partialTick, float nearDistance, float farDistance,
-                                            @NotNull FogShape shape) {
-                    farDistance = 24.0F;
-                    if (farDistance > renderDistance) {
-                        farDistance = renderDistance;
-                        shape = FogShape.CYLINDER;
-                    }
-
-                    RenderSystem.setShaderFogStart(-8.0F);
-                    RenderSystem.setShaderFogEnd(farDistance);
-                    RenderSystem.setShaderFogShape(shape);
-                }
-
-                @Override
-                public void renderOverlay(Minecraft mc, PoseStack poseStack) {
-                    IClientFluidTypeExtensions.super.renderOverlay(mc, poseStack);
-                }
-
-                public int getTintColor() {
-                    return color;
-                }
-            };
         }
     }
 }

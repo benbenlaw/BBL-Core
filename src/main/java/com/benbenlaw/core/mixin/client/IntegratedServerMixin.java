@@ -1,7 +1,7 @@
 package com.benbenlaw.core.mixin.client;
 
 import com.benbenlaw.core.Core;
-import com.benbenlaw.core.client.BBLCoreClient;
+import com.benbenlaw.core.client.CoreClient;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.server.MinecraftServer;
@@ -25,7 +25,7 @@ public abstract class IntegratedServerMixin extends MinecraftServer {
 
     @Inject(at = @At("TAIL"), method = "initServer")
     private void forceReload(CallbackInfoReturnable<Boolean> ci) {
-        if (BBLCoreClient.isCreatingNewWorld) {
+        if (CoreClient.isCreatingNewWorld) {
             Core.LOGGER.info("Detected newly created world... forcing pack reload");
 
             reloadResources(getPackRepository().getSelectedIds()).exceptionally(ex -> {
@@ -33,7 +33,7 @@ public abstract class IntegratedServerMixin extends MinecraftServer {
                 return null;
             });
 
-            BBLCoreClient.isCreatingNewWorld = false;
+            CoreClient.isCreatingNewWorld = false;
         }
     }
 }

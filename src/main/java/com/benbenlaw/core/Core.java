@@ -1,28 +1,19 @@
 package com.benbenlaw.core;
 
-import com.benbenlaw.core.block.TestBlock;
-import com.benbenlaw.core.config.ColorTintIndexConfig;
-import com.benbenlaw.core.config.CoreDimensionConfig;
-import com.benbenlaw.core.config.CoreModpackConfig;
-import com.benbenlaw.core.config.CoreStartupConfig;
+import com.benbenlaw.core.config.DimensionConfig;
+import com.benbenlaw.core.config.ModpackConfig;
+import com.benbenlaw.core.config.StartupConfig;
 import com.benbenlaw.core.event.ModpackCrashInformation;
-import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.CoreItems;
-import com.benbenlaw.core.item.TestItem;
 import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
-import com.benbenlaw.core.recipe.CoreConditions;
-import com.benbenlaw.core.recipe.CoreRecipes;
-import com.benbenlaw.core.tag.CommonTags;
-import com.benbenlaw.core.util.ColorHandler;
+import com.benbenlaw.core.recipe.CoreRecipeConditions;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
 
@@ -43,22 +34,17 @@ public class Core {
         //** DO NOT DISABLE THIS LINE **//
 
         //Global Resource Tags
-        CommonTags.init();
 
-        CoreDataComponents.COMPONENTS.register(eventBus);
         CoreItems.ITEMS.register(eventBus);
 
-        CoreRecipes.SERIALIZER.register(eventBus);
-        CoreRecipes.TYPES.register(eventBus);
-        CoreConditions.CONDITIONALS.register(eventBus);
+        CoreRecipeConditions.CONDITIONALS.register(eventBus);
         CoreLootModifierCondition.LOOT_CONDITION_TYPES.register(eventBus);
         CoreLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(eventBus);
 
         //Configs
-        modContainer.registerConfig(ModConfig.Type.STARTUP, ColorTintIndexConfig.SPEC, "bbl/core/color_index.toml");
-        modContainer.registerConfig(ModConfig.Type.STARTUP, CoreStartupConfig.SPEC, "bbl/core/startup.toml");
-        modContainer.registerConfig(ModConfig.Type.STARTUP, CoreModpackConfig.SPEC, "bbl/core/modpack.toml");
-        modContainer.registerConfig(ModConfig.Type.STARTUP, CoreDimensionConfig.SPEC, "bbl/core/dimensions.toml");
+        modContainer.registerConfig(ModConfig.Type.STARTUP, StartupConfig.SPEC, "bbl/core/startup.toml");
+        modContainer.registerConfig(ModConfig.Type.STARTUP, ModpackConfig.SPEC, "bbl/core/modpack.toml");
+        modContainer.registerConfig(ModConfig.Type.STARTUP, DimensionConfig.SPEC, "bbl/core/dimensions.toml");
 
         //Modpack Crash Information
         ModpackCrashInformation.register();
@@ -66,9 +52,6 @@ public class Core {
 
         eventBus.addListener(this::addItemToCreativeTab);
 
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            eventBus.register(new ColorHandler());
-        }
     }
 
     private void addItemToCreativeTab(BuildCreativeModeTabContentsEvent event) {

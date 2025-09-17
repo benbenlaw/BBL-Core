@@ -5,10 +5,8 @@
     "mixins": [
         "PortalTagForNetherPortalsMixin",
         "FireBlockNetherPortalMixin",
-        "ColoredCraftingTableValidForPlayer",
         "WorldLoaderMixin",
-        "access.ChunkGeneratorAccess",
-        "compat.JustDireBlockBreakersMixin"
+        "access.ChunkGeneratorAccess"
     ],
     "client": [
         "client.HorizonHeightMixin",

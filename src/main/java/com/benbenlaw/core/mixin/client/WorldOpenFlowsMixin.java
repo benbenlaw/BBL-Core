@@ -25,4 +25,3 @@ public abstract class WorldOpenFlowsMixin {
         WorldInfoCache.capture(registries.compositeAccess());
     }
 }
-
