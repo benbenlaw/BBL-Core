@@ -32,11 +32,8 @@ import java.util.Objects;
 
 public class SyncableBlockEntity extends BlockEntity {
 
-    private final ItemStackHandler itemHandler;
-
-    public SyncableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, ItemStackHandler itemHandler) {
+    public SyncableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        this.itemHandler = itemHandler;
     }
 
     public void sync() {
@@ -78,15 +75,5 @@ public class SyncableBlockEntity extends BlockEntity {
     public void onDataPacket(Connection net, ValueInput valueInput) {
         super.onDataPacket(net, valueInput);
         loadAdditional(valueInput);
-    }
-
-    @Override
-    public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
-        NonNullList<ItemStack> stacks = NonNullList.create();
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            stacks.add(itemHandler.getStackInSlot(i));
-        }
-        assert this.level != null;
-        Containers.dropContents(this.level, this.worldPosition, stacks);
     }
 }
