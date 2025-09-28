@@ -8,28 +8,28 @@ import net.neoforged.api.distmarker.Dist;
 public class CoreButtons {
 
     public static final WidgetSprites ON_BUTTONS = new WidgetSprites(
-            ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/on"),
-            ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/on_hover")
+            Core.rl("machine/on"),
+            Core.rl("machine/on_hover")
     );
 
     public static final WidgetSprites OFF_BUTTONS = new WidgetSprites(
-            ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/off"),
-            ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/off_hover")
+            Core.rl( "machine/off"),
+            Core.rl( "machine/off_hover")
     );
 
     public static final WidgetSprites INCREASE_BUTTONS = new WidgetSprites(
-            ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/increase"),
-            ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/increase_hover")
+            Core.rl( "machine/increase"),
+            Core.rl( "machine/increase_hover")
     );
 
     public static final WidgetSprites DECREASE_BUTTONS = new WidgetSprites(
-            ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/decrease"),
-            ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/decrease_hover")
+            Core.rl( "machine/decrease"),
+            Core.rl( "machine/decrease_hover")
     );
 
     public static final WidgetSprites SAVED_RECIPE_BUTTONS = new WidgetSprites(
-            ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/save_recipe"),
-            ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "machine/save_recipe_hover")
+            Core.rl( "machine/save_recipe"),
+            Core.rl( "machine/save_recipe_hover")
     );
 
 

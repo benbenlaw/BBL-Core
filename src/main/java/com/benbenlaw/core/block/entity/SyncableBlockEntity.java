@@ -2,6 +2,7 @@ package com.benbenlaw.core.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -17,6 +18,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,8 +32,11 @@ import java.util.Objects;
 
 public class SyncableBlockEntity extends BlockEntity {
 
-    public SyncableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    private final ItemStackHandler itemHandler;
+
+    public SyncableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, ItemStackHandler itemHandler) {
         super(type, pos, state);
+        this.itemHandler = itemHandler;
     }
 
     public void sync() {
@@ -75,5 +80,13 @@ public class SyncableBlockEntity extends BlockEntity {
         loadAdditional(valueInput);
     }
 
-
+    @Override
+    public void preRemoveSideEffects(@NotNull BlockPos pos, @NotNull BlockState state) {
+        NonNullList<ItemStack> stacks = NonNullList.create();
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            stacks.add(itemHandler.getStackInSlot(i));
+        }
+        assert this.level != null;
+        Containers.dropContents(this.level, this.worldPosition, stacks);
+    }
 }

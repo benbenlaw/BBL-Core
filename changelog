@@ -7,37 +7,40 @@ Changelog BBL Core
 //OnOff Button API
 //Upgrade API
 
-1.8.0
-Updated to Minecraft 1.21.8
-Changed versioning naming
-Removed Brightable and IColored blocks as better systems are in place to generate textures
-Removed UnbreakableResourceBlock, this is a mess and needs a complete rework would rather re write it in the future
-Removed TintIndex
-Removed ColorList and replaced with ColorUtils, this uses the minecraft dye colors for the tint index
-ResourceNames has been replaced with ResourceMaterials, this is an enum of materials
-Removed ModdedTagBuilder, not needed just extend the CoreTags class
-Removed CoreRecipes, no longer needed
-Removed JEI and kubejs integration, no longer needed
-Removed all Item.colored Classes, no longer needed
-Removed TooltipUtils, no longer needed
-Removed CoreDataComponents, no longer needed
-Horizon Hight can now be set in the config instead of always being -100
-CoreConditions renamed to CoreRecipeConditions
-Cleaned up lang file
-Removed JustDireThings mixin, no longer needed
-Renamed BBLCoreClient to CoreClient
-Moved some CoreStartupConfig options to CoreModpackConfig
-Renamed CoreStartupConfig to CoreConfig
-Renamed CoreDimensionConfig to DimensionConfig
-Renamed CoreModpackConfig to ModpackConfig
-Renamed commands package to command
-
+1.8.5
+- Updated to Minecraft 1.21.8
+- Updated Loader Range to 4
+- Changed versioning naming
+- Removed Brightable and IColored blocks as better systems are in place to generate textures
+- Removed UnbreakableResourceBlock, this is a mess and needs a complete rework would rather re write it in the future
+- Removed TintIndex
+- Removed ColorList and replaced with ColorUtils, this uses the minecraft dye colors for the tint index
+- ResourceNames has been replaced with ResourceMaterials, this is an enum of materials
+- Removed ModdedTagBuilder, not needed just extend the CoreTags class
+- Removed CoreRecipes, no longer needed
+- Removed JEI and kubejs integration, no longer needed
+- Removed all Item.colored Classes, no longer needed
+- Removed TooltipUtils, no longer needed
+- Removed CoreDataComponents, no longer needed
+- Horizon Hight can now be set in the config instead of always being -100
+- CoreConditions renamed to CoreRecipeConditions
+- Cleaned up lang file
+- Removed JustDireThings mixin, no longer needed
+- Renamed BBLCoreClient to CoreClient
+- Moved some CoreStartupConfig options to CoreModpackConfig
+- Renamed CoreStartupConfig to CoreConfig
+- Renamed CoreDimensionConfig to DimensionConfig
+- Renamed CoreModpackConfig to ModpackConfig
+- Renamed commands package to command
+- Removed JEI dependency
+- Added CoreItemUtils this provides utility methods for items at the moment adds popItemStack which drops item like a block would
+- Added Core.rl for easier resource location creation
+- Added FluidRenderingUtils for rendering fluids in GUIs
+- Added CoreFluidTank extends FluidTank, adds methods to read and write to NBT with client Syncing, requires SyncableBlockEntity
+- Added preRemoveSideEffects to SyncableBlockEntity, this is called before the block entity is removed, this by default drop the stored inventory
 
 things to check
-- return to spawn event
 - loot conditions and modifier
-- update command
-- discord and modpack command
 - recipeID broken not implemented
 
 

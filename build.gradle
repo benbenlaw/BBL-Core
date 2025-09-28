@@ -146,7 +146,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
 
     apiToken = System.getenv("curseforge_token").toString()
 
-    def projectId = "${curseforge_id}"
+    def projectId = curseforge_id
     def mainFile = upload(projectId, jar)
 
     mainFile.changelog = changelog

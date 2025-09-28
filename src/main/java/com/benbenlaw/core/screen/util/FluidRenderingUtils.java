@@ -1,0 +1,83 @@
+package com.benbenlaw.core.screen.util;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FluidRenderingUtils {
+
+    /// Used to render a fluid tank in a GUI use
+    /// renderFluid(guiGraphics, tank, x, y, 8, 20, 47, 16, mouseX, mouseY);
+    /// Replaces all previous screen fluid rendering code
+    public void renderFluid(GuiGraphics guiGraphics, FluidTank tank, int screenX, int screenY,
+                            int tankTopX, int tankTopY, int tankHeight, int tankWidth, int mouseX, int mouseY) {
+
+        FluidStack fluidStack = tank.getFluid();
+        int capacity = tank.getCapacity();
+        int fill = fluidStack.getAmount();
+
+        int tankX = screenX + tankTopX;
+        int tankY = screenY + tankTopY;
+
+        if (!fluidStack.isEmpty()) {
+            int displayLevel = (int) ((float) fill / capacity * tankHeight);
+
+            IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluidStack.getFluid());
+            ResourceLocation texture = renderProperties.getStillTexture(fluidStack);
+            TextureAtlasSprite still = Minecraft.getInstance()
+                    .getTextureAtlas(ResourceLocation.withDefaultNamespace("textures/atlas/blocks.png"))
+                    .apply(texture);
+
+            renderTiledSprite(guiGraphics, still, renderProperties.getTintColor(fluidStack),
+                    tankX, tankY + tankHeight - displayLevel, displayLevel, tankWidth);
+        }
+
+        if (mouseX >= tankX && mouseX < tankX + tankWidth &&
+                mouseY >= tankY && mouseY < tankY + tankHeight) {
+
+            List<Component> lines = new ArrayList<>();
+
+            if (fluidStack.isEmpty()) {
+                lines.add(Component.literal("Empty"));
+            } else {
+                lines.add(fluidStack.getHoverName()); // fluid name
+                lines.add(Component.literal(String.format("%d / %d mB", fill, capacity))); // amount
+            }
+
+            List<ClientTooltipComponent> tooltipComponents =
+                    lines.stream().map(Component::getVisualOrderText)
+                            .map(ClientTooltipComponent::create)
+                            .toList();
+
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltipComponents, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+
+
+        }
+    }
+
+    public static void renderTiledSprite(GuiGraphics guiGraphics, TextureAtlasSprite sprite, int color, int x, int y, int height, int width) {
+        int spriteHeight = sprite.contents().height();
+        int startY = y;
+        int textureWidth = (int) (sprite.contents().width() / (sprite.getU1() - sprite.getU0()));
+        int textureHeight = (int) (sprite.contents().height() / (sprite.getV1() - sprite.getV0()));
+        do {
+            int renderHeight = Math.min(spriteHeight, height);
+            height -= renderHeight;
+
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, sprite.atlasLocation(), x, startY, textureWidth * sprite.getU0(), textureHeight * sprite.getV0(), width, renderHeight, textureWidth, textureHeight, color);
+
+            startY += renderHeight;
+        } while (height > 0);
+    }
+}

@@ -53,8 +53,8 @@ public class FluidDeferredRegister {
 
     private static final ResourceLocation OVERLAY = ResourceLocation.withDefaultNamespace("block/water_overlay");
     private static final ResourceLocation RENDER_OVERLAY = ResourceLocation.withDefaultNamespace("textures/misc/underwater.png");
-    private static final ResourceLocation LIQUID = ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "block/liquid");
-    private static final ResourceLocation LIQUID_FLOW = ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "block/liquid_flow");
+    private static final ResourceLocation LIQUID = Core.rl( "block/liquid");
+    private static final ResourceLocation LIQUID_FLOW = Core.rl( "block/liquid_flow");
     private static final DispenseItemBehavior BUCKET_DISPENSE_BEHAVIOR = new DefaultDispenseItemBehavior() {
         public @NotNull ItemStack execute(@NotNull BlockSource source, @NotNull ItemStack stack) {
             Level world = source.level();

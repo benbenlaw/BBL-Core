@@ -25,17 +25,11 @@ public class TestFluid {
 
     static {
 
-
         LIME_WATER = FLUIDS.register("eroding_water", (renderProperties) ->
-                renderProperties.texture(ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "block/water_still"),
-                        ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "block/water_flow")).tint(0xFFCCCCFF));
+                renderProperties.texture(Core.rl("block/water_still"), Core.rl("block/water_flow")).tint(0xFFCCCCFF));
 
         PINK_WATER = FLUIDS.register("pink_water", (renderProperties) ->
-                renderProperties.texture(ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "block/molten_still"),
-                        ResourceLocation.fromNamespaceAndPath(Core.MOD_ID, "block/molten_flow")).tint(0xFFf72cff));
-
-
-
+                renderProperties.texture(Core.rl("block/molten_still"), Core.rl("block/molten_flow")).tint(0xFFf72cff));
 
     }
 }

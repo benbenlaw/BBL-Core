@@ -26,11 +26,3 @@ type="required"
 versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
-
-
-[[dependencies."${mod_id}"]]
-modId="jei"
-type="optional"
-versionRange="jei-1.21-neoforge-19.8.0.97"
-ordering="NONE"
-side="BOTH"
