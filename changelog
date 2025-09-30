@@ -46,8 +46,6 @@ things to check
 - Added Core.rl for easier resource location creation
 - Added FluidRenderingUtils for rendering fluids in GUIs
 - Added CoreFluidTank extends FluidTank, adds methods to read and write to NBT with client Syncing, requires SyncableBlockEntity
-- Added preRemoveSideEffects to SyncableBlockEntity, this is called before the block entity is removed, this by default drop the stored inventory
-
 
 1.3.19
 Update to noeforge 21.1.206

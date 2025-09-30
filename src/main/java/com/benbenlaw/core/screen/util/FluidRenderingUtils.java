@@ -20,7 +20,7 @@ public class FluidRenderingUtils {
     /// Used to render a fluid tank in a GUI use
     /// renderFluid(guiGraphics, tank, x, y, 8, 20, 47, 16, mouseX, mouseY);
     /// Replaces all previous screen fluid rendering code
-    public void renderFluid(GuiGraphics guiGraphics, FluidTank tank, int screenX, int screenY,
+    public static void renderFluid(GuiGraphics guiGraphics, FluidTank tank, int screenX, int screenY,
                             int tankTopX, int tankTopY, int tankHeight, int tankWidth, int mouseX, int mouseY) {
 
         FluidStack fluidStack = tank.getFluid();
