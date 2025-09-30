@@ -5,6 +5,7 @@ import com.benbenlaw.core.block.colored.util.IColored;
 import com.benbenlaw.core.block.colored.util.BlockTypeColorFinder;
 import com.benbenlaw.core.item.CoreDataComponents;
 import com.benbenlaw.core.item.TooltipUtil;
+import com.benbenlaw.core.util.CoreTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -92,6 +93,13 @@ public class ColoringItem extends Item {
         InteractionHand hand = context.getHand();
 
         if (!level.isClientSide()) {
+
+            if (state.is(CoreTags.Blocks.BANNED_FROM_COLORING)) {
+                assert player != null;
+                player.sendSystemMessage(Component.translatable("tooltips.bblcore.coloring_item.banned_block").withStyle(ChatFormatting.RED));
+                return InteractionResult.FAIL;
+            }
+
             if (state.getBlock() instanceof IColored) {
                 DyeColor dyeColor = null;
                 Function<BlockState, DyeColor> colorRetriever = BlockTypeColorFinder.BLOCK_TYPE_COLOR_FINDER.get(state.getBlock().getClass());

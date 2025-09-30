@@ -2,6 +2,9 @@ Changelog BBL Core
 
 //CHECK IN WORLD SPRAYING USES THE TAG SYSTEM
 
+1.3.20
+Actually implemented the banned coloring tags for crafting and in world converting
+
 1.3.19
 Update to noeforge 21.1.206
 Added new config option in StartUpConfig called save the world, this can be used after a world crash to remove the block that caused the crash

@@ -36,7 +36,8 @@ public class ColoringRecipe extends CustomRecipe {
         for (int i = 0; i < craftingInput.size(); i++) {
             ItemStack stack = craftingInput.getItem(i);
             if (!stack.isEmpty()) {
-                if (stack.getItem() instanceof ColoredBlockItem && !stack.is(CoreTags.Items.BANNED_FROM_COLORING)) {
+                if (stack.is(CoreTags.Items.BANNED_FROM_COLORING)) return false;
+                if (stack.getItem() instanceof ColoredBlockItem) {
                     if (!coloredBlockItem.isEmpty()) {
                         return false;
                     }
