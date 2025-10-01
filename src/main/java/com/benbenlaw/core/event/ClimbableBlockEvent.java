@@ -2,7 +2,6 @@ package com.benbenlaw.core.event;
 
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.config.ModpackConfig;
-import com.benbenlaw.core.config.StartupConfig;
 import com.benbenlaw.core.util.CoreTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

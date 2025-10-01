@@ -2,8 +2,6 @@ package com.benbenlaw.core.screen.util;
 
 import com.benbenlaw.core.Core;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
 
 public class CoreButtons {
 
