@@ -1,0 +1,72 @@
+package com.benbenlaw.core.screen.util.button;
+
+import com.benbenlaw.core.Core;
+import com.benbenlaw.core.block.entity.FilterableBlockEntity;
+import com.benbenlaw.core.network.packets.SyncWhitelistMode;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class WhitelistButton extends Button {
+
+    private boolean whitelist;
+
+    public WhitelistButton(int x, int y, int width, int height, boolean initial, OnPress onPress) {
+        super(x, y, width, height, Component.empty(), onPress, DEFAULT_NARRATION);
+        this.whitelist = initial;
+        this.height = 18;
+        this.width = 18;
+    }
+
+    public void toggle() {
+        this.whitelist = !this.whitelist;
+    }
+
+    @Override
+    protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        boolean hovered = this.isHovered();
+        ResourceLocation currentTexture;
+        if (this.whitelist) {
+            currentTexture = hovered ? Core.rl("whitelist_hover") : Core.rl("whitelist");
+        } else {
+            currentTexture = hovered ? Core.rl("blacklist_hover") : Core.rl("blacklist");
+        }
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, currentTexture, this.getX(), this.getY(), this.width, this.height);
+
+        if (hovered) {
+            String mode = this.whitelist ? "Whitelist" : "Blacklist";
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("Mode: ").append(Component.literal(mode).withStyle(this.whitelist ? net.minecraft.ChatFormatting.GREEN : net.minecraft.ChatFormatting.RED)));
+            List<ClientTooltipComponent> tooltipComponents = lines.stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create).toList();
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltipComponents, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+
+        }
+    }
+
+    public static WhitelistButton create(int x, int y, int width, int height, FilterableBlockEntity blockEntity) {
+        boolean initialMode = blockEntity.isWhitelist();
+
+        return new WhitelistButton(x, y, width, height, initialMode, button -> {
+            WhitelistButton whitelistButton = (WhitelistButton) button;
+            whitelistButton.toggle();
+
+            boolean newMode = !blockEntity.isWhitelist();
+            blockEntity.setWhitelist(newMode);
+
+            BlockEntity be = (BlockEntity) blockEntity;
+            ClientPacketDistributor.sendToServer(new SyncWhitelistMode(be.getBlockPos(), newMode));
+        });
+    }
+
+}

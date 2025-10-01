@@ -1,7 +1,6 @@
 package com.benbenlaw.core.fluid;
 
 import com.benbenlaw.core.Core;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;

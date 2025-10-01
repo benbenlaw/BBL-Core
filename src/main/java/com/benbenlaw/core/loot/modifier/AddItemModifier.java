@@ -1,6 +1,5 @@
 package com.benbenlaw.core.loot.modifier;
 
-import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -14,7 +13,6 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
-import java.util.function.Supplier;
 
 public class AddItemModifier extends LootModifier {
 

@@ -2,7 +2,6 @@ package com.benbenlaw.core.util;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.phys.Vec3;
 
 public class DirectionUtil {
     public static Direction adjustPosition(Direction facing, Direction direction) {

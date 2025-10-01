@@ -1,6 +1,5 @@
 package com.benbenlaw.core.recipe;
 
-import net.minecraft.world.item.crafting.RecipeInput;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 

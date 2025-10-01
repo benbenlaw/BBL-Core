@@ -10,9 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class CoreTags {
 
     ///Extending this class CoreTag allows for the creation of new tags tag is your mod id and name is the name of the tag

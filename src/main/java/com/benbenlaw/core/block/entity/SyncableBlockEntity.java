@@ -5,7 +5,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -13,11 +12,6 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -26,10 +20,13 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+/**
+ * Provides synchronization capabilities for block entities between server and client.
+ * Also adds helper to drop item handler contents when the block is removed.
+ */
 public class SyncableBlockEntity extends BlockEntity {
 
     public SyncableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -46,7 +43,7 @@ public class SyncableBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void handleUpdateTag(ValueInput input) {
+    public void handleUpdateTag(@NotNull ValueInput input) {
         loadAdditional(input);
     }
 
@@ -60,7 +57,7 @@ public class SyncableBlockEntity extends BlockEntity {
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+    public @NotNull CompoundTag getUpdateTag(HolderLookup.@NotNull Provider provider) {
         return saveWithoutMetadata(provider);
     }
 
@@ -72,8 +69,18 @@ public class SyncableBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void onDataPacket(Connection net, ValueInput valueInput) {
+    public void onDataPacket(@NotNull Connection net, @NotNull ValueInput valueInput) {
         super.onDataPacket(net, valueInput);
         loadAdditional(valueInput);
+    }
+
+    protected void dropInventoryContents(ItemStackHandler handler) {
+        NonNullList<ItemStack> stacks = NonNullList.create();
+        for (int i = 0; i < handler.getSlots(); i++) {
+            stacks.add(handler.getStackInSlot(i));
+        }
+        if (this.level != null) {
+            Containers.dropContents(this.level, this.worldPosition, stacks);
+        }
     }
 }

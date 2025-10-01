@@ -5,9 +5,9 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
+/// Used to create a simple fluid tank inside a block entity that syncs its contents when changed
 public class CoreFluidTank extends FluidTank {
 
-    /// Used to create a simple fluid tank inside a block entity that syncs its contents when changed
     SyncableBlockEntity blockEntity;
     String tankName;
 

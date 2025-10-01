@@ -7,7 +7,16 @@ Changelog BBL Core
 //OnOff Button API
 //Upgrade API
 
-1.8.7
+1.8.8
+
+- Added item handler dropping method to SyncableBlockEntity
+- Added SyncableBlock class, this is a base class for custom blocks with a RUNNING property and a FACING property
+- Added FilterItemHandler for adding item filtering to block entities
+- Added FilterableBlockEntity interface
+- Added networking for filter packets for both JEI dragging support and placing into a FilterSlot from a GUI
+- Added FilterSlot for Menus, slots do not take the items but copy them to a FilterItemHandler saved on the BlockEntity
+- Added Whitelist Button for GUIs
+
 things to check
 - loot conditions and modifier
 - recipeID broken not implemented
