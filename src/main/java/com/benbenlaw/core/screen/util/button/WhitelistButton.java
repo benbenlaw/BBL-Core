@@ -46,11 +46,23 @@ public class WhitelistButton extends Button {
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, currentTexture, this.getX(), this.getY(), this.width, this.height);
 
         if (hovered) {
-            String mode = this.whitelist ? "Whitelist" : "Blacklist";
-            List<Component> lines = new ArrayList<>();
-            lines.add(Component.literal("Mode: ").append(Component.literal(mode).withStyle(this.whitelist ? net.minecraft.ChatFormatting.GREEN : net.minecraft.ChatFormatting.RED)));
-            List<ClientTooltipComponent> tooltipComponents = lines.stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create).toList();
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltipComponents, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+            Component modeText = Component.translatable(
+                    this.whitelist
+                            ? "tooltip.bblcore.whitelist_button.whitelist"
+                            : "tooltip.bblcore.whitelist_button.blacklist"
+            ).withStyle(this.whitelist ? net.minecraft.ChatFormatting.GREEN : net.minecraft.ChatFormatting.RED);
+
+            Component tooltip = Component.translatable("tooltip.bblcore.whitelist_button.mode", modeText);
+
+            List<ClientTooltipComponent> tooltipComponents = List.of(ClientTooltipComponent.create(tooltip.getVisualOrderText()));
+            guiGraphics.renderTooltip(
+                    Minecraft.getInstance().font,
+                    tooltipComponents,
+                    mouseX,
+                    mouseY,
+                    DefaultTooltipPositioner.INSTANCE,
+                    null
+            );
         }
     }
 
