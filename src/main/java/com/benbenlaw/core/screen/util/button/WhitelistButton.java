@@ -2,6 +2,7 @@ package com.benbenlaw.core.screen.util.button;
 
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.block.entity.FilterableBlockEntity;
+import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.network.packets.SyncWhitelistMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -38,9 +39,9 @@ public class WhitelistButton extends Button {
         boolean hovered = this.isHovered();
         ResourceLocation currentTexture;
         if (this.whitelist) {
-            currentTexture = hovered ? Core.rl("whitelist_hover") : Core.rl("whitelist");
+            currentTexture = hovered ? Core.rl("whitelist_button/whitelist_hover") : Core.rl("whitelist_button/whitelist");
         } else {
-            currentTexture = hovered ? Core.rl("blacklist_hover") : Core.rl("blacklist");
+            currentTexture = hovered ? Core.rl("whitelist_button/blacklist_hover") : Core.rl("whitelist_button/blacklist");
         }
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, currentTexture, this.getX(), this.getY(), this.width, this.height);
 
@@ -50,23 +51,27 @@ public class WhitelistButton extends Button {
             lines.add(Component.literal("Mode: ").append(Component.literal(mode).withStyle(this.whitelist ? net.minecraft.ChatFormatting.GREEN : net.minecraft.ChatFormatting.RED)));
             List<ClientTooltipComponent> tooltipComponents = lines.stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create).toList();
             guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltipComponents, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
-
         }
     }
 
-    public static WhitelistButton create(int x, int y, int width, int height, FilterableBlockEntity blockEntity) {
-        boolean initialMode = blockEntity.isWhitelist();
+    public static WhitelistButton create(int x, int y, int width, int height, BlockEntity blockEntity) {
 
-        return new WhitelistButton(x, y, width, height, initialMode, button -> {
-            WhitelistButton whitelistButton = (WhitelistButton) button;
-            whitelistButton.toggle();
+        if (blockEntity instanceof FilterableBlockEntity filterable) {
 
-            boolean newMode = !blockEntity.isWhitelist();
-            blockEntity.setWhitelist(newMode);
+            boolean initialMode = filterable.isWhitelist();
 
-            BlockEntity be = (BlockEntity) blockEntity;
-            ClientPacketDistributor.sendToServer(new SyncWhitelistMode(be.getBlockPos(), newMode));
-        });
+            return new WhitelistButton(x, y, width, height, initialMode, button -> {
+                WhitelistButton whitelistButton = (WhitelistButton) button;
+                whitelistButton.toggle();
+
+                boolean newMode = !filterable.isWhitelist();
+                filterable.setWhitelist(newMode);
+
+                ClientPacketDistributor.sendToServer(new SyncWhitelistMode(blockEntity.getBlockPos(), newMode));
+            });
+        } else {
+            Core.LOGGER.error("Attempted to create WhitelistButton for a BlockEntity that does not implement FilterableBlockEntity");
+            return null;
+        }
     }
-
 }
