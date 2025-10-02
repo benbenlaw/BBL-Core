@@ -34,12 +34,11 @@ public class SleepingInOtherDimensionsEvent {
 
         if (!isConfiguredDim) return;
 
-        MinecraftServer server = player.getServer();
+        MinecraftServer server = player.level().getServer();
         long currentTime = level.getDayTime();
         long newTime = ((currentTime / 24000) + 1) * 24000;
         String command = "time set " + newTime;
 
-        assert server != null;
         server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withLevel(level).withSuppressedOutput(), command);
     }
 

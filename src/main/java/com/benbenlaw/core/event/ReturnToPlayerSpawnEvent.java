@@ -37,9 +37,9 @@ public class ReturnToPlayerSpawnEvent {
                 ServerPlayer.RespawnConfig respawnConfig = player.getRespawnConfig();
 
                 assert respawnConfig != null;
-                BlockPos spawnPos = respawnConfig.pos();
-                ResourceKey<Level> dimension = respawnConfig.dimension();
-                ServerLevel serverLevel = Objects.requireNonNull(player.getServer()).getLevel(dimension);
+                BlockPos spawnPos = respawnConfig.respawnData().pos();
+                ResourceKey<Level> dimension = respawnConfig.respawnData().dimension();
+                ServerLevel serverLevel = player.level().getServer().getLevel(dimension);
 
                 assert serverLevel != null;
                 player.fallDistance = 0.0F;

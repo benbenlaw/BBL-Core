@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.AtlasManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -35,10 +36,14 @@ public class FluidRenderingUtils {
 
             IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluidStack.getFluid());
             ResourceLocation texture = renderProperties.getStillTexture(fluidStack);
+            AtlasManager atlas = Minecraft.getInstance().getAtlasManager();
+            /*
             TextureAtlasSprite still = Minecraft.getInstance()
                     .getTextureAtlas(ResourceLocation.withDefaultNamespace("textures/atlas/blocks.png"))
                     .apply(texture);
 
+             */
+            TextureAtlasSprite still = atlas.getAtlasOrThrow(ResourceLocation.withDefaultNamespace("textures/atlas/blocks.png")).getSprite(texture);
             renderTiledSprite(guiGraphics, still, renderProperties.getTintColor(fluidStack),
                     tankX, tankY + tankHeight - displayLevel, displayLevel, tankWidth);
         }
