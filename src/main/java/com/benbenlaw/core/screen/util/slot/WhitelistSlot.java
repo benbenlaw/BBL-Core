@@ -1,15 +1,17 @@
 package com.benbenlaw.core.screen.util.slot;
 
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.IndexModifier;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
-public class WhitelistSlot extends SlotItemHandler {
+public class WhitelistSlot extends ResourceHandlerSlot {
 
     private final ItemStack itemLike;
 
-    public WhitelistSlot(IItemHandler itemHandler, int index, int xPos, int yPos, ItemStack itemLike) {
-        super(itemHandler, index, xPos, yPos);
+    public WhitelistSlot(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> slotModifier, int index, int xPosition, int yPosition, ItemStack itemLike) {
+        super(handler, slotModifier, index, xPosition, yPosition);
         this.itemLike = itemLike;
     }
 

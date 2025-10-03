@@ -24,6 +24,8 @@ public class FluidRenderingUtils {
     public static void renderFluid(GuiGraphics guiGraphics, FluidTank tank, int screenX, int screenY,
                             int tankTopX, int tankTopY, int tankHeight, int tankWidth, int mouseX, int mouseY) {
 
+
+
         FluidStack fluidStack = tank.getFluid();
         int capacity = tank.getCapacity();
         int fill = fluidStack.getAmount();
@@ -37,13 +39,7 @@ public class FluidRenderingUtils {
             IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluidStack.getFluid());
             ResourceLocation texture = renderProperties.getStillTexture(fluidStack);
             AtlasManager atlas = Minecraft.getInstance().getAtlasManager();
-            /*
-            TextureAtlasSprite still = Minecraft.getInstance()
-                    .getTextureAtlas(ResourceLocation.withDefaultNamespace("textures/atlas/blocks.png"))
-                    .apply(texture);
-
-             */
-            TextureAtlasSprite still = atlas.getAtlasOrThrow(ResourceLocation.withDefaultNamespace("textures/atlas/blocks.png")).getSprite(texture);
+            TextureAtlasSprite still = atlas.getAtlasOrThrow(ResourceLocation.withDefaultNamespace("blocks")).getSprite(texture);
             renderTiledSprite(guiGraphics, still, renderProperties.getTintColor(fluidStack),
                     tankX, tankY + tankHeight - displayLevel, displayLevel, tankWidth);
         }

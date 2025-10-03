@@ -11,6 +11,15 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.9.5
+- Updated to Neoforge to Transfer System
+- Added InputSlot for menus
+- Added Slots now extend ResourceHandlerSlots
+- Updated InputOutputItemHandler to extend ResourceHandlerItemHandler
+- Added InputOutputFluidHandler
+- Changed SyncableBlockEntity to need ItemStacksResourceHandler for dropInventoryContents method
+- Removed CoreFluidHandler and CoreFluidTank both replaced with InputOutputFluidHandler
+
 1.9.1
 - Updated to Minecraft 1.21.9
 

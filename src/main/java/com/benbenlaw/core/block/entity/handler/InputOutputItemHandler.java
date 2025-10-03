@@ -1,48 +1,53 @@
 package com.benbenlaw.core.block.entity.handler;
 
+import com.benbenlaw.core.block.entity.SyncableBlockEntity;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class InputOutputItemHandler implements IItemHandlerModifiable {
-    private final IItemHandlerModifiable handler;
+public class InputOutputItemHandler extends ItemStacksResourceHandler {
     private final BiPredicate<Integer, ItemStack> canInput;
     private final Predicate<Integer> canOutput;
+    private final SyncableBlockEntity blockEntity;
 
-    public InputOutputItemHandler(IItemHandlerModifiable handler, BiPredicate<Integer, ItemStack> canInput, Predicate<Integer> canOutput) {
-        this.handler = handler;
+    public InputOutputItemHandler(SyncableBlockEntity blockEntity, int size, BiPredicate<Integer, ItemStack> canInput, Predicate<Integer> canOutput) {
+        super(size);
         this.canInput = canInput;
         this.canOutput = canOutput;
+        this.blockEntity = blockEntity;
     }
 
-    public void setStackInSlot(int slot, @NotNull ItemStack stack) {
-        this.handler.setStackInSlot(slot, stack);
+    @Override
+    public boolean isValid(int index, ItemResource resource) {
+        ItemStack stack = resource.toStack(1);
+        return canInput.test(index, stack) && super.isValid(index, resource);
     }
 
-    public @NotNull ItemStack getStackInSlot(int slot) {
-        return this.handler.getStackInSlot(slot);
+    @Override
+    public int insert(int index, ItemResource resource, int amount, TransactionContext transaction) {
+        ItemStack stack = resource.toStack(amount);
+        if (!canInput.test(index, stack)) {
+            return 0;
+        }
+        return super.insert(index, resource, amount, transaction);
     }
 
-    public int getSlots() {
-        return this.handler.getSlots();
+    @Override
+    public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
+        if (!canOutput.test(index)) {
+            return 0;
+        }
+        return super.extract(index, resource, amount, transaction);
     }
 
-    public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return this.canInput.test(slot, stack) ? this.handler.insertItem(slot, stack, simulate) : stack;
-    }
-
-    public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return this.canOutput.test(slot) ? this.handler.extractItem(slot, amount, simulate) : ItemStack.EMPTY;
-    }
-
-    public int getSlotLimit(int slot) {
-        return this.handler.getSlotLimit(slot);
-    }
-
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return this.canInput.test(slot, stack) && this.handler.isItemValid(slot, stack);
+    @Override
+    protected void onContentsChanged(int index, ItemStack previousContents) {
+        blockEntity.setChanged();
+        blockEntity.sync();
     }
 }
