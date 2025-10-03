@@ -48,6 +48,15 @@ public class InputOutputFluidHandler extends FluidStacksResourceHandler {
         return extracted;
     }
 
+    public boolean isEmpty() {
+        for (int i = 0; i < size(); i++) {
+            if (!getResource(i).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     protected void onContentsChanged(int index, FluidStack previousContents) {
         blockEntity.setChanged();

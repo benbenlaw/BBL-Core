@@ -11,6 +11,10 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.9.6
+- Added SimpleAbstractContainerMenu extends AbstractContainerMenu, this is a base class for menus that has shift support and a bunch of other boiler plate code
+- InputOutputFluidHandler now has isEmpty method
+
 1.9.5
 - Updated to Neoforge to Transfer System
 - Added InputSlot for menus
