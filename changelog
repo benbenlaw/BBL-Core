@@ -11,6 +11,9 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.9.7
+- Added TransactionHelper for easier transaction handling with the neoforge transfer system
+
 1.9.6
 - Added SimpleAbstractContainerMenu extends AbstractContainerMenu, this is a base class for menus that has shift support and a bunch of other boiler plate code
 - InputOutputFluidHandler now has isEmpty method
