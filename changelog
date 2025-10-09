@@ -11,6 +11,25 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.9.21
+- Removed TransactionHelper
+- Removed InputOutputItemHandler
+- Removed InputOutputFluidHandler
+- Added InputItemHandler and OutputItemHandler
+- Added InputFluidHandler and OutputFluidHandler
+- Added CombinedItemHandler
+- Changed FilterItemHandler to extend ItemStacksResourceHandler
+
+
+1.9.19
+- Please work Handlers and Transaction helper?
+
+1.9.16
+- Maybe fully working Handlers and Transaction helper?
+
+1.9.8
+- Updated TransactionHelper
+
 1.9.7
 - Added TransactionHelper for easier transaction handling with the neoforge transfer system
 
