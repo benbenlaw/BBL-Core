@@ -1,5 +1,7 @@
 package com.benbenlaw.core.block.entity;
 
+import com.benbenlaw.core.block.entity.handler.item.FilterItemHandler;
+
 public interface FilterableBlockEntity {
 
     FilterItemHandler getFilterItemHandler();
