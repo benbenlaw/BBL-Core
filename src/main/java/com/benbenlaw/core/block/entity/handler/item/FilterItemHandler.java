@@ -20,11 +20,6 @@ public class FilterItemHandler extends ItemStacksResourceHandler {
         this.blockEntity = blockEntity;
     }
 
-    @Override
-    public boolean isValid(int index, ItemResource resource) {
-        return false;
-    }
-
     public boolean isBlockItem(ItemResource resource) {
         if (resource == null || resource.getItem() == null) return false;
         return resource.getItem() instanceof BlockItem;
@@ -41,6 +36,8 @@ public class FilterItemHandler extends ItemStacksResourceHandler {
         return blockFromItem == blockState.getBlock();
     }
 
+
+    //Use this to compare a BlockState to the filter contents item as a block item with whitelist/blacklist functionality
     public boolean matchesBlockState(BlockState blockState, boolean whitelist) {
         boolean hasAnyFilter = false;
 
@@ -58,15 +55,29 @@ public class FilterItemHandler extends ItemStacksResourceHandler {
         return !hasAnyFilter || !whitelist;
     }
 
-    @Override
-    public int insert(int index, ItemResource resource, int amount, TransactionContext transaction) {
-        return 0;
+    public boolean matchesItem(ItemResource resource, ItemStack stack) {
+        if (resource == null || stack == null) return false;
+        return ItemStack.isSameItemSameComponents(resource.toStack(), stack);
     }
 
-    @Override
-    public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
-        return 0;
+    //Use this to compare an ItemStack to the filter contents item with whitelist/blacklist functionality, checks itemstack not item
+    public boolean matchesItem(ItemStack stack, boolean whitelist) {
+        boolean hasAnyFilter = false;
+
+        for (int i = 0; i < this.size(); i++) {
+            ItemResource resource = this.getResource(i);
+
+            hasAnyFilter = true;
+
+            if (matchesItem(resource, stack)) {
+
+                return whitelist;
+            }
+        }
+
+        return !hasAnyFilter || !whitelist;
     }
+
 
     @Override
     protected void onContentsChanged(int index, ItemStack previousContents) {

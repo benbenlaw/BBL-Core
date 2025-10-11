@@ -11,6 +11,10 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.9.31
+- Added item filtering check
+- Added FilterFluidHandler
+
 1.9.30
 - Fixed WhitelistButton
 
