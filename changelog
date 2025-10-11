@@ -11,6 +11,34 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.10.1
+- Updated to Minecraft 1.21.10
+
+1.9.30
+- Fixed WhitelistButton
+
+1.9.29
+- Added WhitelistBlockEntity, this interface can be implemented on block entities to enable whitelist functionality via packets
+
+1.9.28
+- Fixed issue with FilterItemHandler not working correctly
+
+1.9.27
+- Re added blockstate matching in filter item handler
+
+1.9.26
+- Input and Output slot can now set the max stack size option use .size(int) when adding menu button
+
+1.9.24
+- Updated FluidRenderingUtils to use FluidStacksResourceHandler
+
+1.9.23
+- Fixed fluid handler internal methods being the wrong way round
+
+
+1.9.22
+- Fixed classes in wrong places, renamed methods in fluidhandlers
+
 1.9.21
 - Removed TransactionHelper
 - Removed InputOutputItemHandler
@@ -18,7 +46,7 @@ things to check
 - Added InputItemHandler and OutputItemHandler
 - Added InputFluidHandler and OutputFluidHandler
 - Added CombinedItemHandler
-- Changed FilterItemHandler to extend ItemStacksResourceHandler
+- Changed FilterItemHandler to extend ItemStacksResourceHandler (filtering is WIP at the moment)
 
 
 1.9.19

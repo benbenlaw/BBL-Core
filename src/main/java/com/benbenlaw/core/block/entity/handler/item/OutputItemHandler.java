@@ -1,4 +1,4 @@
-package com.benbenlaw.core.block.entity.handler.fluid;
+package com.benbenlaw.core.block.entity.handler.item;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import net.minecraft.world.item.ItemStack;

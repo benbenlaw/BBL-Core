@@ -3,6 +3,7 @@ package com.benbenlaw.core.network.packets;
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.block.entity.FilterableBlockEntity;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
+import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -20,12 +21,12 @@ public record SyncWhitelistMode(BlockPos pos, boolean whitelist) implements Cust
     public static final IPayloadHandler<SyncWhitelistMode> HANDLER = (packet, context) -> {
         BlockEntity entity = context.player().level().getBlockEntity(packet.pos);
 
-        if (entity instanceof FilterableBlockEntity filterableBlockEntity) {
-            filterableBlockEntity.getFilterItemHandler().setWhitelist(packet.whitelist);
+        if (entity instanceof WhitelistBlockEntity whitelistBlockEntity) {
+            whitelistBlockEntity.setWhitelist(packet.whitelist);
 
             context.player().playSound(SoundEvents.LEVER_CLICK, SoundSource.PLAYERS.ordinal(), 1.0f);
 
-            if (filterableBlockEntity instanceof SyncableBlockEntity syncableBlockEntity) {
+            if (whitelistBlockEntity instanceof SyncableBlockEntity syncableBlockEntity) {
                 syncableBlockEntity.setChanged();
                 syncableBlockEntity.sync();
             }

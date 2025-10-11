@@ -3,6 +3,7 @@ package com.benbenlaw.core.screen.util.button;
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.block.entity.FilterableBlockEntity;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
+import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import com.benbenlaw.core.network.packets.SyncWhitelistMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -68,21 +69,21 @@ public class WhitelistButton extends Button {
 
     public static WhitelistButton create(int x, int y, int width, int height, BlockEntity blockEntity) {
 
-        if (blockEntity instanceof FilterableBlockEntity filterable) {
+        if (blockEntity instanceof WhitelistBlockEntity whitelistBlockEntity) {
 
-            boolean initialMode = filterable.isWhitelist();
+            boolean initialMode = whitelistBlockEntity.isWhitelist();
 
             return new WhitelistButton(x, y, width, height, initialMode, button -> {
                 WhitelistButton whitelistButton = (WhitelistButton) button;
                 whitelistButton.toggle();
 
-                boolean newMode = !filterable.isWhitelist();
-                filterable.setWhitelist(newMode);
+                boolean newMode = !whitelistBlockEntity.isWhitelist();
+                whitelistBlockEntity.setWhitelist(newMode);
 
                 ClientPacketDistributor.sendToServer(new SyncWhitelistMode(blockEntity.getBlockPos(), newMode));
             });
         } else {
-            Core.LOGGER.error("Attempted to create WhitelistButton for a BlockEntity that does not implement FilterableBlockEntity");
+            Core.LOGGER.error("Attempted to create WhitelistButton for a BlockEntity that does not implement WhitelistBlockEntity: " + blockEntity);
             return null;
         }
     }

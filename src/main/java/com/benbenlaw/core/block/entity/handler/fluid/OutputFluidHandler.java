@@ -32,14 +32,14 @@ public class OutputFluidHandler extends FluidStacksResourceHandler {
         return extracted;
     }
 
-    public int extractInternal(int index, FluidResource resource, int amount, TransactionContext transaction) {
+    public int insertInternal(int index, FluidResource resource, int amount, TransactionContext transaction) {
         if (resource.isEmpty()) return 0;
 
         internalMode = true;
         try {
-            int extracted = super.extract(index, resource, amount, transaction);
-            if (extracted > 0) onContentsChanged(index, getStackFrom(resource, extracted));
-            return extracted;
+            int inserted = super.insert(index, resource, amount, transaction);
+            if (inserted > 0) onContentsChanged(index, getStackFrom(resource, inserted));
+            return inserted;
         } finally {
             internalMode = false;
         }

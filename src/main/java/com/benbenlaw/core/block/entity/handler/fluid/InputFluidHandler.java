@@ -1,4 +1,4 @@
-package com.benbenlaw.core.block.entity.handler.item;
+package com.benbenlaw.core.block.entity.handler.fluid;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -42,14 +42,14 @@ public class InputFluidHandler extends FluidStacksResourceHandler {
         return inserted;
     }
 
-    public int insertInternal(int index, FluidResource resource, int amount, TransactionContext transaction) {
+    public int extractInternal(int index, FluidResource resource, int amount, TransactionContext transaction) {
         if (resource.isEmpty()) return 0;
 
         internalMode = true;
         try {
-            int inserted = super.insert(index, resource, amount, transaction);
-            if (inserted > 0) onContentsChanged(index, getStackFrom(resource, inserted));
-            return inserted;
+            int extracted = super.extract(index, resource, amount, transaction);
+            if (extracted > 0) onContentsChanged(index, getStackFrom(resource, extracted));
+            return extracted;
         } finally {
             internalMode = false;
         }

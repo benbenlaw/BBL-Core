@@ -11,7 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +23,18 @@ public class FluidRenderingUtils {
     /// Used to render a fluid tank in a GUI use
     /// renderFluid(guiGraphics, tank, x, y, 8, 20, 47, 16, mouseX, mouseY);
     /// Replaces all previous screen fluid rendering code
-    public static void renderFluid(GuiGraphics guiGraphics, FluidTank tank, int screenX, int screenY,
-                            int tankTopX, int tankTopY, int tankHeight, int tankWidth, int mouseX, int mouseY) {
+    public static void renderFluid(GuiGraphics guiGraphics, FluidStacksResourceHandler handler, int slot, int screenX, int screenY,
+                                   int tankTopX, int tankTopY, int tankHeight, int tankWidth, int mouseX, int mouseY) {
 
 
-
-        FluidStack fluidStack = tank.getFluid();
-        int capacity = tank.getCapacity();
-        int fill = fluidStack.getAmount();
+        FluidStack fluidStack = FluidUtil.getStack(handler, slot);
+        int capacity = handler.getCapacityAsInt(slot, FluidResource.of(fluidStack));
 
         int tankX = screenX + tankTopX;
         int tankY = screenY + tankTopY;
 
         if (!fluidStack.isEmpty()) {
-            int displayLevel = (int) ((float) fill / capacity * tankHeight);
+            int displayLevel = (int) ((float) fluidStack.getAmount() / capacity * tankHeight);
 
             IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluidStack.getFluid());
             ResourceLocation texture = renderProperties.getStillTexture(fluidStack);
@@ -53,7 +53,7 @@ public class FluidRenderingUtils {
                 lines.add(Component.literal("Empty"));
             } else {
                 lines.add(fluidStack.getHoverName()); // fluid name
-                lines.add(Component.literal(String.format("%d / %d mB", fill, capacity))); // amount
+                lines.add(Component.literal(String.format("%d / %d mB", fluidStack.getAmount(), capacity))); // amount
             }
 
             List<ClientTooltipComponent> tooltipComponents =

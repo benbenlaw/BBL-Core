@@ -1,6 +1,5 @@
 package com.benbenlaw.core.block.entity.handler.item;
 
-import com.benbenlaw.core.block.entity.handler.fluid.OutputItemHandler;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
