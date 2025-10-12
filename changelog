@@ -11,6 +11,14 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+
+1.9.33
+- Last off the filter fluid slot stuff JEI maybe next
+
+1.9.32
+- Added renderFluidStack to FluidRenderingUtils
+- Updated FluidFilterSlot to update the block entity filter when added
+
 1.9.31
 - Added item filtering check
 - Added FilterFluidHandler
