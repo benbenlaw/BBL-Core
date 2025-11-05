@@ -22,4 +22,6 @@ public class CoreSlot extends ResourceHandlerSlot {
         if (stack.isEmpty()) return false;
         return handler.isValid(index, ItemResource.of(stack));
     }
+
+
 }
