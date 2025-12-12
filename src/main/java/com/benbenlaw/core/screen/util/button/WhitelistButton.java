@@ -12,7 +12,7 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jetbrains.annotations.NotNull;
@@ -36,16 +36,16 @@ public class WhitelistButton extends Button {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         boolean hovered = this.isHovered();
-        ResourceLocation currentTexture;
-        if (this.whitelist) {
-            currentTexture = hovered ? Core.rl("whitelist_button/whitelist_hover") : Core.rl("whitelist_button/whitelist");
-        } else {
-            currentTexture = hovered ? Core.rl("whitelist_button/blacklist_hover") : Core.rl("whitelist_button/blacklist");
-        }
+        Identifier currentTexture = this.whitelist
+                ? (hovered ? Core.rl("whitelist_button/whitelist_hover") : Core.rl("whitelist_button/whitelist"))
+                : (hovered ? Core.rl("whitelist_button/blacklist_hover") : Core.rl("whitelist_button/blacklist"));
+
+        // Draw button background
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, currentTexture, this.getX(), this.getY(), this.width, this.height);
 
+        // Render tooltip if hovered
         if (hovered) {
             Component modeText = Component.translatable(
                     this.whitelist
@@ -66,6 +66,7 @@ public class WhitelistButton extends Button {
             );
         }
     }
+
 
     public static WhitelistButton create(int x, int y, int width, int height, BlockEntity blockEntity) {
 

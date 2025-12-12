@@ -1,7 +1,7 @@
 package com.benbenlaw.core.util;
 
 import com.benbenlaw.core.Core;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
@@ -21,11 +21,11 @@ public class CoreTags {
         public static final TagKey<Block> BANNED_FROM_COLORING = tag(Core.MOD_ID,"banned_from_coloring");
 
         public static TagKey<Block> tag(String modName, String name) {
-            return BlockTags.create(ResourceLocation.fromNamespaceAndPath(modName, name));
+            return BlockTags.create(Identifier.fromNamespaceAndPath(modName, name));
         }
 
         public static TagKey<Block> commonTag(String name) {
-            return BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+            return BlockTags.create(Identifier.fromNamespaceAndPath("c", name));
         }
 
 
@@ -35,22 +35,22 @@ public class CoreTags {
         public static final TagKey<Item> BANNED_FROM_COLORING = tag(Core.MOD_ID,"banned_from_coloring");
 
         public static TagKey<Item> tag(String modName, String name) {
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath(modName, name));
+            return ItemTags.create(Identifier.fromNamespaceAndPath(modName, name));
         }
 
         public static TagKey<Item> commonTag(String name) {
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+            return ItemTags.create(Identifier.fromNamespaceAndPath("c", name));
         }
     }
 
     public static class Fluids {
 
         public static TagKey<Fluid> tag(String modName, String name) {
-            return FluidTags.create(ResourceLocation.fromNamespaceAndPath(modName, name));
+            return FluidTags.create(Identifier.fromNamespaceAndPath(modName, name));
         }
 
         public static TagKey<Fluid> commonTag(String name) {
-            return FluidTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+            return FluidTags.create(Identifier.fromNamespaceAndPath("c", name));
         }
     }
 }

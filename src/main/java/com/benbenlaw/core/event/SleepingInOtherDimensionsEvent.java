@@ -2,7 +2,7 @@ package com.benbenlaw.core.event;
 
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.config.DimensionConfig;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,11 +26,11 @@ public class SleepingInOtherDimensionsEvent {
         // Get list of dimension strings from config
         List<String> configuredDims = new ArrayList<>(DimensionConfig.dimensionNames.get());
 
-        // Convert strings to ResourceLocations and check if current dimension matches any
+        // Convert strings to Identifiers and check if current dimension matches any
         boolean isConfiguredDim = configuredDims.stream()
-                .map(ResourceLocation::tryParse)
+                .map(Identifier::tryParse)
                 .filter(Objects::nonNull)
-                .anyMatch(dim -> dim.equals(level.dimension().location()));
+                .anyMatch(dim -> dim.equals(level.dimension().identifier()));
 
         if (!isConfiguredDim) return;
 

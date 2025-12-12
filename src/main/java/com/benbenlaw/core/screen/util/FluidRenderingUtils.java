@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.AtlasManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
@@ -37,9 +37,9 @@ public class FluidRenderingUtils {
             int displayLevel = (int) ((float) fluidStack.getAmount() / capacity * tankHeight);
 
             IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluidStack.getFluid());
-            ResourceLocation texture = renderProperties.getStillTexture(fluidStack);
+            Identifier texture = renderProperties.getStillTexture(fluidStack);
             AtlasManager atlas = Minecraft.getInstance().getAtlasManager();
-            TextureAtlasSprite still = atlas.getAtlasOrThrow(ResourceLocation.withDefaultNamespace("blocks")).getSprite(texture);
+            TextureAtlasSprite still = atlas.getAtlasOrThrow(Identifier.withDefaultNamespace("blocks")).getSprite(texture);
             renderTiledSprite(guiGraphics, still, renderProperties.getTintColor(fluidStack),
                     tankX, tankY + tankHeight - displayLevel, displayLevel, tankWidth);
         }
@@ -86,9 +86,9 @@ public class FluidRenderingUtils {
         if (fluid.isEmpty()) return;
 
         IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluid.getFluid());
-        ResourceLocation texture = renderProperties.getStillTexture(fluid);
+        Identifier texture = renderProperties.getStillTexture(fluid);
         AtlasManager atlas = Minecraft.getInstance().getAtlasManager();
-        TextureAtlasSprite still = atlas.getAtlasOrThrow(ResourceLocation.withDefaultNamespace("blocks")).getSprite(texture);
+        TextureAtlasSprite still = atlas.getAtlasOrThrow(Identifier.withDefaultNamespace("blocks")).getSprite(texture);
 
         renderTiledSprite(guiGraphics, still, renderProperties.getTintColor(fluid), x, y, height, width);
     }

@@ -10,7 +10,7 @@ import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.network.CoreNetworking;
 import com.benbenlaw.core.recipe.CoreRecipeConditions;
 import com.mojang.logging.LogUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -63,8 +63,8 @@ public class Core {
         }
     }
 
-    public static ResourceLocation rl(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier rl(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
     public void registerNetworking(RegisterPayloadHandlersEvent event) {

@@ -36,7 +36,7 @@ public class RecipeIDCommand {
 
         int found = 0;
         for (RecipeHolder<?> recipe : recipes) {
-            ResourceLocation id = recipe.id();
+            Identifier id = recipe.id();
 
             // Filter by mod namespace if specified
             if (modFilter != null && !id.getNamespace().equals(modFilter)) {
@@ -44,7 +44,7 @@ public class RecipeIDCommand {
             }
 
             if (ItemStack.isSameItem(recipe.value().getResultItem(player.level().registryAccess()), heldItem)) {
-                ResourceLocation typeId = net.minecraft.core.registries.BuiltInRegistries.RECIPE_TYPE.getKey(recipe.value().getType());
+                Identifier typeId = net.minecraft.core.registries.BuiltInRegistries.RECIPE_TYPE.getKey(recipe.value().getType());
                 String hoverText = "Click to copy ID: " + id + "\nRecipe Type: " + (typeId != null ? typeId : "unknown");
 
                 Component clickableId = Component.literal(id.toString())

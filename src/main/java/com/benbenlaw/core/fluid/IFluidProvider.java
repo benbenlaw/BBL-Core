@@ -2,7 +2,7 @@ package com.benbenlaw.core.fluid;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -13,7 +13,7 @@ public interface IFluidProvider {
         return new FluidStack(this.getFluid(), size);
     }
 
-    default ResourceLocation getRegistryName() {
+    default Identifier getRegistryName() {
         return BuiltInRegistries.FLUID.getKey(this.getFluid());
     }
 

@@ -7,6 +7,9 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.11.0
+- Updated to Minecraft 1.21.11
+
 1.10.3
 - Added Multiblock Data and CoreMultiblockDetector, good luck
 
