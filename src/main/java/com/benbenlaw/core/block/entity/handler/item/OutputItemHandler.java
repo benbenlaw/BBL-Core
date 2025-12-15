@@ -39,6 +39,17 @@ public class OutputItemHandler extends ItemStacksResourceHandler {
         }
     }
 
+    /** Allows machine logic to insert items internally and get the amount inserted */
+    public int insertInternalReturn(int index, ItemResource resource, int amount, TransactionContext transaction) {
+        if (resource.isEmpty()) return 0;
+        this.internalMode = true;
+        try {
+            return super.insert(index, resource, amount, transaction);
+        } finally {
+            this.internalMode = false;
+        }
+    }
+
     @Override
     public boolean isValid(int index, ItemResource resource) {
         return internalMode; // only valid during internal insertion
