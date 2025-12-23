@@ -7,6 +7,9 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.11.2
+- Added TooltipUtils for easier tooltip handling for ItemTooltipEvent
+
 1.11.1
 - Improved OutputItemHandler to support int result from inserting items
 
