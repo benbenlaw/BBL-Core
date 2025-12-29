@@ -36,7 +36,6 @@ public class FilterItemHandler extends ItemStacksResourceHandler {
         return blockFromItem == blockState.getBlock();
     }
 
-
     //Use this to compare a BlockState to the filter contents item as a block item with whitelist/blacklist functionality
     public boolean matchesBlockState(BlockState blockState, boolean whitelist) {
         boolean hasAnyFilter = false;
@@ -44,16 +43,24 @@ public class FilterItemHandler extends ItemStacksResourceHandler {
         for (int i = 0; i < this.size(); i++) {
             ItemResource resource = this.getResource(i);
 
+            if (resource == null || resource.isEmpty()) {
+                continue;
+            }
+
             hasAnyFilter = true;
 
             if (matchesBlockState(resource, blockState)) {
-
                 return whitelist;
             }
         }
 
-        return !hasAnyFilter || !whitelist;
+        if (!hasAnyFilter) {
+            return true;
+        }
+
+        return !whitelist;
     }
+
 
     public boolean matchesItem(ItemResource resource, ItemStack stack) {
         if (resource == null || stack == null) return false;
@@ -67,15 +74,23 @@ public class FilterItemHandler extends ItemStacksResourceHandler {
         for (int i = 0; i < this.size(); i++) {
             ItemResource resource = this.getResource(i);
 
+            if (resource == null || resource.isEmpty()) {
+                continue;
+            }
+
             hasAnyFilter = true;
 
             if (matchesItem(resource, stack)) {
-
                 return whitelist;
             }
         }
 
-        return !hasAnyFilter || !whitelist;
+        // No filters → allow everything
+        if (!hasAnyFilter) {
+            return true;
+        }
+
+        return !whitelist;
     }
 
 

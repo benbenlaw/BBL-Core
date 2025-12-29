@@ -25,19 +25,27 @@ public class FilterFluidHandler extends FluidStacksResourceHandler {
     public boolean matchesFluid(FluidStack stack, boolean whitelist) {
         boolean hasAnyFilter = false;
 
-        for (int i = 0; i < this.size(); i++) {
-            FluidResource resource = this.getResource(i);
+        for (int i = 0; i < size(); i++) {
+            FluidResource resource = getResource(i);
+
+            if (resource == null || resource.isEmpty()) {
+                continue;
+            }
 
             hasAnyFilter = true;
 
-            if (matchesFluid(resource, stack)) {
-
+            if (resource.getFluid().isSame(stack.getFluid())) {
                 return whitelist;
             }
         }
 
-        return !hasAnyFilter || !whitelist;
+        if (!hasAnyFilter) {
+            return true;
+        }
+
+        return !whitelist;
     }
+
 
     @Override
     protected void onContentsChanged(int index, FluidStack previousContents) {
