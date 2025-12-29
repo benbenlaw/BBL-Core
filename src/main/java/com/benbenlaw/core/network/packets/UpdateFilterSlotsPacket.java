@@ -16,7 +16,7 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 public record UpdateFilterSlotsPacket(int slot, ItemStack stack) implements CustomPacketPayload {
 
-    public static final Type<UpdateFilterSlotsPacket> TYPE = new Type<>(Core.rl("update_filter_slots"));
+    public static final Type<UpdateFilterSlotsPacket> TYPE = new Type<>(Core.identifier("update_filter_slots"));
 
     public static final IPayloadHandler<UpdateFilterSlotsPacket> HANDLER = (packet, context) -> {
         Player player = context.player();

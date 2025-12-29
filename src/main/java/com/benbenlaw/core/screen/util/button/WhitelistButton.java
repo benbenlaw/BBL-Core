@@ -1,8 +1,6 @@
 package com.benbenlaw.core.screen.util.button;
 
 import com.benbenlaw.core.Core;
-import com.benbenlaw.core.block.entity.FilterableBlockEntity;
-import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import com.benbenlaw.core.network.packets.SyncWhitelistMode;
 import net.minecraft.client.Minecraft;
@@ -15,9 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WhitelistButton extends Button {
@@ -39,8 +35,8 @@ public class WhitelistButton extends Button {
     protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         boolean hovered = this.isHovered();
         Identifier currentTexture = this.whitelist
-                ? (hovered ? Core.rl("whitelist_button/whitelist_hover") : Core.rl("whitelist_button/whitelist"))
-                : (hovered ? Core.rl("whitelist_button/blacklist_hover") : Core.rl("whitelist_button/blacklist"));
+                ? (hovered ? Core.identifier("whitelist_button/whitelist_hover") : Core.identifier("whitelist_button/whitelist"))
+                : (hovered ? Core.identifier("whitelist_button/blacklist_hover") : Core.identifier("whitelist_button/blacklist"));
 
         // Draw button background
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, currentTexture, this.getX(), this.getY(), this.width, this.height);

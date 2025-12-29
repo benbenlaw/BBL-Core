@@ -16,7 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -44,8 +43,8 @@ public class FluidDeferredRegister {
 
     private static final Identifier OVERLAY = Identifier.withDefaultNamespace("block/water_overlay");
     private static final Identifier RENDER_OVERLAY = Identifier.withDefaultNamespace("textures/misc/underwater.png");
-    private static final Identifier LIQUID = Core.rl( "block/liquid");
-    private static final Identifier LIQUID_FLOW = Core.rl( "block/liquid_flow");
+    private static final Identifier LIQUID = Core.identifier( "block/liquid");
+    private static final Identifier LIQUID_FLOW = Core.identifier( "block/liquid_flow");
     private static final DispenseItemBehavior BUCKET_DISPENSE_BEHAVIOR = new DefaultDispenseItemBehavior() {
         public @NotNull ItemStack execute(@NotNull BlockSource source, @NotNull ItemStack stack) {
             Level world = source.level();

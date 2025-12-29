@@ -22,5 +22,7 @@
   "tooltip.bblcore.ctrl": "Press CTRL for more info",
   "tooltip.bblcore.whitelist_button.whitelist": "Whitelist",
   "tooltip.bblcore.whitelist_button.blacklist": "Blacklist",
-  "tooltip.bblcore.whitelist_button.mode": "Mode: %s"
+  "tooltip.bblcore.whitelist_button.mode": "Mode: %s",
+
+  "tooltip.core.ticks": "%s / %s Ticks"
 }

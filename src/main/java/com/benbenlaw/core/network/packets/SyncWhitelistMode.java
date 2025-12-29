@@ -1,7 +1,6 @@
 package com.benbenlaw.core.network.packets;
 
 import com.benbenlaw.core.Core;
-import com.benbenlaw.core.block.entity.FilterableBlockEntity;
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -16,7 +15,7 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 public record SyncWhitelistMode(BlockPos pos, boolean whitelist) implements CustomPacketPayload {
 
-    public static final Type<SyncWhitelistMode> TYPE = new Type<>(Core.rl("sync_whitelist_mode"));
+    public static final Type<SyncWhitelistMode> TYPE = new Type<>(Core.identifier("sync_whitelist_mode"));
 
     public static final IPayloadHandler<SyncWhitelistMode> HANDLER = (packet, context) -> {
         BlockEntity entity = context.player().level().getBlockEntity(packet.pos);
