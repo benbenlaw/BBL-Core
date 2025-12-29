@@ -24,5 +24,6 @@
   "tooltip.bblcore.whitelist_button.blacklist": "Blacklist",
   "tooltip.bblcore.whitelist_button.mode": "Mode: %s",
 
-  "tooltip.core.ticks": "%s / %s Ticks"
+  "tooltip.core.duration_tooltip": "%s / %s Ticks",
+  "tooltip.core.ticks": "Ticks: %s"
 }

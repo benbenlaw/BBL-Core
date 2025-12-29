@@ -22,7 +22,7 @@ public class DurationTooltip {
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, TEXTURE, 10, 10, 0, 0, x + xOffset, y + yOffset, 10, 10);
 
         if (MouseUtil.isMouseAboveArea(mouseX, mouseY, x, y, xOffset, yOffset, 10, 10)) {
-            Component progressTick = Component.translatable("tooltip.core.ticks", progress, totalDuration);
+            Component progressTick = Component.translatable("tooltip.core.duration_tooltip", progress, totalDuration);
             FormattedCharSequence sequence = progressTick.getVisualOrderText();
             List<ClientTooltipComponent> tooltipLines = List.of(ClientTooltipComponent.create(sequence));
             guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltipLines, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
