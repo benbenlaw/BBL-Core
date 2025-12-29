@@ -18,6 +18,9 @@ public class DurationTooltip {
     private static final Identifier TEXTURE = Core.identifier("duration_icon");
 
     public static void renderDurationTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, int xOffset, int yOffset, int progress, int totalDuration) {
+
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, TEXTURE, 10, 10, 0, 0, x + xOffset, y + yOffset, 10, 10);
+
         if (MouseUtil.isMouseAboveArea(mouseX, mouseY, x, y, xOffset, yOffset, 10, 10)) {
             Component progressTick = Component.translatable("tooltip.core.ticks", progress, totalDuration);
             FormattedCharSequence sequence = progressTick.getVisualOrderText();
@@ -25,6 +28,5 @@ public class DurationTooltip {
             guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltipLines, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
 
         }
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, TEXTURE, 10, 10, 0, 0, x + xOffset, y + yOffset, 10, 10);
     }
 }
