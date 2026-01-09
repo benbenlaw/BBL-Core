@@ -7,6 +7,11 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.11.7
+- Added IFilterGhostScreen
+- Added GhostFilter util this should make adding JEI filtering to screens easier working on top of the FilterItemHandler and FilterSlots this is for both item and fluid filtering
+- Added UpgradeFilterFluidSlotsPacket
+
 1.11.3
 - Added DurationTooltip for render a icon and duration in tooltips inside screens
 - Added Progress bar icon

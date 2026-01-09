@@ -84,7 +84,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
 
     //JEI
-    //implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
+    implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
 
 }
 
