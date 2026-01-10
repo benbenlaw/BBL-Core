@@ -7,6 +7,9 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.11.12
+- Final tweaks to Ghost Filter system for fluids now fully working
+
 1.11.7
 - Added IFilterGhostScreen
 - Added GhostFilter util this should make adding JEI filtering to screens easier working on top of the FilterItemHandler and FilterSlots this is for both item and fluid filtering

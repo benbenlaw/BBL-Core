@@ -43,3 +43,4 @@ public class FilterFluidSlot extends Slot {
         super.setChanged();
     }
 }
+
