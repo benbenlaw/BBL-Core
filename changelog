@@ -7,6 +7,9 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+1.11.13
+- Removed ResourceMaterials class, added CommonTags which have helper methods to get tags for resources, uses ResourceType (renamed from MaterialType)
+
 1.11.12
 - Final tweaks to Ghost Filter system for fluids now fully working
 

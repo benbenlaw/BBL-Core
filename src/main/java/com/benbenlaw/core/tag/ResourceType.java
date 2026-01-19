@@ -1,6 +1,6 @@
 package com.benbenlaw.core.tag;
 
-public enum MaterialType {
+public enum ResourceType {
     NUGGETS("nuggets"),
     INGOTS("ingots"),
     STORAGE_BLOCKS("storage_blocks"),
@@ -16,7 +16,7 @@ public enum MaterialType {
 
     private final String path;
 
-    MaterialType(String path) {
+    ResourceType(String path) {
         this.path = path;
     }
 }
