@@ -52,7 +52,7 @@ public class GhostFilter<T extends AbstractContainerScreen<?>> implements IGhost
 
                     @Override
                     public void accept(I ingredient) {
-                        filterFluidSlot.set((FluidStack) ingredient, filterFluidSlot.getSlotIndex());
+                        filterFluidSlot.set((FluidStack) ingredient);
                         ClientPacketDistributor.sendToServer(new UpdateFilterFluidSlotsPacket(slot.index, (FluidStack) ingredient));
                     }
                 });

@@ -21,7 +21,7 @@ public record UpdateFilterFluidSlotsPacket(int slot, FluidStack stack) implement
         AbstractContainerMenu menu = player.containerMenu;
         Slot slot = menu.getSlot(packet.slot);
         if (slot instanceof FilterFluidSlot filterFluidSlot) {
-            filterFluidSlot.set(packet.stack, filterFluidSlot.getSlotIndex());
+            filterFluidSlot.set(packet.stack);
             context.player().playSound(SoundEvents.LEVER_CLICK, (float) SoundSource.PLAYERS.ordinal(), 1.0F);
         }
 

@@ -94,6 +94,29 @@ public class FilterItemHandler extends ItemStacksResourceHandler {
     }
 
 
+
+    public boolean matchesItem(ItemResource resource, boolean whitelist, boolean ignoreNbt) {
+        boolean foundMatch = false;
+
+        for (int i = 0; i < size(); i++) {
+            ItemStack filterStack = getResource(i).toStack();
+            if (filterStack.isEmpty()) continue;
+
+            boolean matches = ignoreNbt
+                    ? resource.getItem() == filterStack.getItem()
+                    : ItemStack.isSameItemSameComponents(resource.toStack(), filterStack);
+
+            if (matches) {
+                foundMatch = true;
+                break;
+            }
+        }
+
+        // Apply whitelist / blacklist AFTER matching
+        return whitelist ? foundMatch : !foundMatch;
+    }
+
+
     @Override
     protected void onContentsChanged(int index, ItemStack previousContents) {
         blockEntity.setChanged();

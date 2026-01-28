@@ -2,6 +2,7 @@ package com.benbenlaw.core.block.entity.handler.fluid;
 
 import com.benbenlaw.core.block.entity.SyncableBlockEntity;
 import com.benbenlaw.core.screen.util.IFluidFilterHandler;
+import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
@@ -61,5 +62,35 @@ public class FilterFluidHandler extends FluidStacksResourceHandler implements IF
         }
 
         return !hasAnyFilter || !whitelist;
+    }
+
+    public boolean matchesFluid(FluidResource resource, boolean whitelist, boolean ignoreNbt) {
+        if (resource == null || resource.isEmpty()) return false;
+
+        boolean hasAnyFilter = false;
+        boolean foundMatch = false;
+
+        for (int i = 0; i < size(); i++) {
+            FluidResource filterResource = getResource(i);
+            if (filterResource == null || filterResource.isEmpty()) continue;
+
+            hasAnyFilter = true;
+
+            boolean matches;
+            if (ignoreNbt) {
+                matches = filterResource.getFluid().isSame(resource.getFluid());
+            } else {
+                matches = filterResource.matches(resource.toStack(1000));
+            }
+
+            if (matches) {
+                foundMatch = true;
+                break;
+            }
+        }
+
+        if (!hasAnyFilter) return true;
+
+        return whitelist ? foundMatch : !foundMatch;
     }
 }

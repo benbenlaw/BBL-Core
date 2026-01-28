@@ -16,12 +16,13 @@ import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 
 public class FilterFluidSlot extends Slot {
-
     private final FilterFluidHandler handler;
+    private final int fluidIndex;
 
-    public FilterFluidSlot(FilterFluidHandler handler, int index, int xPosition, int yPosition) {
-        super(new SimpleContainer(1), index, xPosition, yPosition);
+    public FilterFluidSlot(SimpleContainer fakeInventory, FilterFluidHandler handler, int index, int xPosition, int yPosition) {
+        super(fakeInventory, index, xPosition, yPosition);
         this.handler = handler;
+        this.fluidIndex = index;
     }
 
     @Override
@@ -30,12 +31,12 @@ public class FilterFluidSlot extends Slot {
         return !fluidStack.isEmpty();
     }
 
-    public void set(FluidStack stack, int slot) {
-        handler.set(slot, FluidResource.of(stack), 1000);
+    public void set(FluidStack stack) {
+        handler.set(fluidIndex, FluidResource.of(stack), 1000);
     }
 
-    public void setEmpty(int slot) {
-        handler.set(slot, FluidResource.EMPTY, 0);
+    public void setEmpty() {
+        handler.set(fluidIndex, FluidResource.EMPTY, 0);
     }
 
     @Override
