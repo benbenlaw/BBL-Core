@@ -7,6 +7,12 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+26.1-1.0.0
+- Test
+
+1.11.20
+-
+
 1.11.19
 - Added more TooltipUtil methods for easier tooltip handling
 

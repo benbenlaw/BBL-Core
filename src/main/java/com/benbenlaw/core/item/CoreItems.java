@@ -10,7 +10,7 @@ public class CoreItems {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Core.MOD_ID);
 
-    public static final DeferredHolder<Item, Item> UPGRADE_BASE = ITEMS.registerSimpleItem("upgrade_base");
+    //public static final DeferredHolder<Item, Item> UPGRADE_BASE = ITEMS.registerSimpleItem("upgrade_base");
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

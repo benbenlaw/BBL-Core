@@ -26,13 +26,7 @@ public class Core {
     public static final String MOD_ID = "bblcore";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-
     public Core(final IEventBus eventBus, final ModContainer modContainer) {
-        //TestItem.ITEMS.register(eventBus);
-        //TestBlock.BLOCKS.register(eventBus);
-        //TestBlockEntities.BLOCK_ENTITIES.register(eventBus);
-        //TestFluid.FLUIDS.register(modEventBus);
-
 
         //** DO NOT DISABLE THIS LINE **//
 
@@ -52,16 +46,10 @@ public class Core {
         //Modpack Crash Information
         ModpackCrashInformation.register();
 
-        eventBus.addListener(this::addItemToCreativeTab);
         eventBus.addListener(this::registerNetworking);
 
     }
 
-    private void addItemToCreativeTab(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(CoreItems.UPGRADE_BASE.get());
-        }
-    }
 
     public static Identifier identifier(String path) {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
