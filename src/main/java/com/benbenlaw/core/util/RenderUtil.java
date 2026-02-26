@@ -2,11 +2,11 @@ package com.benbenlaw.core.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.LightCoordsUtil;
 import org.joml.Vector3f;
 
 public class RenderUtil {
@@ -14,7 +14,7 @@ public class RenderUtil {
     // Render a face with default full brightness
     public static void renderFace(Direction face, PoseStack.Pose pose, VertexConsumer consumer,
                                   TextureAtlasSprite texture, float x, float y, float z, float w, float h, int color) {
-        renderFace(face, pose, consumer, texture, x, y, z, w, h, color, LightTexture.FULL_BRIGHT);
+        renderFace(face, pose, consumer, texture, x, y, z, w, h, color, LightCoordsUtil.FULL_BRIGHT);
     }
 
     // Render a face with specified light

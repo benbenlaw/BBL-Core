@@ -1,0 +1,17 @@
+1.21.11 -> 26.1
+
+Change build gradle jei to have -neoforge
+this:  implementation("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
+not:  implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
+
+remove from gradle.properties and build.gradle parchment its not needed anymore
+parchment_minecraft
+parchment_version
+
+
+version naming changes
+example: bblcore-26.1-12.0.0 /bblcore-26.1-x.y.z (modname-minecraftversion-modversion)
+X: Major version (mostly bumped when minecraft updates eg 26.2 minecraft would be +1 to the major version, also for game breaking changes)
+Y: Minor version (for features and changes that are not game breaking)
+Z: Patch version (for bug fixes and small changes that do not add features)
+

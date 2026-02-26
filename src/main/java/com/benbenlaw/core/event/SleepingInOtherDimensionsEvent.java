@@ -23,10 +23,8 @@ public class SleepingInOtherDimensionsEvent {
         ServerLevel level = (ServerLevel) player.level();
         if (level.isClientSide()) return;
 
-        // Get list of dimension strings from config
         List<String> configuredDims = new ArrayList<>(DimensionConfig.dimensionNames.get());
 
-        // Convert strings to Identifiers and check if current dimension matches any
         boolean isConfiguredDim = configuredDims.stream()
                 .map(Identifier::tryParse)
                 .filter(Objects::nonNull)
@@ -35,7 +33,7 @@ public class SleepingInOtherDimensionsEvent {
         if (!isConfiguredDim) return;
 
         MinecraftServer server = player.level().getServer();
-        long currentTime = level.getDayTime();
+        long currentTime = level.getGameTime();
         long newTime = ((currentTime / 24000) + 1) * 24000;
         String command = "time set " + newTime;
 

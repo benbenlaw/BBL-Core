@@ -5,7 +5,6 @@ import com.benbenlaw.core.config.ModpackConfig;
 import com.benbenlaw.core.config.StartupConfig;
 import com.benbenlaw.core.event.ModpackCrashInformation;
 import com.benbenlaw.core.item.CoreItems;
-import com.benbenlaw.core.loot.condition.CoreLootModifierCondition;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.network.CoreNetworking;
 import com.benbenlaw.core.recipe.CoreRecipeConditions;
@@ -35,7 +34,7 @@ public class Core {
         CoreItems.ITEMS.register(eventBus);
 
         CoreRecipeConditions.CONDITIONALS.register(eventBus);
-        CoreLootModifierCondition.LOOT_CONDITION_TYPES.register(eventBus);
+        //CoreLootModifierCondition.LOOT_CONDITION_TYPES.register(eventBus);
         CoreLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(eventBus);
 
         //Configs

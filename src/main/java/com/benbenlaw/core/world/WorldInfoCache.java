@@ -8,8 +8,10 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.server.WorldLoader;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.LevelStem;
+import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 
 public class WorldInfoCache {
     private static Holder<MapCodec<? extends ChunkGenerator>> type;

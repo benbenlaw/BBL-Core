@@ -1,23 +1,23 @@
 {
     "required": true,
     "package": "com.benbenlaw.core.mixin",
-    "compatibilityLevel": "JAVA_21",
+    "compatibilityLevel": "JAVA_25",
     "mixins": [
-        "PortalTagForNetherPortalsMixin",
         "FireBlockNetherPortalMixin",
+        "PortalTagForNetherPortalsMixin",
         "WorldLoaderMixin",
         "access.ChunkGeneratorAccess"
     ],
     "client": [
-        "client.HorizonHeightMixin",
-        "client.WorldOpenFlowsMixin",
-        "client.IntegratedServerMixin",
         "client.CreateWorldScreenMixin",
+        "client.HorizonHeightMixin",
+        "client.IntegratedServerMixin",
+        "client.NightVisionEffectMixin",
         "client.ServerListAccessor",
         "client.ServerListMixin",
-        "client.NightVisionEffectMixin"
+        "client.WorldOpenFlowsMixin"
     ],
     "injectors": {
-    "defaultRequire": 1
+        "defaultRequire": 1
     }
 }

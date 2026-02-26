@@ -2,11 +2,13 @@ package com.benbenlaw.core.loot.condition;
 
 import com.benbenlaw.core.Core;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+/// This is different and needs to be investigated more
+
+/*
 public class CoreLootModifierCondition {
 
     public static final DeferredRegister<LootItemConditionType> LOOT_CONDITION_TYPES =
@@ -21,3 +23,5 @@ public class CoreLootModifierCondition {
     }
 
 }
+
+ */
