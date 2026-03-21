@@ -4,9 +4,16 @@ Change build gradle jei to have -neoforge
 this:  implementation("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
 not:  implementation("mezz.jei:jei-${jei_mc_version}:${jei_version}")
 
+Add
+implementation("curse.maven:bblcore-1135181:${core_version}") and add core version to gradle.properties
+
 remove from gradle.properties and build.gradle parchment its not needed anymore
 parchment_minecraft
 parchment_version
+
+update gradle version
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.2.1-bin.zip
+
 
 
 version naming changes
@@ -15,3 +22,4 @@ X: Major version (mostly bumped when minecraft updates eg 26.2 minecraft would b
 Y: Minor version (for features and changes that are not game breaking)
 Z: Patch version (for bug fixes and small changes that do not add features)
 
+set project to java 25 in project structure in settings
