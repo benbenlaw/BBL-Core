@@ -21,8 +21,8 @@ import java.util.Optional;
 
 @Mixin(IntegratedServer.class)
 public abstract class IntegratedServerMixin extends MinecraftServer {
-    public IntegratedServerMixin(Thread serverThread, LevelStorageSource.LevelStorageAccess storageSource, PackRepository packRepository, WorldStem worldStem, Optional<GameRules> gameRules, Proxy proxy, DataFixer fixerUpper, Services services, LevelLoadListener progressListenerFactory) {
-        super(serverThread, storageSource, packRepository, worldStem, gameRules, proxy, fixerUpper, services, progressListenerFactory);
+    public IntegratedServerMixin(Thread serverThread, LevelStorageSource.LevelStorageAccess storageSource, PackRepository packRepository, WorldStem worldStem, Optional<GameRules> gameRules, Proxy proxy, DataFixer fixerUpper, Services services, LevelLoadListener progressListenerFactory, boolean propagatesCrashes) {
+        super(serverThread, storageSource, packRepository, worldStem, gameRules, proxy, fixerUpper, services, progressListenerFactory, propagatesCrashes);
     }
 
 

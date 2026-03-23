@@ -4,7 +4,7 @@ import com.benbenlaw.core.Core;
 import com.benbenlaw.core.block.entity.WhitelistBlockEntity;
 import com.benbenlaw.core.network.packets.SyncWhitelistMode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class WhitelistButton extends Button {
 
@@ -32,7 +33,12 @@ public class WhitelistButton extends Button {
     }
 
     @Override
-    protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void setOverrideRenderHighlightedSprite(Supplier<Boolean> overrideRenderHighlightedSprite) {
+        super.setOverrideRenderHighlightedSprite(overrideRenderHighlightedSprite);
+    }
+
+    @Override
+    protected void extractContents(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         boolean hovered = this.isHovered();
         Identifier currentTexture = this.whitelist
                 ? (hovered ? Core.identifier("whitelist_button/whitelist_hover") : Core.identifier("whitelist_button/whitelist"))
@@ -52,7 +58,7 @@ public class WhitelistButton extends Button {
             Component tooltip = Component.translatable("tooltip.bblcore.whitelist_button.mode", modeText);
 
             List<ClientTooltipComponent> tooltipComponents = List.of(ClientTooltipComponent.create(tooltip.getVisualOrderText()));
-            guiGraphics.renderTooltip(
+            guiGraphics.tooltip(
                     Minecraft.getInstance().font,
                     tooltipComponents,
                     mouseX,
@@ -62,6 +68,8 @@ public class WhitelistButton extends Button {
             );
         }
     }
+
+
 
 
     public static WhitelistButton create(int x, int y, int width, int height, BlockEntity blockEntity) {

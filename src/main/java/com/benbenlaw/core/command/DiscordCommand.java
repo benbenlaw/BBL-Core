@@ -27,32 +27,32 @@ public class DiscordCommand {
             String urlString = ModpackConfig.discordURL.get();
 
             if (urlString == null || urlString.isBlank()) {
-                player.displayClientMessage(Component.translatable("chat.bblcore.discord_not_set")
-                        .withStyle(ChatFormatting.RED), false);
+                player.sendSystemMessage(Component.translatable("chat.bblcore.discord_not_set")
+                        .withStyle(ChatFormatting.RED));
                 return Command.SINGLE_SUCCESS;
             }
 
             if (!urlString.startsWith("http://") && !urlString.startsWith("https://")) {
-                player.displayClientMessage(Component.translatable("chat.bblcore.discord_invalid_url")
-                        .withStyle(ChatFormatting.RED), false);
+                player.sendSystemMessage(Component.translatable("chat.bblcore.discord_invalid_url")
+                        .withStyle(ChatFormatting.RED));
                 return Command.SINGLE_SUCCESS;
             }
 
             try {
                 URI uri = new URI(urlString);
 
-                player.displayClientMessage(Component.literal(urlString)
+                player.sendSystemMessage(Component.literal(urlString)
                         .setStyle(Style.EMPTY
                                 .withUnderlined(true)
                                 .withColor(ChatFormatting.BLUE)
                                 .withClickEvent(new ClickEvent.OpenUrl(uri))
                                 .withHoverEvent(new HoverEvent.ShowText(Component.translatable("chat.bblcore.discord")))
-                        ), false
+                        )
                 );
 
             } catch (URISyntaxException e) {
-                player.displayClientMessage(Component.translatable("chat.bblcore.discord_invalid_url")
-                        .withStyle(ChatFormatting.RED), false);
+                player.sendSystemMessage(Component.translatable("chat.bblcore.discord_invalid_url")
+                        .withStyle(ChatFormatting.RED));
             }
         }
         return Command.SINGLE_SUCCESS;

@@ -19,11 +19,11 @@ public class ModpackCommand {
         if (command.getSource().getEntity() instanceof Player player) {
 
             if (!ModpackConfig.modpackName.get().isEmpty() && !ModpackConfig.modpackVersion.get().isEmpty()) {
-                player.displayClientMessage(Component.translatable("chat.bblcore.modpack", ModpackConfig.modpackName.get(), ModpackConfig.modpackVersion.get())
-                        .withStyle(ChatFormatting.BLUE), false);
+                player.sendSystemMessage(Component.translatable("chat.bblcore.modpack", ModpackConfig.modpackName.get(), ModpackConfig.modpackVersion.get())
+                        .withStyle(ChatFormatting.BLUE));
             } else {
-                player.displayClientMessage(Component.translatable("chat.bblcore.modpack_not_set")
-                        .withStyle(ChatFormatting.RED), false);
+                player.sendSystemMessage(Component.translatable("chat.bblcore.modpack_not_set")
+                        .withStyle(ChatFormatting.RED));
             }
         }
         return Command.SINGLE_SUCCESS;

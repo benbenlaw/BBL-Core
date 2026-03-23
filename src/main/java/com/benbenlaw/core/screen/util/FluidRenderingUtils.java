@@ -1,14 +1,16 @@
 package com.benbenlaw.core.screen.util;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.AtlasManager;
+import net.minecraft.client.resources.model.sprite.AtlasManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.client.extensions.common.ClientExtensionsManager;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
@@ -23,7 +25,7 @@ public class FluidRenderingUtils {
     /// Used to render a fluid tank in a GUI use
     /// renderFluid(guiGraphics, tank, x, y, 8, 20, 47, 16, mouseX, mouseY);
     /// Replaces all previous screen fluid rendering code
-    public static void renderFluid(GuiGraphics guiGraphics, FluidStacksResourceHandler handler, int slot, int screenX, int screenY,
+    public static void renderFluid(GuiGraphicsExtractor guiGraphics, FluidStacksResourceHandler handler, int slot, int screenX, int screenY,
                                    int tankTopX, int tankTopY, int tankHeight, int tankWidth, int mouseX, int mouseY) {
 
 
@@ -36,11 +38,10 @@ public class FluidRenderingUtils {
         if (!fluidStack.isEmpty()) {
             int displayLevel = (int) ((float) fluidStack.getAmount() / capacity * tankHeight);
 
-            IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluidStack.getFluid());
-            Identifier texture = renderProperties.getStillTexture(fluidStack);
-            AtlasManager atlas = Minecraft.getInstance().getAtlasManager();
-            TextureAtlasSprite still = atlas.getAtlasOrThrow(Identifier.withDefaultNamespace("blocks")).getSprite(texture);
-            renderTiledSprite(guiGraphics, still, renderProperties.getTintColor(fluidStack),
+            FluidModel fluidModel = Minecraft.getInstance().getModelManager().getFluidStateModelSet().get(fluidStack.getFluid().defaultFluidState());
+            TextureAtlasSprite fluidSprite = fluidModel.stillMaterial().sprite();
+            assert fluidModel.fluidTintSource() != null;
+            renderTiledSprite(guiGraphics, fluidSprite, fluidModel.fluidTintSource().color(fluidStack.getFluid().defaultFluidState()),
                     tankX, tankY + tankHeight - displayLevel, displayLevel, tankWidth);
         }
 
@@ -61,13 +62,13 @@ public class FluidRenderingUtils {
                             .map(ClientTooltipComponent::create)
                             .toList();
 
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltipComponents, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+            guiGraphics.tooltip(Minecraft.getInstance().font, tooltipComponents, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
 
 
         }
     }
 
-    public static void renderTiledSprite(GuiGraphics guiGraphics, TextureAtlasSprite sprite, int color, int x, int y, int height, int width) {
+    public static void renderTiledSprite(GuiGraphicsExtractor guiGraphics, TextureAtlasSprite sprite, int color, int x, int y, int height, int width) {
         int spriteHeight = sprite.contents().height();
         int startY = y;
         int textureWidth = (int) (sprite.contents().width() / (sprite.getU1() - sprite.getU0()));
@@ -82,31 +83,40 @@ public class FluidRenderingUtils {
         } while (height > 0);
     }
 
-    public static void renderFluidStack(GuiGraphics guiGraphics, FluidStack fluid, int x, int y, int width, int height, int mouseX, int mouseY) {
+    public static void renderFluidStack(GuiGraphicsExtractor guiGraphics, FluidStack fluid, int x, int y, int width, int height, int mouseX, int mouseY) {
         if (fluid.isEmpty()) return;
 
-        IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluid.getFluid());
-        Identifier texture = renderProperties.getStillTexture(fluid);
-        AtlasManager atlas = Minecraft.getInstance().getAtlasManager();
-        TextureAtlasSprite still = atlas.getAtlasOrThrow(Identifier.withDefaultNamespace("blocks")).getSprite(texture);
+        FluidModel fluidModel = Minecraft.getInstance().getModelManager().getFluidStateModelSet().get(fluid.getFluid().defaultFluidState());
+        TextureAtlasSprite fluidSprite = fluidModel.stillMaterial().sprite();
+        assert fluidModel.fluidTintSource() != null;
 
-        renderTiledSprite(guiGraphics, still, renderProperties.getTintColor(fluid), x, y, height, width);
+        renderTiledSprite(guiGraphics, fluidSprite, fluidModel.fluidTintSource().color(fluid.getFluid().defaultFluidState()), x, y, height, width);
     }
 
-    public static void renderFluidStackTooltip(GuiGraphics guiGraphics, FluidStack fluid, int x, int y, int width, int height, int mouseX, int mouseY) {
-        if (fluid.isEmpty()) return;
+    public static void renderFluidStackTooltip(GuiGraphicsExtractor guiGraphics, FluidStack fluid, FluidStacksResourceHandler handler, int slot, int x, int y, int width, int height, int mouseX, int mouseY) {
+        if (!fluid.isEmpty()) {
+            if (mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height) {
 
-        if (mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height) {
-            List<Component> lines = new ArrayList<>();
-            lines.add(fluid.getHoverName());
-            lines.add(Component.literal(String.format("%d mB", fluid.getAmount())));
+                int capacity = handler.getCapacityAsInt(slot, FluidResource.of(fluid));
 
-            List<ClientTooltipComponent> tooltipComponents =
-                    lines.stream().map(Component::getVisualOrderText)
-                            .map(ClientTooltipComponent::create)
-                            .toList();
+                List<Component> lines = new ArrayList();
+                lines.add(fluid.getHoverName());
+                lines.add(Component.literal(String.format("%d / %d mB", fluid.getAmount(), capacity)));
 
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltipComponents, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+                List<ClientTooltipComponent> tooltipComponents = lines.stream()
+                        .map(Component::getVisualOrderText)
+                        .map(ClientTooltipComponent::create)
+                        .toList();
+
+                guiGraphics.tooltip(
+                        Minecraft.getInstance().font,
+                        tooltipComponents,
+                        mouseX,
+                        mouseY,
+                        DefaultTooltipPositioner.INSTANCE,
+                        null
+                );
+            }
         }
     }
 }

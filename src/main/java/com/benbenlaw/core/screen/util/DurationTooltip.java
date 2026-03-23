@@ -3,7 +3,7 @@ package com.benbenlaw.core.screen.util;
 import com.benbenlaw.core.Core;
 import com.benbenlaw.core.util.MouseUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -17,7 +17,7 @@ public class DurationTooltip {
 
     private static final Identifier TEXTURE = Core.identifier("duration_icon");
 
-    public static void renderDurationTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, int xOffset, int yOffset, int progress, int totalDuration) {
+    public static void renderDurationTooltip(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, int x, int y, int xOffset, int yOffset, int progress, int totalDuration) {
 
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, TEXTURE, 10, 10, 0, 0, x + xOffset, y + yOffset, 10, 10);
 
@@ -25,7 +25,7 @@ public class DurationTooltip {
             Component progressTick = Component.translatable("tooltip.core.duration_tooltip", progress, totalDuration);
             FormattedCharSequence sequence = progressTick.getVisualOrderText();
             List<ClientTooltipComponent> tooltipLines = List.of(ClientTooltipComponent.create(sequence));
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltipLines, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+            guiGraphics.tooltip(Minecraft.getInstance().font, tooltipLines, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
 
         }
     }
