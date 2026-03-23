@@ -101,25 +101,22 @@ public class FluidDeferredRegister {
                                 .noCollision().strength(100.0F).noLootTable().replaceable()
                                 .pushReaction(PushReaction.DESTROY).liquid()
                                 .mapColor(getClosestColor(renderProperties.color))
-                                .setId(ResourceKey.create(Registries.BLOCK, Identifier.parse(name)))));
+                                .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(modid, name)))));
 
         DeferredHolder<Item, BUCKET> bucket = this.itemRegister.register(name + "_bucket", () ->
                 bucketCreator.create(stillHolder.get(), new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)
-                        .setId(ResourceKey.create(Registries.ITEM, Identifier.parse(name + "_bucket")))));
+                        .setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(modid,  name + "_bucket")))));
 
-        // 4. Properties (Using the Real Holders from Step 3)
         BaseFlowingFluid.Properties fluidProperties = new BaseFlowingFluid.Properties(fluidType, stillHolder, flowingHolder)
                 .bucket(bucket)
                 .block(block);
 
-        // 5. Finalize Fluid Registration
         DeferredHolder<Fluid, BaseFlowingFluid.Source> stillFluid = this.fluidRegister.register(name, () -> new BaseFlowingFluid.Source(fluidProperties));
         DeferredHolder<Fluid, BaseFlowingFluid.Flowing> flowingFluid = this.fluidRegister.register("flowing_" + name, () -> new BaseFlowingFluid.Flowing(fluidProperties));
 
         return new FluidRegistryObject<>(fluidType, stillFluid, flowingFluid, bucket, block);
     }
 
-    // Boilerplate Register methods
     public FluidRegistryObject<CoreFluidTypes, BaseFlowingFluid.Source, BaseFlowingFluid.Flowing, LiquidBlock, BucketItem> register(String name, UnaryOperator<FluidTypeRenderProperties> renderProperties) {
         return this.register(name, UnaryOperator.identity(), renderProperties);
     }
