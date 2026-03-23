@@ -8,6 +8,7 @@ import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Util;
@@ -99,10 +100,12 @@ public class FluidDeferredRegister {
                         net.minecraft.world.level.block.state.BlockBehaviour.Properties.of()
                                 .noCollision().strength(100.0F).noLootTable().replaceable()
                                 .pushReaction(PushReaction.DESTROY).liquid()
-                                .mapColor(getClosestColor(renderProperties.color))));
+                                .mapColor(getClosestColor(renderProperties.color))
+                                .setId(ResourceKey.create(Registries.BLOCK, Identifier.parse(name)))));
 
         DeferredHolder<Item, BUCKET> bucket = this.itemRegister.register(name + "_bucket", () ->
-                bucketCreator.create(stillHolder.get(), new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
+                bucketCreator.create(stillHolder.get(), new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)
+                        .setId(ResourceKey.create(Registries.ITEM, Identifier.parse(name + "_bucket")))));
 
         // 4. Properties (Using the Real Holders from Step 3)
         BaseFlowingFluid.Properties fluidProperties = new BaseFlowingFluid.Properties(fluidType, stillHolder, flowingHolder)
