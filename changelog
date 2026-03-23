@@ -7,6 +7,9 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+# 12.0.6
+- Fixed fluid rendering in GUIs maybe
+
 # 12.0.5
 - Fully updated for 26.1
 

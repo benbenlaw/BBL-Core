@@ -41,7 +41,7 @@ public class FluidRenderingUtils {
             FluidModel fluidModel = Minecraft.getInstance().getModelManager().getFluidStateModelSet().get(fluidStack.getFluid().defaultFluidState());
             TextureAtlasSprite fluidSprite = fluidModel.stillMaterial().sprite();
             assert fluidModel.fluidTintSource() != null;
-            renderTiledSprite(guiGraphics, fluidSprite, fluidModel.fluidTintSource().color(fluidStack.getFluid().defaultFluidState()),
+            renderTiledSprite(guiGraphics, fluidSprite, 0,
                     tankX, tankY + tankHeight - displayLevel, displayLevel, tankWidth);
         }
 
@@ -90,7 +90,7 @@ public class FluidRenderingUtils {
         TextureAtlasSprite fluidSprite = fluidModel.stillMaterial().sprite();
         assert fluidModel.fluidTintSource() != null;
 
-        renderTiledSprite(guiGraphics, fluidSprite, fluidModel.fluidTintSource().color(fluid.getFluid().defaultFluidState()), x, y, height, width);
+        renderTiledSprite(guiGraphics, fluidSprite, 0, x, y, height, width);
     }
 
     public static void renderFluidStackTooltip(GuiGraphicsExtractor guiGraphics, FluidStack fluid, FluidStacksResourceHandler handler, int slot, int x, int y, int width, int height, int mouseX, int mouseY) {
