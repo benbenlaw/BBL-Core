@@ -4,18 +4,17 @@ import com.benbenlaw.core.config.DimensionConfig;
 import com.benbenlaw.core.config.ModpackConfig;
 import com.benbenlaw.core.config.StartupConfig;
 import com.benbenlaw.core.event.ModpackCrashInformation;
+import com.benbenlaw.core.fluid.TestFluid;
 import com.benbenlaw.core.item.CoreItems;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.network.CoreNetworking;
 import com.benbenlaw.core.recipe.CoreRecipeConditions;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import org.slf4j.Logger;
 
@@ -27,6 +26,7 @@ public class Core {
 
     public Core(final IEventBus eventBus, final ModContainer modContainer) {
 
+        TestFluid.FLUIDS.register(eventBus);
         //** DO NOT DISABLE THIS LINE **//
 
         //Global Resource Tags

@@ -7,6 +7,10 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+# 12.0.10
+- Updated Fluid API with new explanation on fluids
+- Added Thick and Thin textures
+
 # 12.0.9
 - Now fully functional
 

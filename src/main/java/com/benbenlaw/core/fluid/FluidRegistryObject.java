@@ -12,7 +12,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 //FROM Mekanism//
 //https://github.com/mekanism/Mekanism/blob/1.21.x/src/main/java/mekanism/common/registration/impl/FluidRegistryObject.java//
 //Under MIT License//
-public class FluidRegistryObject<TYPE extends FluidType, STILL extends Fluid, FLOWING extends Fluid, BLOCK extends LiquidBlock, BUCKET extends BucketItem> implements IFluidProvider {
+public class FluidRegistryObject<TYPE extends FluidType, STILL extends Fluid, FLOWING extends Fluid, BLOCK extends LiquidBlock, BUCKET extends BucketItem> {
     private final DeferredHolder<FluidType, TYPE> fluidType;
     private final DeferredHolder<Fluid, STILL> still;
     private final DeferredHolder<Fluid, FLOWING> flowing;
