@@ -1,22 +1,6 @@
 {
   "item.bblcore.upgrade_base": "Upgrade Base",
 
-  "chat.bblcore.modpack": "You are playing %s version %s",
-  "chat.bblcore.modpack_not_set": "Set modpack information in the config - config/bbl/core/modpack.toml",
-  "chat.bblcore.modpack_website": "Visit Modpack Page",
-  "chat.bblcore.modpack_update": "This modpack %s has an update available!",
-  "chat.bblcore.modpack_up_date": "Modpack up to date!",
-  "chat.bblcore.discord": "Click to join our Discord server!",
-  "chat.bblcore.discord_not_set": "Set discord information in the config - config/bbl/core/modpack.toml",
-  "chat.bblcore.discord_invalid_url": "Invalid URL check your discord url in the config - config/bbl/core/modpack.toml",
-  "chat.bblcore.falling.home": "A Mysterious force has saved you, taking you home/spawn...",
-  "chat.bblcore.modpack_no_version": "Cannot find modpack current version maybe this is a dev instance?",
-  "chat.bblcore.modpack_instance_error": "Error in Modpack Instance FIle",
-  "chat.bblcore.modpack_no_instance": "File not found",
-  "chat.bblcore.modpack_up_to_date": "Modpack up to date",
-  "chat.bblcore.dev_environment": "No current version found, pack devs don't worry this is fine if you are working on a pack",
-  "chat.bblcore.modpack_invalid_instance": "Invalid instance file",
-
   "tooltip.bblcore.shift": "Press SHIFT for more info",
   "tooltip.bblcore.alt": "Press ALT for more info",
   "tooltip.bblcore.ctrl": "Press CTRL for more info",

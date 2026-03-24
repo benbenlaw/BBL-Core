@@ -16,10 +16,6 @@ public class CoreTags {
     ///CommonTags is used for common tags that are used by multiple mods using the "c" namespace
     public static class Blocks {
 
-        public static final TagKey<Block> NETHER_PORTAL_FRAME = tag(Core.MOD_ID, "nether_portal_frame");
-        public static final TagKey<Block> CLIMBABLE_BLOCKS = tag(Core.MOD_ID,"climbable_blocks");
-        public static final TagKey<Block> BANNED_FROM_COLORING = tag(Core.MOD_ID,"banned_from_coloring");
-
         public static TagKey<Block> tag(String modName, String name) {
             return BlockTags.create(Identifier.fromNamespaceAndPath(modName, name));
         }
@@ -31,8 +27,6 @@ public class CoreTags {
 
     }
     public static class Items {
-        public static final TagKey<Item> NETHER_PORTAL_FRAME = tag(Core.MOD_ID,"nether_portal_frame");
-        public static final TagKey<Item> BANNED_FROM_COLORING = tag(Core.MOD_ID,"banned_from_coloring");
 
         public static TagKey<Item> tag(String modName, String name) {
             return ItemTags.create(Identifier.fromNamespaceAndPath(modName, name));

@@ -7,6 +7,10 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+#12.1.1
+- Removed all modpack stuff into a new mod
+- This is to make core strickly a more library mod
+
 # 12.0.12
 - Fixed CommonTags returning the wrong tags
 - Added Fluid Tags

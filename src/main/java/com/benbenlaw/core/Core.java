@@ -3,9 +3,6 @@ package com.benbenlaw.core;
 import com.benbenlaw.core.config.DimensionConfig;
 import com.benbenlaw.core.config.ModpackConfig;
 import com.benbenlaw.core.config.StartupConfig;
-import com.benbenlaw.core.event.ModpackCrashInformation;
-import com.benbenlaw.core.fluid.TestFluid;
-import com.benbenlaw.core.item.CoreItems;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.network.CoreNetworking;
 import com.benbenlaw.core.recipe.CoreRecipeConditions;
@@ -26,12 +23,13 @@ public class Core {
 
     public Core(final IEventBus eventBus, final ModContainer modContainer) {
 
-        TestFluid.FLUIDS.register(eventBus);
+        //TestFluid.FLUIDS.register(eventBus);
+        //CoreItems.ITEMS.register(eventBus);
+
         //** DO NOT DISABLE THIS LINE **//
 
         //Global Resource Tags
 
-        CoreItems.ITEMS.register(eventBus);
 
         CoreRecipeConditions.CONDITIONALS.register(eventBus);
         //CoreLootModifierCondition.LOOT_CONDITION_TYPES.register(eventBus);
@@ -42,8 +40,6 @@ public class Core {
         modContainer.registerConfig(ModConfig.Type.STARTUP, ModpackConfig.SPEC, "bbl/core/modpack.toml");
         modContainer.registerConfig(ModConfig.Type.STARTUP, DimensionConfig.SPEC, "bbl/core/dimensions.toml");
 
-        //Modpack Crash Information
-        ModpackCrashInformation.register();
 
         eventBus.addListener(this::registerNetworking);
 
