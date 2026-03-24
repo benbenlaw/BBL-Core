@@ -12,7 +12,7 @@ public class TestFluid {
 
     /**
     * This is an example of how to register a fluid using the FluidDeferredRegister and FluidRegistryObject system.
-     * @apiNote This is not a full example and is only meant to show how to register a fluid, core has 2 built in textures, thick (lava like) and thin (water like),
+     * @apiNote This is not a full example and is only meant to show how to register a fluid, core has 2 built in textures, molten (lava like) and thin (water like),
      * tint can be applied, you can also use custom textures.
      */
 

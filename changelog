@@ -7,6 +7,9 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+# 12.0.11
+- Changed to Molten from thick
+
 # 12.0.10
 - Updated Fluid API with new explanation on fluids
 - Added Thick and Thin textures
