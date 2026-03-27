@@ -7,6 +7,9 @@ things to check
 - loot conditions and modifier
 - recipeID broken not implemented
 
+#12.1.3
+- Empty Fluid Filter Slots now render tooltip as Empty Slot instead of Empty
+
 #12.1.2
 - Updated Fluid Rendering Utils
 

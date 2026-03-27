@@ -57,7 +57,7 @@ public class FluidRenderingUtils {
             List<Component> lines = new ArrayList<>();
 
             if (fluidStack.isEmpty()) {
-                lines.add(Component.literal("Empty"));
+                lines.add(Component.literal("Empty Filter"));
             } else {
                 lines.add(fluidStack.getHoverName()); // fluid name
                 lines.add(Component.literal(String.format("%d / %d mB", fluidStack.getAmount(), capacity))); // amount
