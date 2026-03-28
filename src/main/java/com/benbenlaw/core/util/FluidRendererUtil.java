@@ -16,7 +16,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 public class FluidRendererUtil {
 
     //FROM ENDER IO UNDER https://github.com/Team-EnderIO/EnderIO/blob/26.1/LICENSE.txt//
-
     public static void submitFluid(PoseStack poseStack, RenderType renderType, SubmitNodeCollector nodeCollector, FluidStack fluidStack,
         float fillAmount, int packedLight) {
         if (fluidStack.isEmpty()) return;
