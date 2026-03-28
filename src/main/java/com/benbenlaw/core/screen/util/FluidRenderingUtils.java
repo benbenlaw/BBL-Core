@@ -75,18 +75,33 @@ public class FluidRenderingUtils {
     }
 
     public static void renderTiledSprite(GuiGraphicsExtractor guiGraphics, TextureAtlasSprite sprite, int color, int x, int y, int height, int width) {
+        int spriteWidth = sprite.contents().width();
         int spriteHeight = sprite.contents().height();
-        int startY = y;
-        int textureWidth = (int) (sprite.contents().width() / (sprite.getU1() - sprite.getU0()));
-        int textureHeight = (int) (sprite.contents().height() / (sprite.getV1() - sprite.getV0()));
-        do {
-            int renderHeight = Math.min(spriteHeight, height);
-            height -= renderHeight;
 
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, sprite.atlasLocation(), x, startY, textureWidth * sprite.getU0(), textureHeight * sprite.getV0(), width, renderHeight, textureWidth, textureHeight, color);
+        int textureWidth = (int)((float)sprite.contents().width() / (sprite.getU1() - sprite.getU0()));
+        int textureHeight = (int)((float)sprite.contents().height() / (sprite.getV1() - sprite.getV0()));
 
-            startY += renderHeight;
-        } while (height > 0);
+        for (int currentX = 0; currentX < width; currentX += spriteWidth) {
+            int renderWidth = Math.min(spriteWidth, width - currentX);
+
+            for (int currentY = 0; currentY < height; currentY += spriteHeight) {
+                int renderHeight = Math.min(spriteHeight, height - currentY);
+
+                guiGraphics.blit(
+                        RenderPipelines.GUI_TEXTURED,
+                        sprite.atlasLocation(),
+                        x + currentX,
+                        y + currentY,
+                        (float)textureWidth * sprite.getU0(),
+                        (float)textureHeight * sprite.getV0(),
+                        renderWidth,
+                        renderHeight,
+                        textureWidth,
+                        textureHeight,
+                        color
+                );
+            }
+        }
     }
 
     public static void renderFluidStack(GuiGraphicsExtractor guiGraphics, FluidStack fluidStack, int x, int y, int width, int height, int mouseX, int mouseY) {
