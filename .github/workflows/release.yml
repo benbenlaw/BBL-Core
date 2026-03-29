@@ -145,11 +145,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CURSEFORGE_TOKEN: ${{ secrets.TOKEN_CURSEFORGE }}
+      CURSEFORGE_PROJECT_ID: ${{ vars.curseforge_id }}  # numeric ID (e.g., 1135181)
     steps:
       - name: Skip if no CurseForge token or project ID
         shell: bash
         run: |
-          if [[ -z "$CURSEFORGE_TOKEN" || -z "${{ vars.curseforge_id }}" ]]; then
+          if [[ -z "$CURSEFORGE_TOKEN" || -z "$CURSEFORGE_PROJECT_ID" ]]; then
             echo "No CurseForge token or project ID configured. Skipping."
             exit 0
           fi
@@ -170,7 +171,7 @@ jobs:
           loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
           java: ${{ needs.build.outputs.java_version }}
-          curseforge-id: ${{ vars.curseforge_id }}
+          curseforge-id: ${{ env.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
 
   publish-modrinth:
@@ -179,11 +180,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MODRINTH_TOKEN: ${{ secrets.TOKEN_MODRINTH }}
+      MODRINTH_PROJECT_ID: ${{ vars.modrinth_id }}  # UUID or numeric ID (e.g., tfpHINm8)
     steps:
       - name: Skip if no Modrinth token or project ID
         shell: bash
         run: |
-          if [[ -z "$MODRINTH_TOKEN" || -z "${{ vars.modrinth_id }}" ]]; then
+          if [[ -z "$MODRINTH_TOKEN" || -z "$MODRINTH_PROJECT_ID" ]]; then
             echo "No Modrinth token or project ID configured. Skipping."
             exit 0
           fi
@@ -204,5 +206,5 @@ jobs:
           loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
           java: ${{ needs.build.outputs.java_version }}
-          modrinth-id: ${{ vars.modrinth_id }}
+          modrinth-id: ${{ env.MODRINTH_PROJECT_ID }}
           modrinth-token: ${{ env.MODRINTH_TOKEN }}
