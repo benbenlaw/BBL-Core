@@ -117,10 +117,12 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build
-        run: ./gradlew clean build -x copyJar --console=plain
+        run: ./gradlew clean build --console=plain
         env:
           CI: true
           BUILD_VERSION: ${{ steps.meta.outputs.release_tag }}
+          CHANGELOG: ${{ steps.meta.outputs.changelog }}
+          PUBLISH: true
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
