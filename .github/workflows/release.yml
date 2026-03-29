@@ -159,7 +159,7 @@ jobs:
           version: ${{ needs.build.outputs.release_tag }}
           files: build/libs/*.jar
           changelog: ${{ steps.build.outputs.changelog }}
-          loaders: ${{ steps.build.outputs.loader }}
+          loaders: ["${{ steps.build.outputs.loader }}"]
           game-versions: ${{ steps.build.outputs.minecraft_version }}
           java: ${{ steps.build.outputs.java_version }}
           curseforge-id: ${{ vars.curseforge_id }}
@@ -193,7 +193,7 @@ jobs:
           version: ${{ needs.build.outputs.release_tag }}
           files: build/libs/*.jar
           changelog: ${{ steps.build.outputs.changelog }}
-          loaders: ${{ steps.build.outputs.loader }}
+          loaders: ["${{ steps.build.outputs.loader }}"]
           game-versions: ${{ steps.build.outputs.minecraft_version }}
           java: ${{ steps.build.outputs.java_version }}
           modrinth-id: ${{ vars.modrinth_id }}
