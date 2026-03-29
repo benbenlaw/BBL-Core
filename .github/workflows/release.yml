@@ -26,21 +26,23 @@ jobs:
             exit 1
           fi
 
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
 
       - name: Read metadata + changelog
         id: meta
         shell: bash
         run: |
-          # Read properties
           minecraft_version=$(grep '^minecraft_version=' gradle.properties | cut -d= -f2 | tr -d '\r')
           mod_version=$(grep '^mod_version=' gradle.properties | cut -d= -f2 | tr -d '\r')
           mod_name=$(grep '^mod_name=' gradle.properties | cut -d= -f2 | tr -d '\r')
 
           tag="${minecraft_version}-${mod_version}"
 
-          # Changelog file for this major version
+          # Changelog file with major version
           major=$(echo "$mod_version" | cut -d. -f1)
           changelog_file="CHANGELOGS/${minecraft_version}-${major}.x.md"
 
@@ -49,9 +51,9 @@ jobs:
             exit 1
           fi
 
-          # Extract only current version section
+          # Extract only the section for the current version
           changelog=$(awk -v ver="$mod_version" '
-            $0 ~ "^# "ver"$" {found=1; print; next}
+            $0 ~ "^# "ver"$" {found=1; next}
             found && /^# [0-9]/ {exit}
             found {print}
           ' "$changelog_file")
@@ -61,7 +63,6 @@ jobs:
             exit 1
           fi
 
-          # Export outputs
           echo "tag=$tag" >> $GITHUB_OUTPUT
           echo "mod_name=$mod_name" >> $GITHUB_OUTPUT
           echo "minecraft_version=$minecraft_version" >> $GITHUB_OUTPUT
@@ -78,39 +79,41 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
       - name: Build
         run: ./gradlew build
 
-      - name: List built jars
-        run: ls -lh build/libs
-
-      - name: Rename jar for publishing
-        run: |
-          mkdir -p build/libs
-          mv build/libs/*.jar build/libs/bblcore-${{ steps.meta.outputs.tag }}.jar
-
-      - name: Upload jar artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: mod
-          path: build/libs/*.jar
+          path: build/libs/bblcore-${{ steps.meta.outputs.tag }}.jar
 
   publish:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download jar artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: mod
-          path: build/libs
+
+      - name: Prepare publish flags
+        id: publish_flags
+        run: |
+          if [[ -n "${{ secrets.TOKEN_CURSEFORGE }}" && -n "${{ vars.CURSEFORGE_PROJECT_ID }}" ]]; then
+            echo "publish_cf=true" >> $GITHUB_OUTPUT
+          else
+            echo "publish_cf=false" >> $GITHUB_OUTPUT
+          fi
+
+          if [[ -n "${{ secrets.TOKEN_MODRINTH }}" && -n "${{ vars.MODRINTH_PROJECT_ID }}" ]]; then
+            echo "publish_mr=true" >> $GITHUB_OUTPUT
+          else
+            echo "publish_mr=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Publish to CurseForge
-        if: ${{ secrets.TOKEN_CURSEFORGE && vars.CURSEFORGE_PROJECT_ID != '' }}
+        if: ${{ steps.publish_flags.outputs.publish_cf == 'true' }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
           files: "build/libs/bblcore-${{ needs.build.outputs.tag }}.jar"
@@ -124,7 +127,7 @@ jobs:
           curseforge-token: ${{ secrets.TOKEN_CURSEFORGE }}
 
       - name: Publish to Modrinth
-        if: ${{ secrets.TOKEN_MODRINTH && vars.MODRINTH_PROJECT_ID != '' }}
+        if: ${{ steps.publish_flags.outputs.publish_mr == 'true' }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
           files: "build/libs/bblcore-${{ needs.build.outputs.tag }}.jar"
