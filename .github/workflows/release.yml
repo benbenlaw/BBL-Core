@@ -78,12 +78,15 @@ jobs:
           java-version: 21
 
       - name: Build
-        # Passing GitHub variables directly to Gradle to prevent 'unknown property' errors
+        # We pass -P flags to define the properties Gradle's build script expects.
+        # This prevents "unknown property" errors during the configuration phase.
         run: |
           ./gradlew build \
             -Pmodrinth_id=${{ vars.MODRINTH_PROJECT_ID || 'unused' }} \
             -Pcurseforge_id=${{ vars.CURSEFORGE_PROJECT_ID || 'unused' }} \
-            -Prelease_type=release
+            -Prelease_type=release \
+            -Prelease_versions=${{ steps.meta.outputs.minecraft_version }} \
+            -Pchangelog_text="Internal Build"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -120,7 +123,8 @@ jobs:
         if: ${{ steps.publish_flags.outputs.publish_cf == 'true' }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
-          # Path updated: download-artifact places files in the current root
+          # Note: download-artifact flattens the path.
+          # The file is in the root of the workspace now.
           files: "bblcore-${{ needs.build.outputs.tag }}.jar"
           name: ${{ needs.build.outputs.mod_name }}
           version: ${{ needs.build.outputs.tag }}
@@ -135,7 +139,6 @@ jobs:
         if: ${{ steps.publish_flags.outputs.publish_mr == 'true' }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
-          # Path updated: download-artifact places files in the current root
           files: "bblcore-${{ needs.build.outputs.tag }}.jar"
           name: ${{ needs.build.outputs.mod_name }}
           version: ${{ needs.build.outputs.tag }}
