@@ -60,8 +60,7 @@ jobs:
         run: |
           mod_name=$(awk -F= '/^mod_name=/{print $2}' gradle.properties | tr -d '\r')
           mod_version=$(awk -F= '/^mod_version=/{print $2}' gradle.properties | tr -d '\r')
-          minecraft_version=$(awk -F= '/^minecraft_version=/{print $2}' gradle.properties | tr -d '\r')
-
+          minecraft_version=$(awk -F= '/^minecraft_version=/{print $2}' gradle.properties | tr -d '\r' | sed 's/-.*//')
           mod_major_version="${mod_version%%.*}"
           changelog_file="CHANGELOGS/${minecraft_version}-${mod_major_version}.x.md"
 
@@ -162,7 +161,7 @@ jobs:
           files: build/libs/*.jar
           changelog: ${{ steps.build.outputs.changelog }}
           loaders: ${{ needs.build.outputs.loader }}
-          game-versions: ${{ steps.build.outputs.minecraft_version }}
+          game-versions: ${{ needs.build.outputs.minecraft_version }}
           java: ${{ steps.build.outputs.java_version }}
           curseforge-id: ${{ vars.curseforge_id }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
@@ -196,7 +195,7 @@ jobs:
           files: build/libs/*.jar
           changelog: ${{ steps.build.outputs.changelog }}
           loaders: ${{ needs.build.outputs.loader }}
-          game-versions: ${{ steps.build.outputs.minecraft_version }}
+          game-versions: ${{ needs.build.outputs.minecraft_version }}
           java: ${{ steps.build.outputs.java_version }}
           modrinth-id: ${{ vars.modrinth_id }}
           modrinth-token: ${{ env.MODRINTH_TOKEN }}
