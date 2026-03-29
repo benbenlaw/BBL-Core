@@ -110,7 +110,7 @@ jobs:
           path: build/libs
 
       - name: Publish to CurseForge
-        if: secrets.TOKEN_CURSEFORGE && vars.CURSEFORGE_PROJECT_ID != ''
+        if: ${{ secrets.TOKEN_CURSEFORGE && vars.CURSEFORGE_PROJECT_ID != '' }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
           files: "build/libs/bblcore-${{ needs.build.outputs.tag }}.jar"
@@ -124,7 +124,7 @@ jobs:
           curseforge-token: ${{ secrets.TOKEN_CURSEFORGE }}
 
       - name: Publish to Modrinth
-        if: secrets.TOKEN_MODRINTH && vars.MODRINTH_PROJECT_ID != ''
+        if: ${{ secrets.TOKEN_MODRINTH && vars.MODRINTH_PROJECT_ID != '' }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
           files: "build/libs/bblcore-${{ needs.build.outputs.tag }}.jar"
