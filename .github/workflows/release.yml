@@ -160,7 +160,8 @@ jobs:
           changelog: ${{ needs.build.outputs.changelog }}
           loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
-          java: ${{ steps.meta.outputs.java_version }}
+          java: 25
+          environment: both
           curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
 
@@ -194,6 +195,6 @@ jobs:
           changelog: ${{ needs.build.outputs.changelog }}
           loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
-          java: ${{ steps.meta.outputs.java_version }}
+          java: 25
           modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
           modrinth-token: ${{ env.MODRINTH_TOKEN }}
