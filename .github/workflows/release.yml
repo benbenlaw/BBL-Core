@@ -72,16 +72,19 @@ jobs:
           fi
 
           # Extract only current version changelog
-          changelog=$(awk -v version="$mod_version" '
+          changelog_body=$(awk -v version="$mod_version" '
             $0 ~ "# " version {flag=1; next}
             /^#/ {flag=0}
             flag {print}
           ' "$changelog_file")
 
-          if [[ -z "$changelog" ]]; then
+          if [[ -z "$changelog_body" ]]; then
             echo "No changelog entry found for version $mod_version in $changelog_file"
             exit 1
           fi
+
+          # Prepend version heading to changelog
+          changelog="# $mod_version"$'\n'"$changelog_body"
 
           # Detect loader
           if grep -q 'id("net.neoforged.moddev")' build.gradle.kts; then
@@ -161,9 +164,7 @@ jobs:
           loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
           java: 25
-          environment: |
-            - client
-            - server
+          environment: client,server
           curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
 
