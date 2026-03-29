@@ -60,7 +60,9 @@ jobs:
         run: |
           mod_name=$(awk -F= '/^mod_name=/{print $2}' gradle.properties | tr -d '\r')
           mod_version=$(awk -F= '/^mod_version=/{print $2}' gradle.properties | tr -d '\r')
-          minecraft_version=$(awk -F= '/^minecraft_version=/{print $2}' gradle.properties | tr -d '\r' | sed 's/-.*//')
+          minecraft_version=$(awk -F= '/^minecraft_version=/{print $2}' gradle.properties | tr -d '\r')
+
+          # Major version for changelog filename
           mod_major_version="${mod_version%%.*}"
           changelog_file="CHANGELOGS/${minecraft_version}-${mod_major_version}.x.md"
 
@@ -69,6 +71,7 @@ jobs:
             exit 1
           fi
 
+          # Extract only current version changelog
           changelog=$(awk -v version="$mod_version" '
             $0 ~ "# " version {flag=1; next}
             /^#/ {flag=0}
@@ -80,16 +83,16 @@ jobs:
             exit 1
           fi
 
+          # Detect loader
           if grep -q 'id("net.neoforged.moddev")' build.gradle.kts; then
-          loader="neoforge"
+            loader="neoforge"
           elif grep -q 'id("net.minecraftforge.gradle")' build.gradle.kts; then
-          loader="forge"
+            loader="forge"
           else
-          loader="neoforge"
+            loader="neoforge"
           fi
-          
-          echo "loader=$loader" >> "$GITHUB_OUTPUT"
 
+          # Detect java version
           java_version=$(grep -oE 'JavaLanguageVersion\.of\([0-9]+\)' build.gradle.kts | grep -oE '[0-9]+' || echo 21)
 
           echo "mod_name=$mod_name" >> "$GITHUB_OUTPUT"
@@ -114,14 +117,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build
-        shell: bash
-        run: |
-          if ./gradlew tasks --all --console=plain | grep -qE '^copyJar\s'; then
-            EXCLUDE_ARGS="-x copyJar"
-          else
-            EXCLUDE_ARGS=""
-          fi
-          ./gradlew clean build $EXCLUDE_ARGS --console=plain
+        run: ./gradlew clean build -x copyJar --console=plain
         env:
           CI: true
           BUILD_VERSION: ${{ steps.meta.outputs.release_tag }}
@@ -142,7 +138,7 @@ jobs:
       - name: Skip if no CurseForge token or project ID
         shell: bash
         run: |
-          if [[ -z "$CURSEFORGE_TOKEN" || -z "${{ vars.curseforge_id }}" ]]; then
+          if [[ -z "$CURSEFORGE_TOKEN" || -z "${{ vars.CURSEFORGE_PROJECT_ID }}" ]]; then
             echo "No CurseForge token or project ID configured. Skipping."
             exit 0
           fi
@@ -159,11 +155,11 @@ jobs:
           name: ${{ needs.build.outputs.mod_name }} - ${{ needs.build.outputs.release_tag }}
           version: ${{ needs.build.outputs.release_tag }}
           files: build/libs/*.jar
-          changelog: ${{ steps.build.outputs.changelog }}
+          changelog: ${{ needs.build.outputs.changelog }}
           loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
-          java: ${{ steps.build.outputs.java_version }}
-          curseforge-id: ${{ vars.curseforge_id }}
+          java: ${{ steps.meta.outputs.java_version }}
+          curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
 
   publish-modrinth:
@@ -176,7 +172,7 @@ jobs:
       - name: Skip if no Modrinth token or project ID
         shell: bash
         run: |
-          if [[ -z "$MODRINTH_TOKEN" || -z "${{ vars.modrinth_id }}" ]]; then
+          if [[ -z "$MODRINTH_TOKEN" || -z "${{ vars.MODRINTH_PROJECT_ID }}" ]]; then
             echo "No Modrinth token or project ID configured. Skipping."
             exit 0
           fi
@@ -193,9 +189,9 @@ jobs:
           name: ${{ needs.build.outputs.mod_name }} - ${{ needs.build.outputs.release_tag }}
           version: ${{ needs.build.outputs.release_tag }}
           files: build/libs/*.jar
-          changelog: ${{ steps.build.outputs.changelog }}
+          changelog: ${{ needs.build.outputs.changelog }}
           loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
-          java: ${{ steps.build.outputs.java_version }}
-          modrinth-id: ${{ vars.modrinth_id }}
+          java: ${{ steps.meta.outputs.java_version }}
+          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
           modrinth-token: ${{ env.MODRINTH_TOKEN }}
