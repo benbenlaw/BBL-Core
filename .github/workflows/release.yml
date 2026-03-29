@@ -63,7 +63,7 @@ jobs:
           mod_version=$(awk -F= '/^mod_version=/{print $2}' gradle.properties | tr -d '\r')
           minecraft_version=$(awk -F= '/^minecraft_version=/{print $2}' gradle.properties | tr -d '\r')
 
-          # Determine major version for changelog filename
+          # Major version for changelog filename
           mod_major_version="${mod_version%%.*}"
           changelog_file="CHANGELOGS/${minecraft_version}-${mod_major_version}.md"
 
@@ -72,7 +72,7 @@ jobs:
             exit 1
           fi
 
-          # Extract changelog for current version
+          # Extract only current version changelog
           changelog=$(awk -v version="$mod_version" '
             $0 ~ "# " version {flag=1; next}
             /^#/ {flag=0}
@@ -84,7 +84,7 @@ jobs:
             exit 1
           fi
 
-          # Detect loader (neoforge or forge)
+          # Detect loader
           if grep -q 'id("net.neoforged.moddev")' build.gradle.kts; then
             loader="neoforge"
           elif grep -q 'id("net.minecraftforge.gradle")' build.gradle.kts; then
@@ -132,11 +132,18 @@ jobs:
   publish-curseforge:
     name: Publish to CurseForge
     needs: build
-    if: secrets.TOKEN_CURSEFORGE != '' && vars.curseforge_id != ''
     runs-on: ubuntu-latest
     env:
       CURSEFORGE_TOKEN: ${{ secrets.TOKEN_CURSEFORGE }}
     steps:
+      - name: Skip if no CurseForge token or project ID
+        shell: bash
+        run: |
+          if [[ -z "$CURSEFORGE_TOKEN" || -z "${{ vars.curseforge_id }}" ]]; then
+            echo "No CurseForge token or project ID configured. Skipping."
+            exit 0
+          fi
+
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
@@ -159,11 +166,18 @@ jobs:
   publish-modrinth:
     name: Publish to Modrinth
     needs: build
-    if: secrets.TOKEN_MODRINTH != '' && vars.modrinth_id != ''
     runs-on: ubuntu-latest
     env:
       MODRINTH_TOKEN: ${{ secrets.TOKEN_MODRINTH }}
     steps:
+      - name: Skip if no Modrinth token or project ID
+        shell: bash
+        run: |
+          if [[ -z "$MODRINTH_TOKEN" || -z "${{ vars.modrinth_id }}" ]]; then
+            echo "No Modrinth token or project ID configured. Skipping."
+            exit 0
+          fi
+
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
