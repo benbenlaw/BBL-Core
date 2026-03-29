@@ -18,6 +18,7 @@ jobs:
       mod_name: ${{ steps.meta.outputs.mod_name }}
       minecraft_version: ${{ steps.meta.outputs.minecraft_version }}
       loader: ${{ steps.meta.outputs.loader }}
+      mod_version: ${{ steps.meta.outputs.mod_version }}
 
     steps:
       - name: Confirm release
@@ -37,10 +38,12 @@ jobs:
           minecraft_version=$(grep '^minecraft_version=' gradle.properties | cut -d= -f2 | tr -d '\r')
           mod_version=$(grep '^mod_version=' gradle.properties | cut -d= -f2 | tr -d '\r')
           mod_name=$(grep '^mod_name=' gradle.properties | cut -d= -f2 | tr -d '\r')
+          mod_id=$(grep '^mod_id=' gradle.properties | cut -d= -f2 | tr -d '\r')
 
           tag="${minecraft_version}-${mod_version}"
+          loader="neoforge"
 
-          # Use your new naming format: 21.1-12.x.md
+          # Changelog file: 26.1-12.x.md
           major=$(echo "$mod_version" | cut -d. -f1)
           changelog_file="CHANGELOGS/${minecraft_version}-${major}.x.md"
 
@@ -49,10 +52,10 @@ jobs:
             exit 1
           fi
 
-          # Safer parsing (only stops at version headers, not ## Notes)
+          # Extract only the section for this version
           changelog=$(awk -v ver="$mod_version" '
-            $0 ~ "^# "ver"$" {found=1; print; next}
-            found && /^# [0-9]/ {exit}
+            $0 ~ "^# "ver"$" {found=1; next}
+            found && /^# / {exit}
             found {print}
           ' "$changelog_file")
 
@@ -61,17 +64,11 @@ jobs:
             exit 1
           fi
 
-          # Detect loader
-          if grep -q 'neoforge' build.gradle.kts; then
-            loader="neoforge"
-          else
-            loader="forge"
-          fi
-
           echo "tag=$tag" >> $GITHUB_OUTPUT
           echo "mod_name=$mod_name" >> $GITHUB_OUTPUT
           echo "minecraft_version=$minecraft_version" >> $GITHUB_OUTPUT
           echo "loader=$loader" >> $GITHUB_OUTPUT
+          echo "mod_version=$mod_version" >> $GITHUB_OUTPUT
 
           {
             echo "changelog<<EOF"
@@ -83,13 +80,16 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 25
-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+          java-version: 21
 
       - name: Build
         run: ./gradlew build
+
+      - name: Rename & Upload jar
+        run: |
+          for f in build/libs/*.jar; do
+            mv "$f" "build/libs/${{ needs.build.outputs.mod_id }}-${{ needs.build.outputs.minecraft_version }}-${{ needs.build.outputs.mod_version }}.jar"
+          done
 
       - name: Upload jar
         uses: actions/upload-artifact@v4
@@ -110,12 +110,13 @@ jobs:
         if: vars.CURSEFORGE_PROJECT_ID != ''
         uses: Kira-NT/mc-publish@v3.3.0
         with:
-          files: "*.jar"
+          files: "build/libs/*.jar"
           name: ${{ needs.build.outputs.mod_name }}
           version: ${{ needs.build.outputs.tag }}
           changelog: ${{ needs.build.outputs.changelog }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
-          loaders: ${{ needs.build.outputs.loader }}
+          loaders: neoforge
+          environment: server,client
           curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ secrets.TOKEN_CURSEFORGE }}
 
@@ -123,11 +124,12 @@ jobs:
         if: vars.MODRINTH_PROJECT_ID != ''
         uses: Kira-NT/mc-publish@v3.3.0
         with:
-          files: "*.jar"
+          files: "build/libs/*.jar"
           name: ${{ needs.build.outputs.mod_name }}
           version: ${{ needs.build.outputs.tag }}
           changelog: ${{ needs.build.outputs.changelog }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
-          loaders: ${{ needs.build.outputs.loader }}
+          loaders: neoforge
+          environment: server,client
           modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
           modrinth-token: ${{ secrets.TOKEN_MODRINTH }}
