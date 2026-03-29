@@ -42,6 +42,7 @@ jobs:
 
           tag="${minecraft_version}-${mod_version}"
 
+          # Changelog file with major version
           major=$(echo "$mod_version" | cut -d. -f1)
           changelog_file="CHANGELOGS/${minecraft_version}-${major}.x.md"
 
@@ -50,6 +51,7 @@ jobs:
             exit 1
           fi
 
+          # Extract only the section for the current version
           changelog=$(awk -v ver="$mod_version" '
             $0 ~ "^# "ver"$" {found=1; next}
             found && /^# [0-9]/ {exit}
@@ -78,15 +80,7 @@ jobs:
           java-version: 21
 
       - name: Build
-        # We pass -P flags to define the properties Gradle's build script expects.
-        # This prevents "unknown property" errors during the configuration phase.
-        run: |
-          ./gradlew build \
-            -Pmodrinth_id=${{ vars.MODRINTH_PROJECT_ID || 'unused' }} \
-            -Pcurseforge_id=${{ vars.CURSEFORGE_PROJECT_ID || 'unused' }} \
-            -Prelease_type=release \
-            -Prelease_versions=${{ steps.meta.outputs.minecraft_version }} \
-            -Pchangelog_text="Internal Build"
+        run: ./gradlew build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -99,8 +93,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download mod artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: mod
 
@@ -123,9 +116,7 @@ jobs:
         if: ${{ steps.publish_flags.outputs.publish_cf == 'true' }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
-          # Note: download-artifact flattens the path.
-          # The file is in the root of the workspace now.
-          files: "bblcore-${{ needs.build.outputs.tag }}.jar"
+          files: "build/libs/bblcore-${{ needs.build.outputs.tag }}.jar"
           name: ${{ needs.build.outputs.mod_name }}
           version: ${{ needs.build.outputs.tag }}
           changelog: ${{ needs.build.outputs.changelog }}
@@ -139,7 +130,7 @@ jobs:
         if: ${{ steps.publish_flags.outputs.publish_mr == 'true' }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
-          files: "bblcore-${{ needs.build.outputs.tag }}.jar"
+          files: "build/libs/bblcore-${{ needs.build.outputs.tag }}.jar"
           name: ${{ needs.build.outputs.mod_name }}
           version: ${{ needs.build.outputs.tag }}
           changelog: ${{ needs.build.outputs.changelog }}
