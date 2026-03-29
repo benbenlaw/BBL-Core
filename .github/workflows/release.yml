@@ -82,12 +82,14 @@ jobs:
           fi
 
           if grep -q 'id("net.neoforged.moddev")' build.gradle.kts; then
-            loader="neoforge"
+          loader="neoforge"
           elif grep -q 'id("net.minecraftforge.gradle")' build.gradle.kts; then
-            loader="forge"
+          loader="forge"
           else
-            loader="neoforge"
+          loader="neoforge"
           fi
+          
+          echo "loader=$loader" >> "$GITHUB_OUTPUT"
 
           java_version=$(grep -oE 'JavaLanguageVersion\.of\([0-9]+\)' build.gradle.kts | grep -oE '[0-9]+' || echo 21)
 
@@ -159,7 +161,7 @@ jobs:
           version: ${{ needs.build.outputs.release_tag }}
           files: build/libs/*.jar
           changelog: ${{ steps.build.outputs.changelog }}
-          loaders: ["${{ steps.build.outputs.loader }}"]
+          loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ steps.build.outputs.minecraft_version }}
           java: ${{ steps.build.outputs.java_version }}
           curseforge-id: ${{ vars.curseforge_id }}
@@ -193,7 +195,7 @@ jobs:
           version: ${{ needs.build.outputs.release_tag }}
           files: build/libs/*.jar
           changelog: ${{ steps.build.outputs.changelog }}
-          loaders: ["${{ steps.build.outputs.loader }}"]
+          loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ steps.build.outputs.minecraft_version }}
           java: ${{ steps.build.outputs.java_version }}
           modrinth-id: ${{ vars.modrinth_id }}
