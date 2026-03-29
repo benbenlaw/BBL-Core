@@ -118,7 +118,17 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build
-        run: ./gradlew clean build -x copyJar --console=plain
+        shell: bash
+        run: |
+          # Check if copyJar exists
+          if ./gradlew tasks --all --console=plain | grep -qE '^copyJar\s'; then
+            echo "Excluding copyJar task"
+            EXCLUDE_ARGS="-x copyJar"
+          else
+            EXCLUDE_ARGS=""
+          fi
+
+          ./gradlew clean build $EXCLUDE_ARGS --console=plain
         env:
           CI: true
           BUILD_VERSION: ${{ steps.meta.outputs.release_tag }}
