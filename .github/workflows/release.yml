@@ -1,12 +1,9 @@
 name: Auto Publish Mod
 
 on:
-  workflow_dispatch:
-    inputs:
-      confirm:
-        description: "Type RELEASE to confirm"
-        required: true
-        type: string
+  push:
+    branches:
+      - '*'  # trigger on all branches
 
 concurrency:
   group: auto-publish-${{ github.ref_name || github.run_id }}
@@ -16,28 +13,8 @@ permissions:
   contents: read
 
 jobs:
-  validate-release:
-    name: Validate Release
-    runs-on: ubuntu-latest
-    outputs:
-      target_branch: ${{ steps.branch_check.outputs.target_branch }}
-    steps:
-      - name: Resolve trigger input
-        id: branch_check
-        shell: bash
-        env:
-          TARGET_BRANCH: ${{ github.ref_name }}
-          INPUT_CONFIRM: ${{ inputs.confirm }}
-        run: |
-          if [[ "$INPUT_CONFIRM" != "RELEASE" ]]; then
-            echo "Manual confirmation failed. Type RELEASE to confirm."
-            exit 1
-          fi
-          echo "target_branch=$TARGET_BRANCH" >> "$GITHUB_OUTPUT"
-
   build:
     name: Build Mod
-    needs: validate-release
     runs-on: ubuntu-latest
     outputs:
       mod_name: ${{ steps.meta.outputs.mod_name }}
@@ -46,21 +23,35 @@ jobs:
       loader: ${{ steps.meta.outputs.loader }}
       minecraft_version: ${{ steps.meta.outputs.minecraft_version }}
       java_version: ${{ steps.meta.outputs.java_version }}
+      curseforge_id: ${{ steps.meta.outputs.curseforge_id }}
+      modrinth_id: ${{ steps.meta.outputs.modrinth_id }}
 
     steps:
       - name: Checkout branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.ref }}
 
       - name: Read project metadata
         id: meta
         shell: bash
         run: |
-          mod_name=$(awk -F= '/^mod_name=/{print $2}' gradle.properties | tr -d '\r')
-          mod_version=$(awk -F= '/^mod_version=/{print $2}' gradle.properties | tr -d '\r')
-          minecraft_version=$(awk -F= '/^minecraft_version=/{print $2}' gradle.properties | tr -d '\r')
+          # Get current branch name
+          current_branch="${GITHUB_REF##*/}"
+          echo "Current branch: $current_branch"
+
+          # Read gradle.properties and trim whitespace
+          minecraft_version=$(awk -F= '/^minecraft_version=/{print $2}' gradle.properties | tr -d '\r' | xargs)
+          mod_name=$(awk -F= '/^mod_name=/{print $2}' gradle.properties | tr -d '\r' | xargs)
+          mod_version=$(awk -F= '/^mod_version=/{print $2}' gradle.properties | tr -d '\r' | xargs)
+          curseforge_id=$(awk -F= '/^curseforge_id=/{print $2}' gradle.properties | tr -d '\r' | xargs)
+          modrinth_id=$(awk -F= '/^modrinth_id=/{print $2}' gradle.properties | tr -d '\r' | xargs)
+
+          # Skip build if branch doesn't match minecraft_version
+          if [[ "$current_branch" != "$minecraft_version" ]]; then
+            echo "Branch $current_branch does not match minecraft_version $minecraft_version. Skipping workflow."
+            exit 0
+          fi
 
           # Major version for changelog filename
           mod_major_version="${mod_version%%.*}"
@@ -98,6 +89,7 @@ jobs:
           # Detect java version
           java_version=$(grep -oE 'JavaLanguageVersion\.of\([0-9]+\)' build.gradle.kts | grep -oE '[0-9]+' || echo 21)
 
+          # Output all metadata to GitHub
           echo "mod_name=$mod_name" >> "$GITHUB_OUTPUT"
           echo "release_tag=${minecraft_version}-${mod_version}" >> "$GITHUB_OUTPUT"
           echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
@@ -106,6 +98,8 @@ jobs:
           echo "loader=$loader" >> "$GITHUB_OUTPUT"
           echo "minecraft_version=$minecraft_version" >> "$GITHUB_OUTPUT"
           echo "java_version=$java_version" >> "$GITHUB_OUTPUT"
+          echo "curseforge_id=$curseforge_id" >> "$GITHUB_OUTPUT"
+          echo "modrinth_id=$modrinth_id" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -140,11 +134,11 @@ jobs:
     env:
       CURSEFORGE_TOKEN: ${{ secrets.TOKEN_CURSEFORGE }}
     steps:
-      - name: Skip if no CurseForge token or project ID
+      - name: Skip if no CurseForge token
         shell: bash
         run: |
-          if [[ -z "$CURSEFORGE_TOKEN" || -z "${{ vars.CURSEFORGE_PROJECT_ID }}" ]]; then
-            echo "No CurseForge token or project ID configured. Skipping."
+          if [[ -z "$CURSEFORGE_TOKEN" ]]; then
+            echo "No CurseForge token configured. Skipping."
             exit 0
           fi
 
@@ -164,8 +158,7 @@ jobs:
           loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
           java: 25
-          environment: client,server
-          curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
+          curseforge-id: ${{ needs.build.outputs.curseforge_id }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
 
   publish-modrinth:
@@ -175,11 +168,11 @@ jobs:
     env:
       MODRINTH_TOKEN: ${{ secrets.TOKEN_MODRINTH }}
     steps:
-      - name: Skip if no Modrinth token or project ID
+      - name: Skip if no Modrinth token
         shell: bash
         run: |
-          if [[ -z "$MODRINTH_TOKEN" || -z "${{ vars.MODRINTH_PROJECT_ID }}" ]]; then
-            echo "No Modrinth token or project ID configured. Skipping."
+          if [[ -z "$MODRINTH_TOKEN" ]]; then
+            echo "No Modrinth token configured. Skipping."
             exit 0
           fi
 
@@ -199,5 +192,5 @@ jobs:
           loaders: ${{ needs.build.outputs.loader }}
           game-versions: ${{ needs.build.outputs.minecraft_version }}
           java: 25
-          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
+          modrinth-id: ${{ needs.build.outputs.modrinth_id }}
           modrinth-token: ${{ env.MODRINTH_TOKEN }}

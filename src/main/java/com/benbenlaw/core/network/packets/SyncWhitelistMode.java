@@ -38,6 +38,7 @@ public record SyncWhitelistMode(BlockPos pos, boolean whitelist) implements Cust
             SyncWhitelistMode::new
     );
 
+
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
