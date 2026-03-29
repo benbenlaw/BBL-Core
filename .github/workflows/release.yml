@@ -42,7 +42,7 @@ jobs:
 
           tag="${minecraft_version}-${mod_version}"
 
-          # Changelog file with major version
+          # Changelog file
           major=$(echo "$mod_version" | cut -d. -f1)
           changelog_file="CHANGELOGS/${minecraft_version}-${major}.x.md"
 
@@ -51,7 +51,6 @@ jobs:
             exit 1
           fi
 
-          # Extract only the section for the current version
           changelog=$(awk -v ver="$mod_version" '
             $0 ~ "^# "ver"$" {found=1; next}
             found && /^# [0-9]/ {exit}
@@ -97,23 +96,17 @@ jobs:
         with:
           name: mod
 
-      - name: Prepare publish flags
-        id: publish_flags
+      - name: Read IDs from gradle.properties
+        id: ids
+        shell: bash
         run: |
-          if [[ -n "${{ secrets.TOKEN_CURSEFORGE }}" && -n "${{ vars.CURSEFORGE_PROJECT_ID }}" ]]; then
-            echo "publish_cf=true" >> $GITHUB_OUTPUT
-          else
-            echo "publish_cf=false" >> $GITHUB_OUTPUT
-          fi
-
-          if [[ -n "${{ secrets.TOKEN_MODRINTH }}" && -n "${{ vars.MODRINTH_PROJECT_ID }}" ]]; then
-            echo "publish_mr=true" >> $GITHUB_OUTPUT
-          else
-            echo "publish_mr=false" >> $GITHUB_OUTPUT
-          fi
+          cf_id=$(grep '^curseforge_id=' gradle.properties | cut -d= -f2 | tr -d '\r')
+          mr_id=$(grep '^modrinth_id=' gradle.properties | cut -d= -f2 | tr -d '\r')
+          echo "cf_id=$cf_id" >> $GITHUB_OUTPUT
+          echo "mr_id=$mr_id" >> $GITHUB_OUTPUT
 
       - name: Publish to CurseForge
-        if: ${{ steps.publish_flags.outputs.publish_cf == 'true' }}
+        if: ${{ secrets.TOKEN_CURSEFORGE && steps.ids.outputs.cf_id }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
           files: "build/libs/bblcore-${{ needs.build.outputs.tag }}.jar"
@@ -123,11 +116,11 @@ jobs:
           game-versions: ${{ needs.build.outputs.minecraft_version }}
           loaders: "neoforge"
           environments: "client,server"
-          curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
+          curseforge-id: ${{ steps.ids.outputs.cf_id }}
           curseforge-token: ${{ secrets.TOKEN_CURSEFORGE }}
 
       - name: Publish to Modrinth
-        if: ${{ steps.publish_flags.outputs.publish_mr == 'true' }}
+        if: ${{ secrets.TOKEN_MODRINTH && steps.ids.outputs.mr_id }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
           files: "build/libs/bblcore-${{ needs.build.outputs.tag }}.jar"
@@ -137,5 +130,5 @@ jobs:
           game-versions: ${{ needs.build.outputs.minecraft_version }}
           loaders: "neoforge"
           environments: "client,server"
-          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
+          modrinth-id: ${{ steps.ids.outputs.mr_id }}
           modrinth-token: ${{ secrets.TOKEN_MODRINTH }}
