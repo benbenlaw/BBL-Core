@@ -31,7 +31,19 @@ public class CoreMultiblockDetector {
             return null;
         }
 
-        Direction controllerDirection = controllerState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        Direction controllerDirection = Direction.NORTH;
+
+        if (controllerState.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+            controllerDirection = controllerState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        }
+        else if (controllerState.hasProperty(BlockStateProperties.FACING)) {
+            controllerDirection = controllerState.getValue(BlockStateProperties.FACING);
+        }
+
+        if (controllerDirection == Direction.UP || controllerDirection == Direction.DOWN) {
+            return null;
+        }
+
         List<BlockPos> extraValidBlocks = new ArrayList<>();
         Pair<BlockPos, BlockPos> topCorners = findEdges(
                 level, controllerPos, controllerBlock, controllerDirection.getClockWise(), top.immutable(),
