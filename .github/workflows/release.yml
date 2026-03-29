@@ -65,7 +65,7 @@ jobs:
 
           # Major version for changelog filename
           mod_major_version="${mod_version%%.*}"
-          changelog_file="CHANGELOGS/${minecraft_version}-${mod_major_version}.md"
+          changelog_file="CHANGELOGS/${minecraft_version}-${mod_major_version}.x.md"
 
           if [[ ! -f "$changelog_file" ]]; then
             echo "Missing changelog file: $changelog_file"
