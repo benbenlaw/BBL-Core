@@ -106,7 +106,7 @@ jobs:
           echo "mr_id=$mr_id" >> $GITHUB_OUTPUT
 
       - name: Publish to CurseForge
-        if: ${{ secrets.TOKEN_CURSEFORGE && steps.ids.outputs.cf_id }}
+        if: ${{ steps.ids.outputs.cf_id != '' && secrets.TOKEN_CURSEFORGE != '' }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
           files: "build/libs/bblcore-${{ needs.build.outputs.tag }}.jar"
@@ -120,7 +120,7 @@ jobs:
           curseforge-token: ${{ secrets.TOKEN_CURSEFORGE }}
 
       - name: Publish to Modrinth
-        if: ${{ secrets.TOKEN_MODRINTH && steps.ids.outputs.mr_id }}
+        if: ${{ steps.ids.outputs.mr_id != '' && secrets.TOKEN_MODRINTH != '' }}
         uses: Kira-NT/mc-publish@v3.3.0
         with:
           files: "build/libs/bblcore-${{ needs.build.outputs.tag }}.jar"
