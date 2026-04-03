@@ -3,7 +3,7 @@ name: Auto Publish Mod
 on:
   push:
     branches:
-      - '*'  # trigger on all branches
+      - '26.1'
 
 concurrency:
   group: auto-publish-${{ github.ref_name || github.run_id }}
