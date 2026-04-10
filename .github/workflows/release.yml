@@ -36,67 +36,70 @@ jobs:
         id: meta
         shell: bash
         run: |
-          # 1. Capture the branch name
+          # Get current branch name
           current_branch="${GITHUB_REF##*/}"
-          
-          # 2. Extract values from gradle.properties
-          minecraft_version=$(awk -F= '/^minecraft_version=/{print $2}' gradle.properties | xargs)
-          minecraft_version_range=$(awk -F= '/^minecraft_version_range=/{print $2}' gradle.properties | xargs)
-          mod_name=$(awk -F= '/^mod_name=/{print $2}' gradle.properties | xargs)
-          mod_version=$(awk -F= '/^mod_version=/{print $2}' gradle.properties | xargs)
-          curseforge_id=$(awk -F= '/^curseforge_id=/{print $2}' gradle.properties | xargs)
-          modrinth_id=$(awk -F= '/^modrinth_id=/{print $2}' gradle.properties | xargs)
-          
-          # 3. Wildcard Comparison
-          # This allows branch '26.1.x' to match '26.1.2'
-          if [[ "$minecraft_version" != $current_branch ]]; then
-            echo "Branch $current_branch does not match MC version $minecraft_version. Skipping."
+          echo "Current branch: $current_branch"
+
+          # Read gradle.properties and trim whitespace
+          minecraft_version=$(awk -F= '/^minecraft_version=/{print $2}' gradle.properties | tr -d '\r' | xargs)
+          mod_name=$(awk -F= '/^mod_name=/{print $2}' gradle.properties | tr -d '\r' | xargs)
+          mod_version=$(awk -F= '/^mod_version=/{print $2}' gradle.properties | tr -d '\r' | xargs)
+          curseforge_id=$(awk -F= '/^curseforge_id=/{print $2}' gradle.properties | tr -d '\r' | xargs)
+          modrinth_id=$(awk -F= '/^modrinth_id=/{print $2}' gradle.properties | tr -d '\r' | xargs)
+
+          # Skip build if branch doesn't match minecraft_version
+          if [[ "$current_branch" != "$minecraft_version"* ]]; then
+            echo "Branch $current_branch does not match minecraft_version $minecraft_version. Skipping workflow."
             exit 0
           fi
-          
-          # 4. Handle Changelog (Path: CHANGELOGS/26.1.x-12.x.md)
+
+          # Major version for changelog filename
           mod_major_version="${mod_version%%.*}"
-          changelog_file="CHANGELOGS/${current_branch}-${mod_major_version}.x.md"
-          
+          changelog_file="CHANGELOGS/${minecraft_version}-${mod_major_version}.x.md"
+
           if [[ ! -f "$changelog_file" ]]; then
-            echo "::error::Missing changelog file: $changelog_file"
+            echo "Missing changelog file: $changelog_file"
             exit 1
           fi
-          
+
+          # Extract only current version changelog
           changelog_body=$(awk -v version="$mod_version" '
             $0 ~ "# " version {flag=1; next}
             /^#/ {flag=0}
             flag {print}
           ' "$changelog_file")
-          
+
           if [[ -z "$changelog_body" ]]; then
-            echo "::error::No entry for # $mod_version in $changelog_file"
+            echo "No changelog entry found for version $mod_version in $changelog_file"
             exit 1
           fi
-          
-          # 5. Safe Java Detection
-          # Falls back to 21 if the build.gradle.kts check fails
-          java_val=$(grep -oE 'JavaLanguageVersion\.of\([0-9]+\)' build.gradle.kts | grep -oE '[0-9]+' | head -1)
-          java_version=${java_val:-21}
-          
-          # 6. Loader Detection
-          loader="neoforge"
-          if grep -q 'net.minecraftforge.gradle' build.gradle.kts; then loader="forge"; fi
-          
-          # 7. Outputs
+
+          # Prepend version heading to changelog
+          changelog="# $mod_version"$'\n'"$changelog_body"
+
+          # Detect loader
+          if grep -q 'id("net.neoforged.moddev")' build.gradle.kts; then
+            loader="neoforge"
+          elif grep -q 'id("net.minecraftforge.gradle")' build.gradle.kts; then
+            loader="forge"
+          else
+            loader="neoforge"
+          fi
+
+          # Detect java version
+          java_version=$(grep -oE 'JavaLanguageVersion\.of\([0-9]+\)' build.gradle.kts | grep -oE '[0-9]+' || echo 21)
+
+          # Output all metadata to GitHub
           echo "mod_name=$mod_name" >> "$GITHUB_OUTPUT"
           echo "release_tag=${minecraft_version}-${mod_version}" >> "$GITHUB_OUTPUT"
+          echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$changelog" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
           echo "loader=$loader" >> "$GITHUB_OUTPUT"
           echo "minecraft_version=$minecraft_version" >> "$GITHUB_OUTPUT"
-          echo "minecraft_version_range=$minecraft_version_range" >> "$GITHUB_OUTPUT"
           echo "java_version=$java_version" >> "$GITHUB_OUTPUT"
           echo "curseforge_id=$curseforge_id" >> "$GITHUB_OUTPUT"
           echo "modrinth_id=$modrinth_id" >> "$GITHUB_OUTPUT"
-          
-          echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
-          echo "# $mod_version" >> "$GITHUB_OUTPUT"
-          echo "$changelog_body" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK
         uses: actions/setup-java@v4
