@@ -22,7 +22,7 @@ jobs:
       changelog: ${{ steps.meta.outputs.changelog }}
       loader: ${{ steps.meta.outputs.loader }}
       minecraft_version: ${{ steps.meta.outputs.minecraft_version }}
-      java_version: ${{ steps.meta.outputs.java_version }}
+      java_version: 25
       curseforge_id: ${{ steps.meta.outputs.curseforge_id }}
       modrinth_id: ${{ steps.meta.outputs.modrinth_id }}
 
@@ -105,7 +105,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: ${{ steps.meta.outputs.java_version }}
+          java-version: 25
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
