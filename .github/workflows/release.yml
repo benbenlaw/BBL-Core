@@ -3,7 +3,7 @@ name: Auto Publish Mod
 on:
   push:
     branches:
-      - '26.1.x'
+      - '26.1.2'
 
 concurrency:
   group: auto-publish-${{ github.ref_name || github.run_id }}
@@ -22,7 +22,7 @@ jobs:
       changelog: ${{ steps.meta.outputs.changelog }}
       loader: ${{ steps.meta.outputs.loader }}
       minecraft_version: ${{ steps.meta.outputs.minecraft_version }}
-      java_version: 25
+      java_version: ${{ steps.meta.outputs.java_version }}
       curseforge_id: ${{ steps.meta.outputs.curseforge_id }}
       modrinth_id: ${{ steps.meta.outputs.modrinth_id }}
 
@@ -48,7 +48,7 @@ jobs:
           modrinth_id=$(awk -F= '/^modrinth_id=/{print $2}' gradle.properties | tr -d '\r' | xargs)
 
           # Skip build if branch doesn't match minecraft_version
-          if [[ "$current_branch" != "$minecraft_version"* ]]; then
+          if [[ "$current_branch" != "$minecraft_version" ]]; then
             echo "Branch $current_branch does not match minecraft_version $minecraft_version. Skipping workflow."
             exit 0
           fi
@@ -105,7 +105,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 25
+          java-version: ${{ steps.meta.outputs.java_version }}
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
