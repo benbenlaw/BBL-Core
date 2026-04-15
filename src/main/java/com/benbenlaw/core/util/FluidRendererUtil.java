@@ -48,7 +48,7 @@ public class FluidRendererUtil {
             faceSize, color, packedLight);
 
         // Bottom
-        RenderUtil.submitFace(Direction.DOWN, poseStack, renderType, nodeCollector, texture, inset, inset, 14f, faceSize,
+        RenderUtil.submitFace(Direction.DOWN, poseStack, renderType, nodeCollector, texture, inset, inset, 1 - inset, faceSize,
                 faceSize, color, packedLight);
 
         // Sides
