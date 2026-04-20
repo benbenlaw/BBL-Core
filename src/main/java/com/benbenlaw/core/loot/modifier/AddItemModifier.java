@@ -13,7 +13,7 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
-
+/*
 public class AddItemModifier extends LootModifier {
 
     public static final MapCodec<AddItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> codecStart(instance).and(instance.group(
@@ -26,7 +26,7 @@ public class AddItemModifier extends LootModifier {
     private final int count;
 
     protected AddItemModifier(LootItemCondition[] conditionsIn, Item addedItemIn, int count) {
-        super(conditionsIn);
+        super(conditionsIn, 1001);
         this.addedItem = addedItemIn;
         this.count = count;
     }
@@ -59,3 +59,5 @@ public class AddItemModifier extends LootModifier {
 
 
 }
+
+ */

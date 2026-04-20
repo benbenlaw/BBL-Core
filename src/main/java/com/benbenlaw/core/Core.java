@@ -30,9 +30,7 @@ public class Core {
 
         //Global Resource Tags
 
-
         CoreRecipeConditions.CONDITIONALS.register(eventBus);
-        //CoreLootModifierCondition.LOOT_CONDITION_TYPES.register(eventBus);
         CoreLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(eventBus);
 
         //Configs
