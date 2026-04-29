@@ -11,6 +11,7 @@ import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 
 import java.util.function.BiPredicate;
 
+@Deprecated(since = "12.5.0", forRemoval = true)
 public class FilterItemHandler extends ItemStacksResourceHandler {
 
     private final SyncableBlockEntity blockEntity;

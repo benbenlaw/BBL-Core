@@ -4,6 +4,7 @@ import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 
+@Deprecated(since = "12.5.0", forRemoval = true)
 public class CombinedItemHandler implements ResourceHandler<ItemResource> {
 
     private final InputItemHandler inputHandler;

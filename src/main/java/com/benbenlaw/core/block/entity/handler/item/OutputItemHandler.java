@@ -8,6 +8,7 @@ import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 
 import java.util.function.Predicate;
 
+@Deprecated(since = "12.5.0", forRemoval = true)
 public class OutputItemHandler extends ItemStacksResourceHandler {
 
     private final Predicate<Integer> canExtract;

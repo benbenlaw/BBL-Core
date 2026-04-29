@@ -3,17 +3,21 @@ package com.benbenlaw.core.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 
 public record ChanceResult(ItemStackTemplate template, float chance) {
-    //public static final ChanceResult EMPTY = new ChanceResult(ItemStackTemplate, 1.0f);
 
     public static final Codec<ChanceResult> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ItemStackTemplate.CODEC.fieldOf("item").forGetter(ChanceResult::template),
             Codec.FLOAT.optionalFieldOf("chance", 1.0f).forGetter(ChanceResult::chance)
     ).apply(inst, ChanceResult::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, ChanceResult> STREAM_CODEC = StreamCodec.of(
+            (buf, value) ->
+                    value.write(buf), ChanceResult::read);
 
     public ItemStack rollOutput(RandomSource rand) {
         ItemStack stack = template.create();
