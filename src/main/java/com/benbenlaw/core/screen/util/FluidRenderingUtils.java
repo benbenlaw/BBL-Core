@@ -37,13 +37,15 @@ public class FluidRenderingUtils {
 
 
         FluidStack fluidStack = FluidUtil.getStack(handler, slot);
-        int capacity = handler.getCapacityAsInt(slot, FluidResource.of(fluidStack));
+        int capacity = handler.getCapacityAsInt(slot, FluidResource.EMPTY);
 
         int tankX = screenX + tankTopX;
         int tankY = screenY + tankTopY;
 
         if (!fluidStack.isEmpty()) {
-            int displayLevel = (int) ((float) fluidStack.getAmount() / capacity * tankHeight);
+            int displayLevel = capacity > 0
+                    ? (int)((float)fluidStack.getAmount() / capacity * tankHeight)
+                    : 0;
 
             if (getStillFluidSprite(fluidStack).isPresent()) {
                 renderTiledSprite(guiGraphics, getStillFluidSprite(fluidStack).get(), getColorTint(fluidStack),
