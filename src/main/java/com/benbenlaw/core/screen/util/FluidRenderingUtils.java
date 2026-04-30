@@ -32,6 +32,8 @@ public class FluidRenderingUtils {
     /// Used to render a fluid tank in a GUI use
     /// renderFluid(guiGraphics, tank, x, y, 8, 20, 47, 16, mouseX, mouseY);
     /// Replaces all previous screen fluid rendering code
+    ///
+    @Deprecated(forRemoval = true)
     public static void renderFluid(GuiGraphicsExtractor guiGraphics, FluidStacksResourceHandler handler, int slot, int screenX, int screenY,
                                    int tankTopX, int tankTopY, int tankHeight, int tankWidth, int mouseX, int mouseY) {
 
@@ -60,6 +62,50 @@ public class FluidRenderingUtils {
 
             if (fluidStack.isEmpty()) {
                 lines.add(Component.literal("Empty Filter"));
+            } else {
+                lines.add(fluidStack.getHoverName()); // fluid name
+                lines.add(Component.literal(String.format("%d / %d mB", fluidStack.getAmount(), capacity))); // amount
+            }
+
+            List<ClientTooltipComponent> tooltipComponents =
+                    lines.stream().map(Component::getVisualOrderText)
+                            .map(ClientTooltipComponent::create)
+                            .toList();
+
+            guiGraphics.tooltip(Minecraft.getInstance().font, tooltipComponents, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+
+
+        }
+    }
+
+    public static void renderFluid(GuiGraphicsExtractor guiGraphics, FluidStacksResourceHandler handler, int slot, int screenX, int screenY,
+                                   int tankTopX, int tankTopY, int tankHeight, int tankWidth, int mouseX, int mouseY, Component emptyTooltip) {
+
+
+        FluidStack fluidStack = FluidUtil.getStack(handler, slot);
+        int capacity = handler.getCapacityAsInt(slot, FluidResource.EMPTY);
+
+        int tankX = screenX + tankTopX;
+        int tankY = screenY + tankTopY;
+
+        if (!fluidStack.isEmpty()) {
+            int displayLevel = capacity > 0
+                    ? (int)((float)fluidStack.getAmount() / capacity * tankHeight)
+                    : 0;
+
+            if (getStillFluidSprite(fluidStack).isPresent()) {
+                renderTiledSprite(guiGraphics, getStillFluidSprite(fluidStack).get(), getColorTint(fluidStack),
+                        tankX, tankY + tankHeight - displayLevel, displayLevel, tankWidth);
+            }
+        }
+
+        if (mouseX >= tankX && mouseX < tankX + tankWidth &&
+                mouseY >= tankY && mouseY < tankY + tankHeight) {
+
+            List<Component> lines = new ArrayList<>();
+
+            if (fluidStack.isEmpty()) {
+                lines.add(emptyTooltip);
             } else {
                 lines.add(fluidStack.getHoverName()); // fluid name
                 lines.add(Component.literal(String.format("%d / %d mB", fluidStack.getAmount(), capacity))); // amount
