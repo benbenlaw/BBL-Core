@@ -13,10 +13,10 @@ import java.util.function.Predicate;
 public class SyncableFluidHandler extends FluidStacksResourceHandler {
 
     private final SyncableBlockEntity blockEntity;
-
     private final BiPredicate<Integer, FluidStack> canInsert;
     private final Predicate<Integer> canExtract;
 
+    private boolean internalMode = false;
 
     public SyncableFluidHandler(SyncableBlockEntity blockEntity, int size, int capacity, BiPredicate<Integer, FluidStack> canInsert, Predicate<Integer> canExtract) {
         super(size, capacity);
@@ -31,7 +31,7 @@ public class SyncableFluidHandler extends FluidStacksResourceHandler {
 
         FluidStack stack = resource.toStack(amount);
 
-        if (canInsert.test(index, stack)) {
+        if (internalMode || canInsert.test(index, stack)) {
             return super.insert(index, resource, amount, tx);
         }
 
@@ -42,7 +42,7 @@ public class SyncableFluidHandler extends FluidStacksResourceHandler {
     public int extract(int index, FluidResource resource, int amount, TransactionContext tx) {
         if (resource.isEmpty()) return 0;
 
-        if (canExtract.test(index)) {
+        if (internalMode || canExtract.test(index)) {
             return super.extract(index, resource, amount, tx);
         }
 
@@ -51,6 +51,8 @@ public class SyncableFluidHandler extends FluidStacksResourceHandler {
 
     @Override
     public boolean isValid(int index, FluidResource resource) {
+        if (internalMode) return true;
+
         return canInsert.test(index, resource.toStack(1)) && super.isValid(index, resource);
     }
 
@@ -58,5 +60,25 @@ public class SyncableFluidHandler extends FluidStacksResourceHandler {
     protected void onContentsChanged(int index, FluidStack previousContents) {
         blockEntity.setChanged();
         blockEntity.sync();
+    }
+
+    public <T> T runInternal(java.util.function.Supplier<T> action) {
+        boolean prev = internalMode;
+        internalMode = true;
+        try {
+            return action.get();
+        } finally {
+            internalMode = prev;
+        }
+    }
+
+    public void runInternal(Runnable action) {
+        boolean prev = internalMode;
+        internalMode = true;
+        try {
+            action.run();
+        } finally {
+            internalMode = prev;
+        }
     }
 }

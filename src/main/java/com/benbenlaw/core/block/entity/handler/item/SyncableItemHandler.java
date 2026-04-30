@@ -60,4 +60,25 @@ public class SyncableItemHandler extends ItemStacksResourceHandler {
         blockEntity.setChanged();
         blockEntity.sync();
     }
+
+    public <T> T runInternal(java.util.function.Supplier<T> action) {
+        boolean prev = internalMode;
+        internalMode = true;
+        try {
+            return action.get();
+        } finally {
+            internalMode = prev;
+        }
+    }
+
+    public void runInternal(Runnable action) {
+        boolean prev = internalMode;
+        internalMode = true;
+        try {
+            action.run();
+        } finally {
+            internalMode = prev;
+        }
+    }
+
 }
