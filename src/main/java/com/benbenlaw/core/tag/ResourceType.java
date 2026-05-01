@@ -12,7 +12,8 @@ public enum ResourceType {
     GEARS("gears"),
     RODS("rods"),
     GEMS("gems"),
-    WIRES("wires");
+    WIRES("wires"),
+    SHARDS("shards");
 
     private final String path;
 
