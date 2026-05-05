@@ -8,7 +8,6 @@
     ],
     "client": [
         "client.CreateWorldScreenMixin",
-        "client.IntegratedServerMixin",
         "client.WorldOpenFlowsMixin"
     ],
     "injectors": {

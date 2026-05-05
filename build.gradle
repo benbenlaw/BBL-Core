@@ -76,6 +76,9 @@ dependencies {
 
     //JEI
     implementation("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
+    //Curio
+    implementation("curse.maven:curios-309927:7925547")
+    implementation("curse.maven:artifacts-312353:7956096")
 
 }
 
