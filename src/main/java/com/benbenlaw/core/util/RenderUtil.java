@@ -18,7 +18,6 @@ public class RenderUtil {
      * todo; is this confusing?
      */
 
-
     public static void submitFace(Direction face, PoseStack poseStack, RenderType renderType, SubmitNodeCollector nodeCollector,
             TextureAtlasSprite texture, float x, float y, float z, float w, float h, int color) {
         submitFace(face, poseStack, renderType, nodeCollector, texture, x, y, z, w, h, color, LightCoordsUtil.FULL_BRIGHT);
