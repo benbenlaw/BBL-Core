@@ -23,10 +23,7 @@ public class DurationTooltip {
 
         if (MouseUtil.isMouseAboveArea(mouseX, mouseY, x, y, xOffset, yOffset, 10, 10)) {
             Component progressTick = Component.translatable("tooltip.core.duration_tooltip", progress, totalDuration);
-            FormattedCharSequence sequence = progressTick.getVisualOrderText();
-            List<ClientTooltipComponent> tooltipLines = List.of(ClientTooltipComponent.create(sequence));
-            guiGraphics.tooltip(Minecraft.getInstance().font, tooltipLines, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
-
+            guiGraphics.setTooltipForNextFrame(Minecraft.getInstance().font, progressTick, mouseX, mouseY);
         }
     }
 }

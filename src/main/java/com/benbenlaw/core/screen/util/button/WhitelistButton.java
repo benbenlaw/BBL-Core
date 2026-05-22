@@ -57,20 +57,9 @@ public class WhitelistButton extends Button {
 
             Component tooltip = Component.translatable("tooltip.bblcore.whitelist_button.mode", modeText);
 
-            List<ClientTooltipComponent> tooltipComponents = List.of(ClientTooltipComponent.create(tooltip.getVisualOrderText()));
-            guiGraphics.tooltip(
-                    Minecraft.getInstance().font,
-                    tooltipComponents,
-                    mouseX,
-                    mouseY,
-                    DefaultTooltipPositioner.INSTANCE,
-                    null
-            );
+            guiGraphics.setTooltipForNextFrame(Minecraft.getInstance().font, tooltip, mouseX, mouseY);
         }
     }
-
-
-
 
     public static WhitelistButton create(int x, int y, int width, int height, BlockEntity blockEntity) {
 

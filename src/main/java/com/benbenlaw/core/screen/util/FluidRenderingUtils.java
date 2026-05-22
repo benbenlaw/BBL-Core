@@ -67,14 +67,7 @@ public class FluidRenderingUtils {
                 lines.add(Component.literal(String.format("%d / %d mB", fluidStack.getAmount(), capacity))); // amount
             }
 
-            List<ClientTooltipComponent> tooltipComponents =
-                    lines.stream().map(Component::getVisualOrderText)
-                            .map(ClientTooltipComponent::create)
-                            .toList();
-
-            guiGraphics.tooltip(Minecraft.getInstance().font, tooltipComponents, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
-
-
+            guiGraphics.setTooltipForNextFrame(Minecraft.getInstance().font, lines, Optional.empty(), mouseX, mouseY);
         }
     }
 
@@ -115,8 +108,7 @@ public class FluidRenderingUtils {
                     lines.stream().map(Component::getVisualOrderText)
                             .map(ClientTooltipComponent::create)
                             .toList();
-
-            guiGraphics.tooltip(Minecraft.getInstance().font, tooltipComponents, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+            guiGraphics.setTooltipForNextFrame(Minecraft.getInstance().font, lines, Optional.empty(), mouseX, mouseY);
 
 
         }
@@ -169,19 +161,7 @@ public class FluidRenderingUtils {
                 lines.add(fluid.getHoverName());
                 lines.add(Component.literal(String.format("%d / %d mB", fluid.getAmount(), capacity)));
 
-                List<ClientTooltipComponent> tooltipComponents = lines.stream()
-                        .map(Component::getVisualOrderText)
-                        .map(ClientTooltipComponent::create)
-                        .toList();
-
-                guiGraphics.tooltip(
-                        Minecraft.getInstance().font,
-                        tooltipComponents,
-                        mouseX,
-                        mouseY,
-                        DefaultTooltipPositioner.INSTANCE,
-                        null
-                );
+                guiGraphics.setTooltipForNextFrame(Minecraft.getInstance().font, lines, Optional.empty(), mouseX, mouseY);
             }
         }
     }

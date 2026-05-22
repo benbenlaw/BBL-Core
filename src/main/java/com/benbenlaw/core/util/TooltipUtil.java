@@ -14,14 +14,18 @@ public class TooltipUtil {
 
     public static void addShiftTooltip(ItemStack stack, ItemTooltipEvent event, Item item, String tooltipText) {
         if (!stack.is(item)) return;
+        boolean alreadyAdded = event.getToolTip().stream().anyMatch(
+                c -> c.getString().equals(Component.translatable("tooltip.bblcore.shift").getString())
+        );
 
         if (Minecraft.getInstance().hasShiftDown()) {
             event.getToolTip().add(
                     Component.translatable(tooltipText).withStyle(ChatFormatting.BLUE)
             );
-        } else {
+        } else if (!alreadyAdded) {
             event.getToolTip().add(
-                    Component.translatable("tooltip.bblcore.shift").withStyle(ChatFormatting.YELLOW)
+                    Component.translatable("tooltip.bblcore.shift")
+                            .withStyle(ChatFormatting.YELLOW)
             );
         }
     }
@@ -29,13 +33,18 @@ public class TooltipUtil {
     public static void addShiftTooltip(ItemStack stack, ItemTooltipEvent event, TagKey<Item> item, String tooltipText) {
         if (!stack.is(item)) return;
 
+        boolean alreadyAdded = event.getToolTip().stream().anyMatch(
+                c -> c.getString().equals(Component.translatable("tooltip.bblcore.shift").getString())
+        );
+
         if (Minecraft.getInstance().hasShiftDown()) {
             event.getToolTip().add(
                     Component.translatable(tooltipText).withStyle(ChatFormatting.BLUE)
             );
-        } else {
+        } else if (!alreadyAdded) {
             event.getToolTip().add(
-                    Component.translatable("tooltip.bblcore.shift").withStyle(ChatFormatting.YELLOW)
+                    Component.translatable("tooltip.bblcore.shift")
+                            .withStyle(ChatFormatting.YELLOW)
             );
         }
     }
@@ -43,13 +52,18 @@ public class TooltipUtil {
     public static void addShiftTooltip(ItemStack stack, ItemTooltipEvent event, Item item, String tooltipText, String... additionalInfo) {
         if (!stack.is(item)) return;
 
+        boolean alreadyAdded = event.getToolTip().stream().anyMatch(
+                c -> c.getString().equals(Component.translatable("tooltip.bblcore.shift").getString())
+        );
+
         if (Minecraft.getInstance().hasShiftDown()) {
             event.getToolTip().add(
                     Component.translatable(tooltipText, (Object[]) additionalInfo).withStyle(ChatFormatting.BLUE)
             );
-        } else {
+        }  else if (!alreadyAdded) {
             event.getToolTip().add(
-                    Component.translatable("tooltip.bblcore.shift").withStyle(ChatFormatting.YELLOW)
+                    Component.translatable("tooltip.bblcore.shift")
+                            .withStyle(ChatFormatting.YELLOW)
             );
         }
     }
@@ -57,13 +71,18 @@ public class TooltipUtil {
     public static void addShiftTooltip(ItemStack stack, ItemTooltipEvent event, TagKey<Item> item, String tooltipText, String... additionalInfo) {
         if (!stack.is(item)) return;
 
+        boolean alreadyAdded = event.getToolTip().stream().anyMatch(
+                c -> c.getString().equals(Component.translatable("tooltip.bblcore.shift").getString())
+        );
+
         if (Minecraft.getInstance().hasShiftDown()) {
             event.getToolTip().add(
                     Component.translatable(tooltipText, (Object[]) additionalInfo).withStyle(ChatFormatting.BLUE)
             );
-        } else {
+        } else if (!alreadyAdded) {
             event.getToolTip().add(
-                    Component.translatable("tooltip.bblcore.shift").withStyle(ChatFormatting.YELLOW)
+                    Component.translatable("tooltip.bblcore.shift")
+                            .withStyle(ChatFormatting.YELLOW)
             );
         }
     }
