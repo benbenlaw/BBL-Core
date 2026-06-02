@@ -114,6 +114,45 @@ public class FluidRenderingUtils {
         }
     }
 
+    public static void renderFluid(GuiGraphicsExtractor guiGraphics, FluidStack fluidStack, int capacity, int screenX, int screenY,
+                                   int tankTopX, int tankTopY, int tankHeight, int tankWidth, int mouseX, int mouseY, Component emptyTooltip) {
+
+        int tankX = screenX + tankTopX;
+        int tankY = screenY + tankTopY;
+
+        if (!fluidStack.isEmpty()) {
+            int displayLevel = capacity > 0
+                    ? (int)((float)fluidStack.getAmount() / capacity * tankHeight)
+                    : 0;
+
+            if (getStillFluidSprite(fluidStack).isPresent()) {
+                renderTiledSprite(guiGraphics, getStillFluidSprite(fluidStack).get(), getColorTint(fluidStack),
+                        tankX, tankY + tankHeight - displayLevel, displayLevel, tankWidth);
+            }
+        }
+
+        if (mouseX >= tankX && mouseX < tankX + tankWidth &&
+                mouseY >= tankY && mouseY < tankY + tankHeight) {
+
+            List<Component> lines = new ArrayList<>();
+
+            if (fluidStack.isEmpty()) {
+                lines.add(emptyTooltip);
+            } else {
+                lines.add(fluidStack.getHoverName()); // fluid name
+                lines.add(Component.literal(String.format("%d / %d mB", fluidStack.getAmount(), capacity))); // amount
+            }
+
+            List<ClientTooltipComponent> tooltipComponents =
+                    lines.stream().map(Component::getVisualOrderText)
+                            .map(ClientTooltipComponent::create)
+                            .toList();
+            guiGraphics.setTooltipForNextFrame(Minecraft.getInstance().font, lines, Optional.empty(), mouseX, mouseY);
+
+
+        }
+    }
+
     public static void renderTiledSprite(GuiGraphicsExtractor guiGraphics, TextureAtlasSprite sprite, int color, int x, int y, int height, int width) {
         int spriteWidth = sprite.contents().width();
         int spriteHeight = sprite.contents().height();
