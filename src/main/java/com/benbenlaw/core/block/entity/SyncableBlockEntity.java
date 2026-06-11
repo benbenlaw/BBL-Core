@@ -18,8 +18,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.storage.ValueInput;
-import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -77,15 +77,9 @@ public class SyncableBlockEntity extends BlockEntity {
 
     protected void dropInventoryContents(ItemStacksResourceHandler handler) {
         NonNullList<ItemStack> stacks = NonNullList.create();
-
-        for (int i = 0; i < handler.size(); ++i) {
-            ItemStack stack = ((ItemResource) handler.getResource(i)).toStack();
-
-            if (!stack.isEmpty()) {
-                stacks.add(stack);
-            }
+        for (int i = 0; i < handler.size(); i++) {
+            stacks.add(ItemUtil.getStack(handler, i));
         }
-
         if (this.level != null) {
             Containers.dropContents(this.level, this.worldPosition, stacks);
         }
