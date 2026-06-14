@@ -6,23 +6,23 @@ import net.minecraft.world.item.crafting.Recipe;
 
 public class RecipeProviderHelper {
 
-    public Recipe.CommonInfo simpleCommonInfo() {
+    public static Recipe.CommonInfo simpleCommonInfo() {
         return new Recipe.CommonInfo(true);
     }
 
-    public CraftingRecipe.CraftingBookInfo simpleCraftingBookInfo() {
+    public static CraftingRecipe.CraftingBookInfo simpleCraftingBookInfo() {
         return new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.MISC, "");
     }
 
-    public CraftingRecipe.CraftingBookInfo simpleCraftingBookInfo(String group) {
+    public static CraftingRecipe.CraftingBookInfo simpleCraftingBookInfo(String group) {
         return new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.MISC, group);
     }
 
-    public CraftingRecipe.CraftingBookInfo craftingBookInfo(CraftingBookCategory category, String group) {
+    public static CraftingRecipe.CraftingBookInfo craftingBookInfo(CraftingBookCategory category, String group) {
         return new CraftingRecipe.CraftingBookInfo(category, group);
     }
 
-    public Recipe.CommonInfo simpleCommonInfo(boolean isHidden) {
+    public static Recipe.CommonInfo simpleCommonInfo(boolean isHidden) {
         return new Recipe.CommonInfo(isHidden);
     }
 }
