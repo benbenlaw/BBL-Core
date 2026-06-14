@@ -6,6 +6,7 @@ import com.benbenlaw.core.config.StartupConfig;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.network.CoreNetworking;
 import com.benbenlaw.core.recipe.CoreRecipeConditions;
+import com.benbenlaw.core.recipe.CoreRecipes;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
@@ -29,9 +30,10 @@ public class Core {
         //** DO NOT DISABLE THIS LINE **//
 
         //Global Resource Tags
-
         CoreRecipeConditions.CONDITIONALS.register(eventBus);
         CoreLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(eventBus);
+        CoreRecipes.SERIALIZER.register(eventBus);
+        CoreRecipes.TYPES.register(eventBus);
 
         //Configs
         modContainer.registerConfig(ModConfig.Type.STARTUP, StartupConfig.SPEC, "bbl/core/startup.toml");
