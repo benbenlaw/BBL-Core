@@ -1,7 +1,5 @@
 package com.benbenlaw.core;
 
-import com.benbenlaw.core.config.DimensionConfig;
-import com.benbenlaw.core.config.ModpackConfig;
 import com.benbenlaw.core.config.StartupConfig;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.network.CoreNetworking;
@@ -37,9 +35,6 @@ public class Core {
 
         //Configs
         modContainer.registerConfig(ModConfig.Type.STARTUP, StartupConfig.SPEC, "bbl/core/startup.toml");
-        modContainer.registerConfig(ModConfig.Type.STARTUP, ModpackConfig.SPEC, "bbl/core/modpack.toml");
-        modContainer.registerConfig(ModConfig.Type.STARTUP, DimensionConfig.SPEC, "bbl/core/dimensions.toml");
-
 
         eventBus.addListener(this::registerNetworking);
 
