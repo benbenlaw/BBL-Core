@@ -98,7 +98,7 @@ public class FluidDeferredRegister {
         DeferredHolder<Fluid, BaseFlowingFluid.Flowing> flowingFluid = this.fluidRegister.register("flowing_" + name, () -> new BaseFlowingFluid.Flowing(fluidProperties));
         DeferredHolder<Item, BUCKET> bucket = this.itemRegister.register(name + "_bucket", () -> bucketCreator.create(stillFluid.get(), (new Item.Properties()).stacksTo(1).craftRemainder(Items.BUCKET).setId(ResourceKey.create(Registries.ITEM, baseKey.withSuffix("_bucket")))));
         MapColor color = getClosestColor(renderProperties.color);
-        DeferredHolder<Block, LiquidBlock> block = this.blockRegister.register(name, () -> new LiquidBlock(stillFluid.get(), net.minecraft.world.level.block.state.BlockBehaviour.Properties.of().noCollision().strength(100.0F).noLootTable().replaceable().pushReaction(PushReaction.DESTROY).liquid().mapColor(color).setId(ResourceKey.create(Registries.BLOCK, baseKey.withSuffix("_bucket")))));
+        DeferredHolder<Block, LiquidBlock> block = this.blockRegister.register(name, () -> new LiquidBlock(stillFluid.get(), net.minecraft.world.level.block.state.BlockBehaviour.Properties.of().noCollision().strength(100.0F).noLootTable().replaceable().pushReaction(PushReaction.DESTROY).liquid().mapColor(color).setId(ResourceKey.create(Registries.BLOCK, baseKey))));
         return new FluidRegistryObject<>(fluidType, stillFluid, flowingFluid, bucket, block);
     }
 
