@@ -90,6 +90,7 @@ public class FluidDeferredRegister {
     public <BUCKET extends BucketItem> FluidRegistryObject<CoreFluidTypes, BaseFlowingFluid.Source, BaseFlowingFluid.Flowing, LiquidBlock, BUCKET> register(String name, FluidType.Properties properties, FluidTypeRenderProperties renderProperties, BucketCreator<BUCKET> bucketCreator, BiFunction<FluidType.Properties, FluidTypeRenderProperties, CoreFluidTypes> fluidTypeCreator) {
         DeferredHolder<FluidType, CoreFluidTypes> fluidType = this.fluidTypeRegister.register(name, (rl) -> {
             properties.descriptionId(Util.makeDescriptionId("block", rl));
+            properties.temperature(renderProperties.temperature);
             return fluidTypeCreator.apply(properties, renderProperties);
         });
         Identifier baseKey = Identifier.fromNamespaceAndPath(this.fluidRegister.getNamespace(), name);
@@ -183,10 +184,10 @@ public class FluidDeferredRegister {
     public static class FluidTypeRenderProperties {
         private Identifier stillTexture = LIQUID;
         private Identifier flowingTexture = LIQUID_FLOW;
-        //For now all our fluids use the same "overlay" for being against glass as vanilla water.
         private Identifier overlayTexture = OVERLAY;
         private Identifier renderOverlayTexture = RENDER_OVERLAY;
         private int color;
+        private int temperature = 300; // vanilla water default
 
         private FluidTypeRenderProperties() {
         }
@@ -215,6 +216,11 @@ public class FluidDeferredRegister {
 
         public FluidTypeRenderProperties tint(int color) {
             this.color = color;
+            return this;
+        }
+
+        public FluidTypeRenderProperties temperature(int temperature) {
+            this.temperature = temperature;
             return this;
         }
     }
