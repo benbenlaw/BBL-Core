@@ -149,7 +149,7 @@ jobs:
           path: build/libs
 
       - name: Publish to CurseForge
-        uses: Kira-NT/mc-publish@v3.3.0
+        uses: Kira-NT/mc-publish@v3.3.1
         with:
           name: ${{ needs.build.outputs.mod_name }} - ${{ needs.build.outputs.release_tag }}
           version: ${{ needs.build.outputs.release_tag }}
@@ -160,6 +160,7 @@ jobs:
           java: 25
           curseforge-id: ${{ needs.build.outputs.curseforge_id }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
+          environment: client | server
 
   publish-modrinth:
     name: Publish to Modrinth
