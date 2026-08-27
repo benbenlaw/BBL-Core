@@ -2,6 +2,7 @@ package com.benbenlaw.core.fluid;
 
 import com.benbenlaw.core.Core;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
@@ -29,13 +30,12 @@ public class TestFluid {
 
     public static final FluidRegistryObject<FluidDeferredRegister.CoreFluidTypes, BaseFlowingFluid.Source, BaseFlowingFluid.Flowing, LiquidBlock, BucketItem> HEAVY_WATER = FLUIDS.register("heavy_water",
             renderProperties -> renderProperties.texture(Core.identifier("block/liquid"),
-                   Core.identifier("block/liquid_flow")).tint(0xFF0D1455));
-
+                   Core.identifier("block/liquid_flow")).tint(0xFF0D1455).moveLikeLava());
 
     /**
      * @since 26.1 + fluid now require Fluid Models, below is an example from Casting, that registers the fluids models
      *
-     * ```js
+     * ```js\
      * @EventBusSubscriber(modid = Casting.MOD_ID, value = Dist.CLIENT)
      * public class FluidModels {
      *

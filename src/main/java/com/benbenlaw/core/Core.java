@@ -1,6 +1,7 @@
 package com.benbenlaw.core;
 
 import com.benbenlaw.core.config.StartupConfig;
+import com.benbenlaw.core.fluid.TestFluid;
 import com.benbenlaw.core.loot.modifier.CoreLootModifiers;
 import com.benbenlaw.core.network.CoreNetworking;
 import com.benbenlaw.core.recipe.CoreRecipeConditions;
@@ -22,7 +23,7 @@ public class Core {
 
     public Core(final IEventBus eventBus, final ModContainer modContainer) {
 
-        //TestFluid.FLUIDS.register(eventBus);
+        TestFluid.FLUIDS.register(eventBus);
         //CoreItems.ITEMS.register(eventBus);
 
         //** DO NOT DISABLE THIS LINE **//

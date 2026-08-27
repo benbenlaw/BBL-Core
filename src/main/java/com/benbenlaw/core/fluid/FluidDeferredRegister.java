@@ -10,8 +10,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Util;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -20,7 +25,9 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -188,6 +195,7 @@ public class FluidDeferredRegister {
         private Identifier renderOverlayTexture = RENDER_OVERLAY;
         private int color;
         private int temperature = 300; // vanilla water default
+        private MovementBehavior movementBehavior = MovementBehavior.NONE;
 
         private FluidTypeRenderProperties() {
         }
@@ -223,6 +231,22 @@ public class FluidDeferredRegister {
             this.temperature = temperature;
             return this;
         }
+
+        public FluidTypeRenderProperties moveLikeWater() {
+            this.movementBehavior = MovementBehavior.WATER;
+            return this;
+        }
+
+        public FluidTypeRenderProperties moveLikeLava() {
+            this.movementBehavior = MovementBehavior.LAVA;
+            return this;
+        }
+    }
+
+    public enum MovementBehavior {
+        NONE,
+        WATER,
+        LAVA
     }
 
     public static class CoreFluidTypes extends FluidType {
@@ -231,6 +255,7 @@ public class FluidDeferredRegister {
         public final Identifier overlayTexture;
         public final Identifier renderOverlayTexture;
         public final int color;
+        private final MovementBehavior movementBehavior;
 
         public CoreFluidTypes(Properties properties, FluidTypeRenderProperties renderProperties) {
             super(properties);
@@ -239,10 +264,91 @@ public class FluidDeferredRegister {
             this.overlayTexture = renderProperties.overlayTexture;
             this.renderOverlayTexture = renderProperties.renderOverlayTexture;
             this.color = renderProperties.color;
+            this.movementBehavior = renderProperties.movementBehavior;
+        }
+
+        @Override
+        public boolean move(LivingEntity entity, Vec3 movementVector, double gravity) {
+            boolean isFalling = entity.getDeltaMovement().y <= 0;
+            double oldY = entity.getY();
+
+            return switch (movementBehavior) {
+                case WATER -> {
+                    travelInWater(entity, movementVector, gravity, isFalling, oldY);
+                    yield true;
+                }
+                case LAVA -> {
+                    travelInLava(entity, movementVector, gravity, isFalling, oldY);
+                    yield true;
+                }
+                case NONE -> false;
+            };
         }
 
         public boolean isVaporizedOnPlacement(Level level, BlockPos pos, FluidStack stack) {
             return false;
         }
+
+        public void travelInLava(LivingEntity entity, Vec3 input, double baseGravity, boolean isFalling, double oldY) {
+            entity.moveRelative(0.02F, input);
+            entity.move(MoverType.SELF, entity.getDeltaMovement());
+            if (entity.getFluidHeight(FluidTags.LAVA) <= entity.getFluidJumpThreshold()) {
+                entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.8F, 0.5));
+                Vec3 movement = entity.getFluidFallingAdjustedMovement(baseGravity, isFalling, entity.getDeltaMovement());
+                entity.setDeltaMovement(movement);
+            } else {
+                entity.setDeltaMovement(entity.getDeltaMovement().scale(0.5));
+            }
+
+            if (baseGravity != 0.0) {
+                entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, -baseGravity / 4.0, 0.0));
+            }
+
+            jumpOutOfFluid(entity, oldY);
+        }
+
+        public void travelInWater(LivingEntity entity, Vec3 input, double baseGravity, boolean isFalling, double oldY) {
+            float slowDown = entity.isSprinting() ? 0.9F : getWaterSlowDown();
+            float speed = 0.02F;
+            float waterWalker = (float)entity.getAttributeValue(Attributes.WATER_MOVEMENT_EFFICIENCY);
+            if (!entity.onGround()) {
+                waterWalker *= 0.5F;
+            }
+
+            if (waterWalker > 0.0F) {
+                slowDown += (0.54600006F - slowDown) * waterWalker;
+                speed += (entity.getSpeed() - speed) * waterWalker;
+            }
+
+            if (entity.hasEffect(MobEffects.DOLPHINS_GRACE)) {
+                slowDown = 0.96F;
+            }
+
+            speed *= (float)entity.getAttributeValue(NeoForgeMod.SWIM_SPEED);
+            entity.moveRelative(speed, input);
+            entity.move(MoverType.SELF, entity.getDeltaMovement());
+            Vec3 ladderMovement = entity.getDeltaMovement();
+            if (entity.horizontalCollision && entity.onClimbable()) {
+                ladderMovement = new Vec3(ladderMovement.x, 0.2, ladderMovement.z);
+            }
+
+            ladderMovement = ladderMovement.multiply((double)slowDown, (double)0.8F, (double)slowDown);
+            entity.setDeltaMovement(entity.getFluidFallingAdjustedMovement(baseGravity, isFalling, ladderMovement));
+            jumpOutOfFluid(entity, oldY);
+        }
+
+        protected float getWaterSlowDown() {
+            return 0.8F;
+        }
+
+
+        private void jumpOutOfFluid(LivingEntity entity, double oldY) {
+            Vec3 movement = entity.getDeltaMovement();
+            if (entity.horizontalCollision && entity.isFree(movement.x, movement.y + (double)0.6F - entity.getY() + oldY, movement.z)) {
+                entity.setDeltaMovement(movement.x, (double)0.3F, movement.z);
+            }
+
+        }
+
     }
 }
