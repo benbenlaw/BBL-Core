@@ -23,7 +23,7 @@ public class Core {
 
     public Core(final IEventBus eventBus, final ModContainer modContainer) {
 
-        TestFluid.FLUIDS.register(eventBus);
+        //TestFluid.FLUIDS.register(eventBus);
         //CoreItems.ITEMS.register(eventBus);
 
         //** DO NOT DISABLE THIS LINE **//
