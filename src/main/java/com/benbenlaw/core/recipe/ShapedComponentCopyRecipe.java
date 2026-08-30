@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
@@ -24,7 +25,7 @@ public class ShapedComponentCopyRecipe extends NormalCraftingRecipe {
     private final ShapedRecipePattern pattern;
     private final ItemStackTemplate result;
     private final Ingredient source;
-    private final List<DataComponentType<?>> componentsToCopy;
+    private final List<Identifier> componentsToCopy;
 
     public static final MapCodec<ShapedComponentCopyRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
@@ -33,7 +34,7 @@ public class ShapedComponentCopyRecipe extends NormalCraftingRecipe {
                     ShapedRecipePattern.MAP_CODEC.forGetter(o -> o.pattern),
                     ItemStackTemplate.CODEC.fieldOf("result").forGetter(o -> o.result),
                     Ingredient.CODEC.fieldOf("source").forGetter(o -> o.source),
-                    BuiltInRegistries.DATA_COMPONENT_TYPE.byNameCodec()
+                    Identifier.CODEC
                             .listOf()
                             .fieldOf("copy_components")
                             .forGetter(o -> o.componentsToCopy)
@@ -47,9 +48,7 @@ public class ShapedComponentCopyRecipe extends NormalCraftingRecipe {
                     ShapedRecipePattern.STREAM_CODEC, o -> o.pattern,
                     ItemStackTemplate.STREAM_CODEC,   o -> o.result,
                     Ingredient.CONTENTS_STREAM_CODEC, o -> o.source,
-                    ByteBufCodecs.fromCodec(
-                            BuiltInRegistries.DATA_COMPONENT_TYPE.byNameCodec().listOf()
-                    ),                                o -> o.componentsToCopy,
+                    Identifier.STREAM_CODEC.apply(ByteBufCodecs.list()), o -> o.componentsToCopy,
                     ShapedComponentCopyRecipe::new
             );
 
@@ -61,7 +60,7 @@ public class ShapedComponentCopyRecipe extends NormalCraftingRecipe {
 
     public ShapedComponentCopyRecipe(CommonInfo commonInfo, CraftingBookInfo bookInfo,
                                      ShapedRecipePattern pattern, ItemStackTemplate result,
-                                     Ingredient source, List<DataComponentType<?>> componentsToCopy) {
+                                     Ingredient source, List<Identifier> componentsToCopy) {
         super(commonInfo, bookInfo);
         this.pattern = pattern;
         this.result = result;
@@ -76,7 +75,6 @@ public class ShapedComponentCopyRecipe extends NormalCraftingRecipe {
 
     @Override
     public @NonNull ItemStack assemble(CraftingInput input) {
-        // Find the first slot matching the source ingredient
         ItemStack sourceStack = ItemStack.EMPTY;
         for (int i = 0; i < input.size(); i++) {
             ItemStack stack = input.getItem(i);
@@ -88,8 +86,11 @@ public class ShapedComponentCopyRecipe extends NormalCraftingRecipe {
 
         ItemStack output = this.result.create();
 
-        for (DataComponentType<?> type : componentsToCopy) {
-            copyComponent(type, sourceStack, output);
+        for (Identifier id : componentsToCopy) {
+            DataComponentType<?> type = BuiltInRegistries.DATA_COMPONENT_TYPE.getOptional(id).orElse(null);
+            if (type != null) {
+                copyComponent(type, sourceStack, output);
+            }
         }
 
         return output;

@@ -7,11 +7,11 @@ import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
@@ -30,12 +30,12 @@ public class ShapedComponentCopyRecipeProvider implements RecipeBuilder {
     ShapedRecipePattern shapedRecipePattern;
     ItemStackTemplate result;
     Ingredient source;
-    List<DataComponentType<?>> componentsToCopy;
+    List<Identifier> componentsToCopy;
 
     protected final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
     public ShapedComponentCopyRecipeProvider(Recipe.CommonInfo commonInfo, CraftingRecipe.CraftingBookInfo craftingBookInfo, ShapedRecipePattern shapedRecipePattern,
-            ItemStackTemplate result, Ingredient source, List<DataComponentType<?>> componentsToCopy) {
+                                             ItemStackTemplate result, Ingredient source, List<Identifier> componentsToCopy) {
         this.commonInfo = commonInfo;
         this.craftingBookInfo = craftingBookInfo;
         this.shapedRecipePattern = shapedRecipePattern;
@@ -45,7 +45,7 @@ public class ShapedComponentCopyRecipeProvider implements RecipeBuilder {
     }
 
     public static ShapedComponentCopyRecipeProvider componentCopyRecipe(Recipe.CommonInfo commonInfo, CraftingRecipe.CraftingBookInfo craftingBookInfo,
-            ShapedRecipePattern shapedRecipePattern, ItemStackTemplate result, Ingredient source, List<DataComponentType<?>> componentsToCopy) {
+                                                                        ShapedRecipePattern shapedRecipePattern, ItemStackTemplate result, Ingredient source, List<Identifier> componentsToCopy) {
         return new ShapedComponentCopyRecipeProvider(commonInfo, craftingBookInfo, shapedRecipePattern, result, source, componentsToCopy);
     }
 
