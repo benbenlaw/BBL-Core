@@ -54,7 +54,10 @@ public abstract class SyncableBlock extends BaseEntityBlock {
 
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction direction = context.getNearestLookingDirection().getOpposite();
+        Direction direction = context.getPlayer() == null
+                              ? context.getClickedFace().getOpposite()
+                              : context.getNearestLookingDirection().getOpposite();
+
         return this.defaultBlockState()
                 .setValue(FACING, direction)
                 .setValue(RUNNING, true);
