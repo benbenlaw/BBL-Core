@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ResultSlot extends ResourceHandlerSlot {
 
-    private int slotMaxStackSize = -1; // -1 = use default
+    private int maxStackSize = -1;
 
     public ResultSlot(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> slotModifier, int index, int xPosition, int yPosition) {
         super(handler, slotModifier, index, xPosition, yPosition);
@@ -17,7 +17,7 @@ public class ResultSlot extends ResourceHandlerSlot {
 
     /** Allows setting a custom max stack size */
     public ResultSlot size(int maxStackSize) {
-        this.slotMaxStackSize = maxStackSize;
+        this.maxStackSize = maxStackSize;
         return this;
     }
 
@@ -28,11 +28,11 @@ public class ResultSlot extends ResourceHandlerSlot {
 
     @Override
     public int getMaxStackSize() {
-        return slotMaxStackSize > 0 ? slotMaxStackSize : super.getMaxStackSize();
+        return maxStackSize > 0 ? maxStackSize : super.getMaxStackSize();
     }
 
     @Override
     public int getMaxStackSize(ItemStack stack) {
-        return slotMaxStackSize > 0 ? slotMaxStackSize : super.getMaxStackSize(stack);
+        return this.maxStackSize > 0 ? this.maxStackSize : this.getMaxStackSize();
     }
 }

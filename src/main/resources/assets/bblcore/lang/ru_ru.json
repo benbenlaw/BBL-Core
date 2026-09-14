@@ -1,0 +1,13 @@
+{
+  "item.bblcore.upgrade_base": "Основа для улучшения",
+
+  "tooltip.bblcore.shift": "SHIFT для доп. информации",
+  "tooltip.bblcore.alt": "ALT для доп. информации",
+  "tooltip.bblcore.ctrl": "CTRL для доп. информации",
+  "tooltip.bblcore.whitelist_button.whitelist": "Белый список",
+  "tooltip.bblcore.whitelist_button.blacklist": "Чёрный список",
+  "tooltip.bblcore.whitelist_button.mode": "Режим: %s",
+
+  "tooltip.core.duration_tooltip": "%s / %s тиков",
+  "tooltip.core.ticks": "Тики: %s"
+}

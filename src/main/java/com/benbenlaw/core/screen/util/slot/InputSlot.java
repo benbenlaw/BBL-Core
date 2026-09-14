@@ -9,7 +9,7 @@ import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 public class InputSlot extends ResourceHandlerSlot {
 
-    private int maxStackSize = -1; // -1 = use default
+    private int maxStackSize = -1;
 
     public InputSlot(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> slotModifier, int index, int xPosition, int yPosition) {
         super(handler, slotModifier, index, xPosition, yPosition);
@@ -38,6 +38,6 @@ public class InputSlot extends ResourceHandlerSlot {
 
     @Override
     public int getMaxStackSize(ItemStack stack) {
-        return maxStackSize > 0 ? maxStackSize : super.getMaxStackSize(stack);
+        return this.maxStackSize > 0 ? this.maxStackSize : this.getMaxStackSize();
     }
 }
