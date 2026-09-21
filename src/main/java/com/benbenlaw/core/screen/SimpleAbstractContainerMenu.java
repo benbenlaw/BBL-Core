@@ -1,5 +1,6 @@
 package com.benbenlaw.core.screen;
 
+import com.benbenlaw.core.screen.util.slot.FilterSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -99,5 +100,10 @@ public class SimpleAbstractContainerMenu extends AbstractContainerMenu {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
+    }
+
+    @Override
+    public boolean canTakeItemForPickAll(@NotNull ItemStack stack, @NotNull Slot slot) {
+        return !(slot instanceof FilterSlot) && super.canTakeItemForPickAll(stack, slot);
     }
 }

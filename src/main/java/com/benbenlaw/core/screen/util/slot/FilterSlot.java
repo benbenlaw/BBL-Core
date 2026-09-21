@@ -10,11 +10,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class FilterSlot extends ResourceHandlerSlot {
 
-
     public FilterSlot(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> slotModifier, int index, int xPosition, int yPosition) {
         super(handler, slotModifier, index, xPosition, yPosition);
     }
-
 
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
@@ -27,13 +25,8 @@ public class FilterSlot extends ResourceHandlerSlot {
     }
 
     @Override
-    public boolean mayPickup(@NotNull Player player) {
-        return true;
-    }
-
-    @Override
-    public void onTake(@NotNull Player player, @NotNull ItemStack stack) {
-        this.set(ItemStack.EMPTY);
+    public int getMaxStackSize(@NotNull ItemStack stack) {
+        return 1;
     }
 
     @Override
@@ -44,4 +37,5 @@ public class FilterSlot extends ResourceHandlerSlot {
             super.set(ItemStack.EMPTY);
         }
     }
+
 }
